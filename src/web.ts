@@ -1,9 +1,15 @@
-import { WebPlugin } from '@capacitor/core';
-import type { Cluster, onClusterClickHandler } from '@googlemaps/markerclusterer';
-import { MarkerClusterer, SuperClusterAlgorithm } from '@googlemaps/markerclusterer';
+import { WebPlugin } from "@capacitor/core";
+import type {
+  Cluster,
+  onClusterClickHandler,
+} from "@googlemaps/markerclusterer";
+import {
+  MarkerClusterer,
+  SuperClusterAlgorithm,
+} from "@googlemaps/markerclusterer";
 
-import type { Marker } from './definitions';
-import { MapType, LatLngBounds } from './definitions';
+import type { Marker } from "./definitions";
+import { MapType, LatLngBounds } from "./definitions";
 import type {
   AddMarkerArgs,
   CameraArgs,
@@ -27,9 +33,12 @@ import type {
   RemoveCirclesArgs,
   AddPolylinesArgs,
   RemovePolylinesArgs,
-} from './implementation';
+} from "./implementation";
 
-export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogleMapsPlugin {
+export class CapacitorGoogleMapsWeb
+  extends WebPlugin
+  implements CapacitorGoogleMapsPlugin
+{
   private gMapsRef: typeof google.maps | undefined = undefined;
   private maps: {
     [id: string]: {
@@ -73,12 +82,12 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
           latitude: marker.getPosition()?.lat(),
           longitude: marker.getPosition()?.lng(),
           title: marker.getTitle(),
-          snippet: '',
+          snippet: "",
         });
       }
     }
 
-    this.notifyListeners('onClusterClick', {
+    this.notifyListeners("onClusterClick", {
       mapId: mapId,
       latitude: cluster.position.lat(),
       longitude: cluster.position.lng(),
@@ -94,7 +103,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       }
     }
 
-    return '';
+    return "";
   }
 
   private getIdFromMarker(mapId: string, marker: google.maps.Marker): string {
@@ -104,31 +113,35 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       }
     }
 
-    return '';
+    return "";
   }
 
-  private async importGoogleLib(apiKey: string, region?: string, language?: string) {
+  private async importGoogleLib(
+    apiKey: string,
+    region?: string,
+    language?: string
+  ) {
     if (this.gMapsRef === undefined) {
-      const lib = await import('@googlemaps/js-api-loader');
+      const lib = await import("@googlemaps/js-api-loader");
       const loader = new lib.Loader({
-        apiKey: apiKey ?? '',
-        version: 'weekly',
-        libraries: ['places'],
+        apiKey: apiKey ?? "",
+        version: "weekly",
+        libraries: ["places"],
         language,
         region,
       });
       const google = await loader.load();
       this.gMapsRef = google.maps;
-      console.log('Loaded google maps API');
+      console.log("Loaded google maps API");
     }
   }
 
   async enableTouch(_args: { id: string }): Promise<void> {
-    this.maps[_args.id].map.setOptions({ gestureHandling: 'auto' });
+    this.maps[_args.id].map.setOptions({ gestureHandling: "auto" });
   }
 
   async disableTouch(_args: { id: string }): Promise<void> {
-    this.maps[_args.id].map.setOptions({ gestureHandling: 'none' });
+    this.maps[_args.id].map.setOptions({ gestureHandling: "none" });
   }
 
   async setCamera(_args: CameraArgs): Promise<void> {
@@ -144,28 +157,29 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   async getMapType(_args: { id: string }): Promise<{ type: string }> {
     let type = this.maps[_args.id].map.getMapTypeId();
     if (type !== undefined) {
-      if (type === 'roadmap') {
+      if (type === "roadmap") {
         type = MapType.Normal;
       }
       return { type: `${type.charAt(0).toUpperCase()}${type.slice(1)}` };
     }
-    throw new Error('Map type is undefined');
+    throw new Error("Map type is undefined");
   }
 
   async setMapType(_args: MapTypeArgs): Promise<void> {
     let mapType = _args.mapType.toLowerCase();
     if (_args.mapType === MapType.Normal) {
-      mapType = 'roadmap';
+      mapType = "roadmap";
     }
     this.maps[_args.id].map.setMapTypeId(mapType);
   }
 
   async enableIndoorMaps(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   async enableTrafficLayer(_args: TrafficLayerArgs): Promise<void> {
-    const trafficLayer = this.maps[_args.id].trafficLayer ?? new google.maps.TrafficLayer();
+    const trafficLayer =
+      this.maps[_args.id].trafficLayer ?? new google.maps.TrafficLayer();
 
     if (_args.enabled) {
       trafficLayer.setMap(this.maps[_args.id].map);
@@ -177,11 +191,11 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async enableAccessibilityElements(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   dispatchMapEvent(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   async enableCurrentLocation(_args: CurrentLocArgs): Promise<void> {
@@ -196,16 +210,16 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
             this.maps[_args.id].map.setCenter(pos);
 
-            this.notifyListeners('onMyLocationButtonClick', {});
+            this.notifyListeners("onMyLocationButtonClick", {});
 
-            this.notifyListeners('onMyLocationClick', {});
+            this.notifyListeners("onMyLocationClick", {});
           },
           () => {
-            throw new Error('Geolocation not supported on web browser.');
+            throw new Error("Geolocation not supported on web browser.");
           }
         );
       } else {
-        throw new Error('Geolocation not supported on web browser.');
+        throw new Error("Geolocation not supported on web browser.");
       }
     }
   }
@@ -221,7 +235,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     const bounds = this.maps[_args.id].map.getBounds();
 
     if (!bounds) {
-      throw new Error('Google Map Bounds could not be found.');
+      throw new Error("Google Map Bounds could not be found.");
     }
 
     return new LatLngBounds({
@@ -254,7 +268,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       const markerOpts = this.buildMarkerOpts(markerArgs, map.map);
       const marker = new google.maps.Marker(markerOpts);
 
-      const id = '' + this.currMarkerId;
+      const id = "" + this.currMarkerId;
 
       map.markers[id] = marker;
       this.setMarkerListeners(_args.id, id, marker);
@@ -267,11 +281,14 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async addMarker(_args: AddMarkerArgs): Promise<{ id: string }> {
-    const markerOpts = this.buildMarkerOpts(_args.marker, this.maps[_args.id].map);
+    const markerOpts = this.buildMarkerOpts(
+      _args.marker,
+      this.maps[_args.id].map
+    );
 
     const marker = new google.maps.Marker(markerOpts);
 
-    const id = '' + this.currMarkerId;
+    const id = "" + this.currMarkerId;
 
     this.maps[_args.id].markers[id] = marker;
     this.setMarkerListeners(_args.id, id, marker);
@@ -303,7 +320,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       const polygon = new google.maps.Polygon(polygonArgs);
       polygon.setMap(map.map);
 
-      const id = '' + this.currPolygonId;
+      const id = "" + this.currPolygonId;
       this.maps[args.id].polygons[id] = polygon;
       this.setPolygonListeners(args.id, id, polygon);
 
@@ -331,7 +348,7 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       const circle = new google.maps.Circle(circleArgs);
       circle.setMap(map.map);
 
-      const id = '' + this.currCircleId;
+      const id = "" + this.currCircleId;
       this.maps[args.id].circles[id] = circle;
       this.setCircleListeners(args.id, id, circle);
 
@@ -357,10 +374,10 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
 
     for (const polylineArgs of args.polylines) {
       const polyline = new google.maps.Polyline(polylineArgs);
-      polyline.set('tag', polylineArgs.tag);
+      polyline.set("tag", polylineArgs.tag);
       polyline.setMap(map.map);
 
-      const id = '' + this.currPolylineId;
+      const id = "" + this.currPolylineId;
       this.maps[args.id].polylines[id] = polyline;
       this.setPolylineListeners(args.id, id, polyline);
 
@@ -405,15 +422,15 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   }
 
   async onScroll(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   async onResize(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   async onDisplay(): Promise<void> {
-    throw new Error('Method not supported on web.');
+    throw new Error("Method not supported on web.");
   }
 
   async create(_args: CreateMapArgs): Promise<void> {
@@ -434,18 +451,22 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   async destroy(_args: DestroyMapArgs): Promise<void> {
     console.log(`Destroy map: ${_args.id}`);
     const mapItem = this.maps[_args.id];
-    mapItem.element.innerHTML = '';
+    mapItem.element.innerHTML = "";
     mapItem.map.unbindAll();
     delete this.maps[_args.id];
   }
 
-  async mapBoundsContains(_args: MapBoundsContainsArgs): Promise<{ contains: boolean }> {
+  async mapBoundsContains(
+    _args: MapBoundsContainsArgs
+  ): Promise<{ contains: boolean }> {
     const bounds = this.getLatLngBounds(_args.bounds);
     const point = new google.maps.LatLng(_args.point.lat, _args.point.lng);
     return { contains: bounds.contains(point) };
   }
 
-  async mapBoundsExtend(_args: MapBoundsExtendArgs): Promise<{ bounds: LatLngBounds }> {
+  async mapBoundsExtend(
+    _args: MapBoundsExtendArgs
+  ): Promise<{ bounds: LatLngBounds }> {
     const bounds = this.getLatLngBounds(_args.bounds);
     const point = new google.maps.LatLng(_args.point.lat, _args.point.lng);
     bounds.extend(point);
@@ -473,78 +494,94 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
     );
   }
 
-  async setCircleListeners(mapId: string, circleId: string, circle: google.maps.Circle): Promise<void> {
-    circle.addListener('click', () => {
-      this.notifyListeners('onCircleClick', {
+  async setCircleListeners(
+    mapId: string,
+    circleId: string,
+    circle: google.maps.Circle
+  ): Promise<void> {
+    circle.addListener("click", () => {
+      this.notifyListeners("onCircleClick", {
         mapId: mapId,
         circleId: circleId,
-        tag: circle.get('tag'),
+        tag: circle.get("tag"),
       });
     });
   }
 
-  async setPolygonListeners(mapId: string, polygonId: string, polygon: google.maps.Polygon): Promise<void> {
-    polygon.addListener('click', () => {
-      this.notifyListeners('onPolygonClick', {
+  async setPolygonListeners(
+    mapId: string,
+    polygonId: string,
+    polygon: google.maps.Polygon
+  ): Promise<void> {
+    polygon.addListener("click", () => {
+      this.notifyListeners("onPolygonClick", {
         mapId: mapId,
         polygonId: polygonId,
-        tag: polygon.get('tag'),
+        tag: polygon.get("tag"),
       });
     });
   }
 
-  async setPolylineListeners(mapId: string, polylineId: string, polyline: google.maps.Polyline): Promise<void> {
-    polyline.addListener('click', () => {
-      this.notifyListeners('onPolylineClick', {
+  async setPolylineListeners(
+    mapId: string,
+    polylineId: string,
+    polyline: google.maps.Polyline
+  ): Promise<void> {
+    polyline.addListener("click", () => {
+      this.notifyListeners("onPolylineClick", {
         mapId: mapId,
         polylineId: polylineId,
-        tag: polyline.get('tag'),
+        tag: polyline.get("tag"),
       });
     });
   }
 
-  async setMarkerListeners(mapId: string, markerId: string, marker: google.maps.Marker): Promise<void> {
-    marker.addListener('click', () => {
-      this.notifyListeners('onMarkerClick', {
+  async setMarkerListeners(
+    mapId: string,
+    markerId: string,
+    marker: google.maps.Marker
+  ): Promise<void> {
+    marker.addListener("click", () => {
+      this.notifyListeners("onMarkerClick", {
         mapId: mapId,
         markerId: markerId,
         latitude: marker.getPosition()?.lat(),
         longitude: marker.getPosition()?.lng(),
         title: marker.getTitle(),
-        snippet: '',
+        snippet: "",
       });
     });
 
-    marker.addListener('dragstart', () => {
-      this.notifyListeners('onMarkerDragStart', {
+    marker.addListener("dragstart", () => {
+      this.notifyListeners("onMarkerDragStart", {
         mapId: mapId,
         markerId: markerId,
         latitude: marker.getPosition()?.lat(),
         longitude: marker.getPosition()?.lng(),
         title: marker.getTitle(),
-        snippet: '',
+        snippet: "",
       });
     });
 
-    marker.addListener('drag', () => {
-      this.notifyListeners('onMarkerDrag', {
+    marker.addListener("drag", () => {
+      this.notifyListeners("onMarkerDrag", {
         mapId: mapId,
         markerId: markerId,
         latitude: marker.getPosition()?.lat(),
         longitude: marker.getPosition()?.lng(),
         title: marker.getTitle(),
-        snippet: '',
+        snippet: "",
       });
     });
 
-    marker.addListener('dragend', () => {
-      this.notifyListeners('onMarkerDragEnd', {
+    marker.addListener("dragend", () => {
+      this.notifyListeners("onMarkerDragEnd", {
         mapId: mapId,
         markerId: markerId,
         latitude: marker.getPosition()?.lat(),
         longitude: marker.getPosition()?.lng(),
         title: marker.getTitle(),
-        snippet: '',
+        snippet: "",
       });
     });
   }
@@ -552,9 +589,9 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
   async setMapListeners(mapId: string): Promise<void> {
     const map = this.maps[mapId].map;
 
-    map.addListener('idle', async () => {
+    map.addListener("idle", async () => {
       const bounds = await this.getMapBounds({ id: mapId });
-      this.notifyListeners('onCameraIdle', {
+      this.notifyListeners("onCameraIdle", {
         mapId: mapId,
         bearing: map.getHeading(),
         bounds: bounds,
@@ -565,16 +602,16 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       });
     });
 
-    map.addListener('center_changed', () => {
-      this.notifyListeners('onCameraMoveStarted', {
+    map.addListener("center_changed", () => {
+      this.notifyListeners("onCameraMoveStarted", {
         mapId: mapId,
         isGesture: true,
       });
     });
 
-    map.addListener('bounds_changed', async () => {
+    map.addListener("bounds_changed", async () => {
       const bounds = await this.getMapBounds({ id: mapId });
-      this.notifyListeners('onBoundsChanged', {
+      this.notifyListeners("onBoundsChanged", {
         mapId: mapId,
         bearing: map.getHeading(),
         bounds: bounds,
@@ -585,25 +622,33 @@ export class CapacitorGoogleMapsWeb extends WebPlugin implements CapacitorGoogle
       });
     });
 
-    map.addListener('click', (e: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
-      this.notifyListeners('onMapClick', {
-        mapId: mapId,
-        latitude: e.latLng?.lat(),
-        longitude: e.latLng?.lng(),
-      });
-    });
+    map.addListener(
+      "click",
+      (e: google.maps.MapMouseEvent | google.maps.IconMouseEvent) => {
+        this.notifyListeners("onMapClick", {
+          mapId: mapId,
+          latitude: e.latLng?.lat(),
+          longitude: e.latLng?.lng(),
+        });
+      }
+    );
 
-    this.notifyListeners('onMapReady', {
+    this.notifyListeners("onMapReady", {
       mapId: mapId,
     });
   }
 
-  private buildMarkerOpts(marker: Marker, map: google.maps.Map): google.maps.MarkerOptions {
+  private buildMarkerOpts(
+    marker: Marker,
+    map: google.maps.Map
+  ): google.maps.MarkerOptions {
     let iconImage: google.maps.Icon | undefined = undefined;
     if (marker.iconUrl) {
       iconImage = {
         url: marker.iconUrl,
-        scaledSize: marker.iconSize ? new google.maps.Size(marker.iconSize.width, marker.iconSize.height) : null,
+        scaledSize: marker.iconSize
+          ? new google.maps.Size(marker.iconSize.width, marker.iconSize.height)
+          : null,
         anchor: marker.iconAnchor
           ? new google.maps.Point(marker.iconAnchor.x, marker.iconAnchor.y)
           : new google.maps.Point(0, 0),

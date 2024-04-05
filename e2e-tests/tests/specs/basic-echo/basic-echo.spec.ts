@@ -1,13 +1,13 @@
-import * as IonicE2E from '@ionic/e2e';
-import { waitForLoad, pause, setDevice, switchToWeb, url } from '@ionic/e2e';
+import * as IonicE2E from "@ionic/e2e";
+import { waitForLoad, pause, setDevice, switchToWeb, url } from "@ionic/e2e";
 
-import SetAndGetValuePage from '../../pageobjects/basic-echo/basic-echo.page';
+import SetAndGetValuePage from "../../pageobjects/basic-echo/basic-echo.page";
 
-describe.skip('Google Maps - Basic Echo', function () {
+describe.skip("Google Maps - Basic Echo", function () {
   before(async function () {
     await waitForLoad();
     await switchToWeb();
-    await url('/basic-echo/run-basic-echo');
+    await url("/basic-echo/run-basic-echo");
     await pause(500);
   });
 
@@ -23,11 +23,15 @@ describe.skip('Google Maps - Basic Echo', function () {
     await pause(500);
   });
 
-  it('should run a basic echo from plugin.', async () => {
+  it("should run a basic echo from plugin.", async () => {
     const runEchoButton = await SetAndGetValuePage.runEchoButton;
-    const commandOutput = await $((await SetAndGetValuePage.commandOutputTextarea).selector).$('textarea');
+    const commandOutput = await $(
+      (
+        await SetAndGetValuePage.commandOutputTextarea
+      ).selector
+    ).$("textarea");
 
     await runEchoButton.tap();
-    await expect(commandOutput).toHaveValue('WOW!');
+    await expect(commandOutput).toHaveValue("WOW!");
   });
 });

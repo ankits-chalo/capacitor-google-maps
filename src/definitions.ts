@@ -1,4 +1,4 @@
-import { CapacitorGoogleMaps } from './implementation';
+import { CapacitorGoogleMaps } from "./implementation";
 
 /**
  * An interface representing the viewports latitude and longitude bounds.
@@ -25,7 +25,7 @@ export class LatLngBounds {
       bounds: this,
       point,
     });
-    return result['contains'];
+    return result["contains"];
   }
 
   async extend(point: LatLng): Promise<LatLngBounds> {
@@ -33,9 +33,9 @@ export class LatLngBounds {
       bounds: this,
       point,
     });
-    this.southwest = result['bounds']['southwest'];
-    this.center = result['bounds']['center'];
-    this.northeast = result['bounds']['northeast'];
+    this.southwest = result["bounds"]["southwest"];
+    this.center = result["bounds"]["center"];
+    this.northeast = result["bounds"]["northeast"];
     return this;
   }
 }
@@ -266,23 +266,23 @@ export enum MapType {
   /**
    * Basic map.
    */
-  Normal = 'Normal',
+  Normal = "Normal",
   /**
    * Satellite imagery with roads and labels.
    */
-  Hybrid = 'Hybrid',
+  Hybrid = "Hybrid",
   /**
    * Satellite imagery with no labels.
    */
-  Satellite = 'Satellite',
+  Satellite = "Satellite",
   /**
    * Topographic data.
    */
-  Terrain = 'Terrain',
+  Terrain = "Terrain",
   /**
    * No base map tiles.
    */
-  None = 'None',
+  None = "None",
 }
 
 /**

@@ -1,5 +1,5 @@
-import type { Plugin } from '@capacitor/core';
-import { registerPlugin } from '@capacitor/core';
+import type { Plugin } from "@capacitor/core";
+import { registerPlugin } from "@capacitor/core";
 
 import type {
   CameraConfig,
@@ -12,7 +12,7 @@ import type {
   Marker,
   Polygon,
   Polyline,
-} from './definitions';
+} from "./definitions";
 
 /**
  * An interface containing the options used when creating a map.
@@ -200,15 +200,20 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
   dispatchMapEvent(args: { id: string; focus: boolean }): Promise<void>;
   getMapBounds(args: { id: string }): Promise<LatLngBounds>;
   fitBounds(args: FitBoundsArgs): Promise<void>;
-  mapBoundsContains(args: MapBoundsContainsArgs): Promise<{ contains: boolean }>;
+  mapBoundsContains(
+    args: MapBoundsContainsArgs
+  ): Promise<{ contains: boolean }>;
   mapBoundsExtend(args: MapBoundsExtendArgs): Promise<{ bounds: LatLngBounds }>;
 }
 
-const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>('CapacitorGoogleMaps', {
-  web: () => import('./web').then((m) => new m.CapacitorGoogleMapsWeb()),
-});
+const CapacitorGoogleMaps = registerPlugin<CapacitorGoogleMapsPlugin>(
+  "CapacitorGoogleMaps",
+  {
+    web: () => import("./web").then((m) => new m.CapacitorGoogleMapsWeb()),
+  }
+);
 
-CapacitorGoogleMaps.addListener('isMapInFocus', (data) => {
+CapacitorGoogleMaps.addListener("isMapInFocus", (data) => {
   const x = data.x;
   const y = data.y;
 
