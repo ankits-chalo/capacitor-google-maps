@@ -1,10 +1,16 @@
 export default class Page {
   public async hideToolBars() {
     await driver.execute(() => {
-      for (let i = 0; i < document.getElementsByTagName('ion-toolbar').length; i++) {
-        const toolbar: HTMLElement | null = document.getElementsByTagName('ion-toolbar').item(i) as HTMLElement;
+      for (
+        let i = 0;
+        i < document.getElementsByTagName("ion-toolbar").length;
+        i++
+      ) {
+        const toolbar: HTMLElement | null = document
+          .getElementsByTagName("ion-toolbar")
+          .item(i) as HTMLElement;
         if (toolbar !== null) {
-          toolbar.style.display = 'none';
+          toolbar.style.display = "none";
         }
       }
     });
@@ -12,10 +18,16 @@ export default class Page {
 
   public async showToolBars() {
     await driver.execute(() => {
-      for (let i = 0; i < document.getElementsByTagName('ion-toolbar').length; i++) {
-        const toolbar: HTMLElement | null = document.getElementsByTagName('ion-toolbar').item(i) as HTMLElement;
+      for (
+        let i = 0;
+        i < document.getElementsByTagName("ion-toolbar").length;
+        i++
+      ) {
+        const toolbar: HTMLElement | null = document
+          .getElementsByTagName("ion-toolbar")
+          .item(i) as HTMLElement;
         if (toolbar !== null) {
-          toolbar.style.display = '';
+          toolbar.style.display = "";
         }
       }
     });

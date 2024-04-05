@@ -1,5 +1,5 @@
-import { Capacitor } from '@capacitor/core';
-import type { PluginListenerHandle } from '@capacitor/core';
+import { Capacitor } from "@capacitor/core";
+import type { PluginListenerHandle } from "@capacitor/core";
 
 import type {
   CameraConfig,
@@ -19,13 +19,16 @@ import type {
   CircleClickCallbackData,
   Polyline,
   PolylineCallbackData,
-} from './definitions';
-import { LatLngBounds, MapType } from './definitions';
-import type { CreateMapArgs } from './implementation';
-import { CapacitorGoogleMaps } from './implementation';
+} from "./definitions";
+import { LatLngBounds, MapType } from "./definitions";
+import type { CreateMapArgs } from "./implementation";
+import { CapacitorGoogleMaps } from "./implementation";
 
 export interface GoogleMapInterface {
-  create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackData>): Promise<GoogleMap>;
+  create(
+    options: CreateMapArgs,
+    callback?: MapListenerCallback<MapReadyCallbackData>
+  ): Promise<GoogleMap>;
   enableTouch(): Promise<void>;
   disableTouch(): Promise<void>;
   enableClustering(
@@ -69,22 +72,54 @@ export interface GoogleMapInterface {
    * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
    */
   fitBounds(bounds: LatLngBounds, padding?: number): Promise<void>;
-  setOnBoundsChangedListener(callback?: MapListenerCallback<CameraIdleCallbackData>): Promise<void>;
-  setOnCameraIdleListener(callback?: MapListenerCallback<CameraIdleCallbackData>): Promise<void>;
-  setOnCameraMoveStartedListener(callback?: MapListenerCallback<CameraMoveStartedCallbackData>): Promise<void>;
-  setOnClusterClickListener(callback?: MapListenerCallback<ClusterClickCallbackData>): Promise<void>;
-  setOnClusterInfoWindowClickListener(callback?: MapListenerCallback<ClusterClickCallbackData>): Promise<void>;
-  setOnInfoWindowClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
-  setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void>;
-  setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
-  setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackData>): Promise<void>;
-  setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData>): Promise<void>;
-  setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData>): Promise<void>;
-  setOnMarkerDragStartListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
-  setOnMarkerDragListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
-  setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void>;
-  setOnMyLocationButtonClickListener(callback?: MapListenerCallback<MyLocationButtonClickCallbackData>): Promise<void>;
-  setOnMyLocationClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void>;
+  setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>
+  ): Promise<void>;
+  setOnCameraIdleListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>
+  ): Promise<void>;
+  setOnCameraMoveStartedListener(
+    callback?: MapListenerCallback<CameraMoveStartedCallbackData>
+  ): Promise<void>;
+  setOnClusterClickListener(
+    callback?: MapListenerCallback<ClusterClickCallbackData>
+  ): Promise<void>;
+  setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback<ClusterClickCallbackData>
+  ): Promise<void>;
+  setOnInfoWindowClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void>;
+  setOnMapClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>
+  ): Promise<void>;
+  setOnMarkerClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void>;
+  setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>
+  ): Promise<void>;
+  setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>
+  ): Promise<void>;
+  setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>
+  ): Promise<void>;
+  setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void>;
+  setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void>;
+  setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void>;
+  setOnMyLocationButtonClickListener(
+    callback?: MapListenerCallback<MyLocationButtonClickCallbackData>
+  ): Promise<void>;
+  setOnMyLocationClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>
+  ): Promise<void>;
 }
 
 class MapCustomElement extends HTMLElement {
@@ -93,21 +128,21 @@ class MapCustomElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = '';
+    this.innerHTML = "";
 
-    if (Capacitor.getPlatform() == 'ios') {
-      this.style.overflow = 'scroll';
-      (this.style as any)['-webkit-overflow-scrolling'] = 'touch';
+    if (Capacitor.getPlatform() == "ios") {
+      this.style.overflow = "scroll";
+      (this.style as any)["-webkit-overflow-scrolling"] = "touch";
 
-      const overflowDiv = document.createElement('div');
-      overflowDiv.style.height = '200%';
+      const overflowDiv = document.createElement("div");
+      overflowDiv.style.height = "200%";
 
       this.appendChild(overflowDiv);
     }
   }
 }
 
-customElements.define('capacitor-google-map', MapCustomElement);
+customElements.define("capacitor-google-map", MapCustomElement);
 
 export class GoogleMap {
   private id: string;
@@ -148,7 +183,7 @@ export class GoogleMap {
     const newMap = new GoogleMap(options.id);
 
     if (!options.element) {
-      throw new Error('container element is required');
+      throw new Error("container element is required");
     }
 
     if (options.config.androidLiteMode === undefined) {
@@ -165,7 +200,7 @@ export class GoogleMap {
     options.config.y = elementBounds.y;
     options.config.devicePixelRatio = window.devicePixelRatio;
 
-    if (Capacitor.getPlatform() == 'android') {
+    if (Capacitor.getPlatform() == "android") {
       newMap.initScrolling();
     }
 
@@ -173,7 +208,8 @@ export class GoogleMap {
       (options.element as any) = {};
 
       const getMapBounds = () => {
-        const mapRect = newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
+        const mapRect =
+          newMap.element?.getBoundingClientRect() ?? ({} as DOMRect);
         return {
           x: mapRect.x,
           y: mapRect.y,
@@ -196,14 +232,14 @@ export class GoogleMap {
         });
       };
 
-      const ionicPage = newMap.element.closest('.ion-page');
-      if (Capacitor.getPlatform() === 'ios' && ionicPage) {
-        ionicPage.addEventListener('ionViewWillEnter', () => {
+      const ionicPage = newMap.element.closest(".ion-page");
+      if (Capacitor.getPlatform() === "ios" && ionicPage) {
+        ionicPage.addEventListener("ionViewWillEnter", () => {
           setTimeout(() => {
             onDisplay();
           }, 100);
         });
-        ionicPage.addEventListener('ionViewDidEnter', () => {
+        ionicPage.addEventListener("ionViewDidEnter", () => {
           setTimeout(() => {
             onDisplay();
           }, 100);
@@ -222,10 +258,13 @@ export class GoogleMap {
           const isHidden = mapRect.width === 0 && mapRect.height === 0;
           if (!isHidden) {
             if (lastState.isHidden) {
-              if (Capacitor.getPlatform() === 'ios' && !ionicPage) {
+              if (Capacitor.getPlatform() === "ios" && !ionicPage) {
                 onDisplay();
               }
-            } else if (lastState.width !== mapRect.width || lastState.height !== mapRect.height) {
+            } else if (
+              lastState.width !== mapRect.width ||
+              lastState.height !== mapRect.height
+            ) {
               onResize();
             }
           }
@@ -251,18 +290,23 @@ export class GoogleMap {
     });
 
     if (callback) {
-      const onMapReadyListener = await CapacitorGoogleMaps.addListener('onMapReady', (data: MapReadyCallbackData) => {
-        if (data.mapId == newMap.id) {
-          callback(data);
-          onMapReadyListener.remove();
+      const onMapReadyListener = await CapacitorGoogleMaps.addListener(
+        "onMapReady",
+        (data: MapReadyCallbackData) => {
+          if (data.mapId == newMap.id) {
+            callback(data);
+            onMapReadyListener.remove();
+          }
         }
-      });
+      );
     }
 
     return newMap;
   }
 
-  private static async getElementBounds(element: HTMLElement): Promise<DOMRect> {
+  private static async getElementBounds(
+    element: HTMLElement
+  ): Promise<DOMRect> {
     return new Promise((resolve) => {
       let elementBounds = element.getBoundingClientRect();
       if (elementBounds.width == 0) {
@@ -273,7 +317,7 @@ export class GoogleMap {
             retries++;
           } else {
             if (retries == 30) {
-              console.warn('Map size could not be determined');
+              console.warn("Map size could not be determined");
             }
             clearInterval(boundsInterval);
             resolve(elementBounds);
@@ -441,7 +485,7 @@ export class GoogleMap {
    * Destroy the current instance of the map
    */
   async destroy(): Promise<void> {
-    if (Capacitor.getPlatform() == 'android') {
+    if (Capacitor.getPlatform() == "android") {
       this.disableScrolling();
     }
 
@@ -576,37 +620,37 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    const ionContents = document.getElementsByTagName('ion-content');
+    const ionContents = document.getElementsByTagName("ion-content");
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < ionContents.length; i++) {
       (ionContents[i] as any).scrollEvents = true;
     }
 
-    window.addEventListener('ionScroll', this.handleScrollEvent);
-    window.addEventListener('scroll', this.handleScrollEvent);
-    window.addEventListener('resize', this.handleScrollEvent);
+    window.addEventListener("ionScroll", this.handleScrollEvent);
+    window.addEventListener("scroll", this.handleScrollEvent);
+    window.addEventListener("resize", this.handleScrollEvent);
     if (screen.orientation) {
-      screen.orientation.addEventListener('change', () => {
+      screen.orientation.addEventListener("change", () => {
         setTimeout(this.updateMapBounds, 500);
       });
     } else {
-      window.addEventListener('orientationchange', () => {
+      window.addEventListener("orientationchange", () => {
         setTimeout(this.updateMapBounds, 500);
       });
     }
   }
 
   disableScrolling(): void {
-    window.removeEventListener('ionScroll', this.handleScrollEvent);
-    window.removeEventListener('scroll', this.handleScrollEvent);
-    window.removeEventListener('resize', this.handleScrollEvent);
+    window.removeEventListener("ionScroll", this.handleScrollEvent);
+    window.removeEventListener("scroll", this.handleScrollEvent);
+    window.removeEventListener("resize", this.handleScrollEvent);
     if (screen.orientation) {
-      screen.orientation.removeEventListener('change', () => {
+      screen.orientation.removeEventListener("change", () => {
         setTimeout(this.updateMapBounds, 1000);
       });
     } else {
-      window.removeEventListener('orientationchange', () => {
+      window.removeEventListener("orientationchange", () => {
         setTimeout(this.updateMapBounds, 1000);
       });
     }
@@ -655,14 +699,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnCameraIdleListener(callback?: MapListenerCallback<CameraIdleCallbackData>): Promise<void> {
+  async setOnCameraIdleListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>
+  ): Promise<void> {
     if (this.onCameraIdleListener) {
       this.onCameraIdleListener.remove();
     }
 
     if (callback) {
       this.onCameraIdleListener = await CapacitorGoogleMaps.addListener(
-        'onCameraIdle',
+        "onCameraIdle",
         this.generateCallback(callback)
       );
     } else {
@@ -676,14 +722,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnBoundsChangedListener(callback?: MapListenerCallback<CameraIdleCallbackData>): Promise<void> {
+  async setOnBoundsChangedListener(
+    callback?: MapListenerCallback<CameraIdleCallbackData>
+  ): Promise<void> {
     if (this.onBoundsChangedListener) {
       this.onBoundsChangedListener.remove();
     }
 
     if (callback) {
       this.onBoundsChangedListener = await CapacitorGoogleMaps.addListener(
-        'onBoundsChanged',
+        "onBoundsChanged",
         this.generateCallback(callback)
       );
     } else {
@@ -697,14 +745,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnCameraMoveStartedListener(callback?: MapListenerCallback<CameraMoveStartedCallbackData>): Promise<void> {
+  async setOnCameraMoveStartedListener(
+    callback?: MapListenerCallback<CameraMoveStartedCallbackData>
+  ): Promise<void> {
     if (this.onCameraMoveStartedListener) {
       this.onCameraMoveStartedListener.remove();
     }
 
     if (callback) {
       this.onCameraMoveStartedListener = await CapacitorGoogleMaps.addListener(
-        'onCameraMoveStarted',
+        "onCameraMoveStarted",
         this.generateCallback(callback)
       );
     } else {
@@ -718,14 +768,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnClusterClickListener(callback?: MapListenerCallback<ClusterClickCallbackData>): Promise<void> {
+  async setOnClusterClickListener(
+    callback?: MapListenerCallback<ClusterClickCallbackData>
+  ): Promise<void> {
     if (this.onClusterClickListener) {
       this.onClusterClickListener.remove();
     }
 
     if (callback) {
       this.onClusterClickListener = await CapacitorGoogleMaps.addListener(
-        'onClusterClick',
+        "onClusterClick",
         this.generateCallback(callback)
       );
     } else {
@@ -739,16 +791,19 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnClusterInfoWindowClickListener(callback?: MapListenerCallback<ClusterClickCallbackData>): Promise<void> {
+  async setOnClusterInfoWindowClickListener(
+    callback?: MapListenerCallback<ClusterClickCallbackData>
+  ): Promise<void> {
     if (this.onClusterInfoWindowClickListener) {
       this.onClusterInfoWindowClickListener.remove();
     }
 
     if (callback) {
-      this.onClusterInfoWindowClickListener = await CapacitorGoogleMaps.addListener(
-        'onClusterInfoWindowClick',
-        this.generateCallback(callback)
-      );
+      this.onClusterInfoWindowClickListener =
+        await CapacitorGoogleMaps.addListener(
+          "onClusterInfoWindowClick",
+          this.generateCallback(callback)
+        );
     } else {
       this.onClusterInfoWindowClickListener = undefined;
     }
@@ -760,14 +815,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnInfoWindowClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void> {
+  async setOnInfoWindowClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void> {
     if (this.onInfoWindowClickListener) {
       this.onInfoWindowClickListener.remove();
     }
 
     if (callback) {
       this.onInfoWindowClickListener = await CapacitorGoogleMaps.addListener(
-        'onInfoWindowClick',
+        "onInfoWindowClick",
         this.generateCallback(callback)
       );
     } else {
@@ -781,13 +838,18 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void> {
+  async setOnMapClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>
+  ): Promise<void> {
     if (this.onMapClickListener) {
       this.onMapClickListener.remove();
     }
 
     if (callback) {
-      this.onMapClickListener = await CapacitorGoogleMaps.addListener('onMapClick', this.generateCallback(callback));
+      this.onMapClickListener = await CapacitorGoogleMaps.addListener(
+        "onMapClick",
+        this.generateCallback(callback)
+      );
     } else {
       this.onMapClickListener = undefined;
     }
@@ -799,14 +861,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackData>): Promise<void> {
+  async setOnPolygonClickListener(
+    callback?: MapListenerCallback<PolygonClickCallbackData>
+  ): Promise<void> {
     if (this.onPolygonClickListener) {
       this.onPolygonClickListener.remove();
     }
 
     if (callback) {
       this.onPolygonClickListener = await CapacitorGoogleMaps.addListener(
-        'onPolygonClick',
+        "onPolygonClick",
         this.generateCallback(callback)
       );
     } else {
@@ -820,12 +884,14 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData>): Promise<void> {
+  async setOnCircleClickListener(
+    callback?: MapListenerCallback<CircleClickCallbackData>
+  ): Promise<void> {
     if (this.onCircleClickListener) [this.onCircleClickListener.remove()];
 
     if (callback) {
       this.onCircleClickListener = await CapacitorGoogleMaps.addListener(
-        'onCircleClick',
+        "onCircleClick",
         this.generateCallback(callback)
       );
     } else {
@@ -839,14 +905,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void> {
+  async setOnMarkerClickListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void> {
     if (this.onMarkerClickListener) {
       this.onMarkerClickListener.remove();
     }
 
     if (callback) {
       this.onMarkerClickListener = await CapacitorGoogleMaps.addListener(
-        'onMarkerClick',
+        "onMarkerClick",
         this.generateCallback(callback)
       );
     } else {
@@ -859,14 +927,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData>): Promise<void> {
+  async setOnPolylineClickListener(
+    callback?: MapListenerCallback<PolylineCallbackData>
+  ): Promise<void> {
     if (this.onPolylineClickListener) {
       this.onPolylineClickListener.remove();
     }
 
     if (callback) {
       this.onPolylineClickListener = await CapacitorGoogleMaps.addListener(
-        'onPolylineClick',
+        "onPolylineClick",
         this.generateCallback(callback)
       );
     } else {
@@ -880,14 +950,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMarkerDragStartListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void> {
+  async setOnMarkerDragStartListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void> {
     if (this.onMarkerDragStartListener) {
       this.onMarkerDragStartListener.remove();
     }
 
     if (callback) {
       this.onMarkerDragStartListener = await CapacitorGoogleMaps.addListener(
-        'onMarkerDragStart',
+        "onMarkerDragStart",
         this.generateCallback(callback)
       );
     } else {
@@ -901,14 +973,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMarkerDragListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void> {
+  async setOnMarkerDragListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void> {
     if (this.onMarkerDragListener) {
       this.onMarkerDragListener.remove();
     }
 
     if (callback) {
       this.onMarkerDragListener = await CapacitorGoogleMaps.addListener(
-        'onMarkerDrag',
+        "onMarkerDrag",
         this.generateCallback(callback)
       );
     } else {
@@ -922,14 +996,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackData>): Promise<void> {
+  async setOnMarkerDragEndListener(
+    callback?: MapListenerCallback<MarkerClickCallbackData>
+  ): Promise<void> {
     if (this.onMarkerDragEndListener) {
       this.onMarkerDragEndListener.remove();
     }
 
     if (callback) {
       this.onMarkerDragEndListener = await CapacitorGoogleMaps.addListener(
-        'onMarkerDragEnd',
+        "onMarkerDragEnd",
         this.generateCallback(callback)
       );
     } else {
@@ -951,10 +1027,11 @@ export class GoogleMap {
     }
 
     if (callback) {
-      this.onMyLocationButtonClickListener = await CapacitorGoogleMaps.addListener(
-        'onMyLocationButtonClick',
-        this.generateCallback(callback)
-      );
+      this.onMyLocationButtonClickListener =
+        await CapacitorGoogleMaps.addListener(
+          "onMyLocationButtonClick",
+          this.generateCallback(callback)
+        );
     } else {
       this.onMyLocationButtonClickListener = undefined;
     }
@@ -966,14 +1043,16 @@ export class GoogleMap {
    * @param callback
    * @returns
    */
-  async setOnMyLocationClickListener(callback?: MapListenerCallback<MapClickCallbackData>): Promise<void> {
+  async setOnMyLocationClickListener(
+    callback?: MapListenerCallback<MapClickCallbackData>
+  ): Promise<void> {
     if (this.onMyLocationClickListener) {
       this.onMyLocationClickListener.remove();
     }
 
     if (callback) {
       this.onMyLocationClickListener = await CapacitorGoogleMaps.addListener(
-        'onMyLocationClick',
+        "onMyLocationClick",
         this.generateCallback(callback)
       );
     } else {
@@ -1067,7 +1146,9 @@ export class GoogleMap {
     }
   }
 
-  private generateCallback(callback: MapListenerCallback<any>): MapListenerCallback<any> {
+  private generateCallback(
+    callback: MapListenerCallback<any>
+  ): MapListenerCallback<any> {
     const mapId = this.id;
     return (data: any) => {
       if (data.mapId == mapId) {
