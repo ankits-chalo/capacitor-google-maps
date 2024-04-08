@@ -14,7 +14,6 @@ import type {
   PolygonClickCallbackData,
   Circle,
   CircleClickCallbackData,
-  Polyline,
   PolylineCallbackData,
 } from "./definitions";
 import { LatLngBounds, MapType } from "./definitions";
@@ -41,7 +40,14 @@ export interface GoogleMapInterface {
   removePolygons(ids: string[]): Promise<void>;
   addCircles(circles: Circle[]): Promise<string[]>;
   removeCircles(ids: string[]): Promise<void>;
-  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  addPolylines(
+    cords: any,
+    { strokeWidth, strokeColor, strokeOpacity, zIndex }: any
+  ): Promise<string[]>;
+  setMarkerPosition(args: any): Promise<{
+    id: string;
+  }>;
+  fitBound(args: any): Promise<void>;
   removePolylines(ids: string[]): Promise<void>;
   destroy(): Promise<void>;
   setCamera(config: CameraConfig): Promise<void>;
@@ -198,7 +204,12 @@ export declare class GoogleMap {
    */
   removeMarkers(ids: string[]): Promise<void>;
   addPolygons(polygons: Polygon[]): Promise<string[]>;
-  addPolylines(polylines: Polyline[]): Promise<string[]>;
+  addPolylines(
+    cords: any,
+    { strokeWidth, strokeColor, strokeOpacity, zIndex }: any
+  ): Promise<string[]>;
+  setMarkerPosition(marker: any): Promise<string>;
+  fitBound(cords: any): Promise<void>;
   removePolygons(ids: string[]): Promise<void>;
   addCircles(circles: Circle[]): Promise<string[]>;
   removeCircles(ids: string[]): Promise<void>;

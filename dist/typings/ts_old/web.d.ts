@@ -110,4 +110,6 @@ export declare class CapacitorGoogleMapsWeb
   ): Promise<void>;
   setMapListeners(mapId: string): Promise<void>;
   private buildMarkerOpts;
+  setMarkerPosition(): Promise<any>;
+  fitBound(): Promise<any>;
 }

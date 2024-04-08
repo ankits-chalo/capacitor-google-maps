@@ -215,21 +215,56 @@
       },
       {
         "name": "addPolylines",
-        "signature": "(polylines: Polyline[]) => Promise<string[]>",
+        "signature": "(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any) => Promise<string[]>",
         "parameters": [
           {
-            "name": "polylines",
+            "name": "cords",
             "docs": "",
-            "type": "Polyline[]"
+            "type": "any"
+          },
+          {
+            "name": "__1",
+            "docs": "",
+            "type": "any"
           }
         ],
         "returns": "Promise<string[]>",
         "tags": [],
         "docs": "",
-        "complexTypes": [
-          "Polyline"
-        ],
+        "complexTypes": [],
         "slug": "addpolylines"
+      },
+      {
+        "name": "setMarkerPosition",
+        "signature": "(args: any) => Promise<{ id: string; }>",
+        "parameters": [
+          {
+            "name": "args",
+            "docs": "",
+            "type": "any"
+          }
+        ],
+        "returns": "Promise<{ id: string; }>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "setmarkerposition"
+      },
+      {
+        "name": "fitBound",
+        "signature": "(args: any) => Promise<void>",
+        "parameters": [
+          {
+            "name": "args",
+            "docs": "",
+            "type": "any"
+          }
+        ],
+        "returns": "Promise<void>",
+        "tags": [],
+        "docs": "",
+        "complexTypes": [],
+        "slug": "fitbound"
       },
       {
         "name": "removePolylines",
@@ -1240,89 +1275,6 @@
           "docs": "",
           "complexTypes": [],
           "type": "string | undefined"
-        }
-      ]
-    },
-    {
-      "name": "Polyline",
-      "slug": "polyline",
-      "docs": "For web, all the javascript Polyline options are available as\nPolyline extends google.maps.PolylineOptions.\nFor iOS and Android only the config options declared on Polyline are available.",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "strokeColor",
-          "tags": [],
-          "docs": "The stroke color. All CSS3 colors are supported except for extended named\ncolors.",
-          "complexTypes": [],
-          "type": "string | undefined"
-        },
-        {
-          "name": "strokeOpacity",
-          "tags": [],
-          "docs": "The stroke opacity between 0.0 and 1.0.",
-          "complexTypes": [],
-          "type": "number | undefined"
-        },
-        {
-          "name": "strokeWeight",
-          "tags": [],
-          "docs": "The stroke width in pixels.",
-          "complexTypes": [],
-          "type": "number | undefined"
-        },
-        {
-          "name": "geodesic",
-          "tags": [],
-          "docs": "When <code>true</code>, edges of the polygon are interpreted as geodesic\nand will follow the curvature of the Earth. When <code>false</code>,\nedges of the polygon are rendered as straight lines in screen space. Note\nthat the shape of a geodesic polygon may appear to change when dragged,\nas the dimensions are maintained relative to the surface of the earth.",
-          "complexTypes": [],
-          "type": "boolean | undefined"
-        },
-        {
-          "name": "clickable",
-          "tags": [],
-          "docs": "Indicates whether this <code>Polyline</code> handles mouse events.",
-          "complexTypes": [],
-          "type": "boolean | undefined"
-        },
-        {
-          "name": "tag",
-          "tags": [],
-          "docs": "",
-          "complexTypes": [],
-          "type": "string | undefined"
-        },
-        {
-          "name": "styleSpans",
-          "tags": [],
-          "docs": "Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of StyleSpan objects.\nSetting the spans property is the preferred way to change the color of a polyline.\n\nOnly on iOS and Android.",
-          "complexTypes": [
-            "StyleSpan"
-          ],
-          "type": "StyleSpan[] | undefined"
-        }
-      ]
-    },
-    {
-      "name": "StyleSpan",
-      "slug": "stylespan",
-      "docs": "Describes the style for some region of a polyline.",
-      "tags": [],
-      "methods": [],
-      "properties": [
-        {
-          "name": "color",
-          "tags": [],
-          "docs": "The stroke color. All CSS3 colors are supported except for extended named colors.",
-          "complexTypes": [],
-          "type": "string"
-        },
-        {
-          "name": "segments",
-          "tags": [],
-          "docs": "The length of this span in number of segments.",
-          "complexTypes": [],
-          "type": "number | undefined"
         }
       ]
     },

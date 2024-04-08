@@ -548,5 +548,11 @@ export class CapacitorGoogleMapsWeb extends WebPlugin {
     };
     return opts;
   }
+  setMarkerPosition() {
+    throw new Error("Method not implemented.");
+  }
+  fitBound() {
+    throw new Error("Method not implemented.");
+  }
 }
 //# sourceMappingURL=web.js.map
