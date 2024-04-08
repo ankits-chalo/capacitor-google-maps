@@ -7,9 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import com.chalo.operatorapp.R
+import com.capacitorjs.plugins.googlemaps.CapacitorGoogleMapMarker
+import com.capacitorjs.plugins.googlemaps.R
 import com.chalo.operatorapp.googleMapPlugin.BusesMarkerInfoWindow
-import com.chalo.operatorapp.googleMapPlugin.CapacitorGoogleMapMarker
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
