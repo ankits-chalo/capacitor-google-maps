@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="marker_size">
+        42dp
+    </dimen>
+    <dimen name="arrow_marker_height">
+        54dp
+    </dimen>
+    <dimen name="arrow_marker_width">
+        62dp
+    </dimen>
+    <dimen name="stop_marker">
+        12dp
+    </dimen>
+    <dimen name="start_end_marker_height">
+        28dp
+    </dimen>
+    <dimen name="start_end_marker_width">
+        42dp
+    </dimen>
+    <dimen name="alert_marker">
+        42dp
+    </dimen>
+
+</resources>
