@@ -308,6 +308,8 @@ export default MyMap;
 * [`addCircles(...)`](#addcircles)
 * [`removeCircles(...)`](#removecircles)
 * [`addPolylines(...)`](#addpolylines)
+* [`setMarkerPosition(...)`](#setmarkerposition)
+* [`fitBound(...)`](#fitbound)
 * [`removePolylines(...)`](#removepolylines)
 * [`destroy()`](#destroy)
 * [`setCamera(...)`](#setcamera)
@@ -516,14 +518,43 @@ removeCircles(ids: string[]) => Promise<void>
 ### addPolylines(...)
 
 ```typescript
-addPolylines(polylines: Polyline[]) => Promise<string[]>
+addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any) => Promise<string[]>
 ```
 
-| Param           | Type                    |
-| --------------- | ----------------------- |
-| **`polylines`** | <code>Polyline[]</code> |
+| Param       | Type             |
+| ----------- | ---------------- |
+| **`cords`** | <code>any</code> |
+| **`__1`**   | <code>any</code> |
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
+
+--------------------
+
+
+### setMarkerPosition(...)
+
+```typescript
+setMarkerPosition(args: any) => Promise<{ id: string; }>
+```
+
+| Param      | Type             |
+| ---------- | ---------------- |
+| **`args`** | <code>any</code> |
+
+**Returns:** <code>Promise&lt;{ id: string; }&gt;</code>
+
+--------------------
+
+
+### fitBound(...)
+
+```typescript
+fitBound(args: any) => Promise<void>
+```
+
+| Param      | Type             |
+| ---------- | ---------------- |
+| **`args`** | <code>any</code> |
 
 --------------------
 
@@ -1014,33 +1045,6 @@ For iOS and Android only the config options declared on <a href="#circle">Circle
 | **`clickable`**    | <code>boolean</code> | Indicates whether this &lt;code&gt;<a href="#circle">Circle</a>&lt;/code&gt; handles mouse events.                                                                                     |
 | **`title`**        | <code>string</code>  | Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text. Only available on iOS. |
 | **`tag`**          | <code>string</code>  |                                                                                                                                                                                        |
-
-
-#### Polyline
-
-For web, all the javascript <a href="#polyline">Polyline</a> options are available as
-Polyline extends google.maps.PolylineOptions.
-For iOS and Android only the config options declared on <a href="#polyline">Polyline</a> are available.
-
-| Prop                | Type                     | Description                                                                                                                                                                                                                                                                                                                                                                                    |
-| ------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`strokeColor`**   | <code>string</code>      | The stroke color. All CSS3 colors are supported except for extended named colors.                                                                                                                                                                                                                                                                                                              |
-| **`strokeOpacity`** | <code>number</code>      | The stroke opacity between 0.0 and 1.0.                                                                                                                                                                                                                                                                                                                                                        |
-| **`strokeWeight`**  | <code>number</code>      | The stroke width in pixels.                                                                                                                                                                                                                                                                                                                                                                    |
-| **`geodesic`**      | <code>boolean</code>     | When &lt;code&gt;true&lt;/code&gt;, edges of the polygon are interpreted as geodesic and will follow the curvature of the Earth. When &lt;code&gt;false&lt;/code&gt;, edges of the polygon are rendered as straight lines in screen space. Note that the shape of a geodesic polygon may appear to change when dragged, as the dimensions are maintained relative to the surface of the earth. |
-| **`clickable`**     | <code>boolean</code>     | Indicates whether this &lt;code&gt;<a href="#polyline">Polyline</a>&lt;/code&gt; handles mouse events.                                                                                                                                                                                                                                                                                         |
-| **`tag`**           | <code>string</code>      |                                                                                                                                                                                                                                                                                                                                                                                                |
-| **`styleSpans`**    | <code>StyleSpan[]</code> | Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of <a href="#stylespan">StyleSpan</a> objects. Setting the spans property is the preferred way to change the color of a polyline. Only on iOS and Android.                                                                                                                                |
-
-
-#### StyleSpan
-
-Describes the style for some region of a polyline.
-
-| Prop           | Type                | Description                                                                       |
-| -------------- | ------------------- | --------------------------------------------------------------------------------- |
-| **`color`**    | <code>string</code> | The stroke color. All CSS3 colors are supported except for extended named colors. |
-| **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
 
 
 #### CameraConfig

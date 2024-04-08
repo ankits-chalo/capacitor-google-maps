@@ -267,12 +267,41 @@ export class GoogleMap {
     });
     return res.ids;
   }
-  async addPolylines(polylines) {
+  // async addPolylines(polylines: Polyline[]): Promise<string[]> {
+  //   const res = await CapacitorGoogleMaps.addPolylines({
+  //     id: this.id,
+  //     polylines,
+  //   });
+  //   return res.ids;
+  // }
+  async addPolylines(
+    cords,
+    { strokeWidth = 1, strokeColor, strokeOpacity, zIndex }
+  ) {
     const res = await CapacitorGoogleMaps.addPolylines({
       id: this.id,
-      polylines,
+      cords,
+      polylineProps: {
+        strokeWidth,
+        strokeColor,
+        strokeOpacity,
+        zIndex,
+      },
     });
     return res.ids;
+  }
+  async setMarkerPosition(marker) {
+    const res = await CapacitorGoogleMaps.setMarkerPosition({
+      id: this.id,
+      marker,
+    });
+    return res.id;
+  }
+  async fitBound(cords) {
+    return CapacitorGoogleMaps.fitBound({
+      id: this.id,
+      cords,
+    });
   }
   async removePolygons(ids) {
     return CapacitorGoogleMaps.removePolygons({

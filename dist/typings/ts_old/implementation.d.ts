@@ -163,9 +163,13 @@ export interface CapacitorGoogleMapsPlugin extends Plugin {
     ids: string[];
   }>;
   removeCircles(args: RemoveCirclesArgs): Promise<void>;
-  addPolylines(args: AddPolylinesArgs): Promise<{
+  addPolylines(args: any): Promise<{
     ids: string[];
   }>;
+  setMarkerPosition(args: any): Promise<{
+    id: string;
+  }>;
+  fitBound(args: any): Promise<void>;
   removePolylines(args: RemovePolylinesArgs): Promise<void>;
   enableClustering(args: EnableClusteringArgs): Promise<void>;
   disableClustering(args: { id: string }): Promise<void>;
