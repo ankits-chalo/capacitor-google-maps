@@ -1,4 +1,4 @@
-package com.chalo.operatorapp.googleMapPlugin
+package com.capacitorjs.plugins.googlemaps
 
 import android.content.Context
 import android.content.res.Resources
@@ -8,7 +8,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.chalo.operatorapp.R
+import com.capacitorjs.plugins.googlemaps.CapacitorGoogleMapMarker
+import com.capacitorjs.plugins.googlemaps.R
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import org.json.JSONObject
