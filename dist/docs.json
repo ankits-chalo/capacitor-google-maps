@@ -1757,31 +1757,31 @@
       "members": [
         {
           "name": "Normal",
-          "value": "'Normal'",
+          "value": "\"Normal\"",
           "tags": [],
           "docs": "Basic map."
         },
         {
           "name": "Hybrid",
-          "value": "'Hybrid'",
+          "value": "\"Hybrid\"",
           "tags": [],
           "docs": "Satellite imagery with roads and labels."
         },
         {
           "name": "Satellite",
-          "value": "'Satellite'",
+          "value": "\"Satellite\"",
           "tags": [],
           "docs": "Satellite imagery with no labels."
         },
         {
           "name": "Terrain",
-          "value": "'Terrain'",
+          "value": "\"Terrain\"",
           "tags": [],
           "docs": "Topographic data."
         },
         {
           "name": "None",
-          "value": "'None'",
+          "value": "\"None\"",
           "tags": [],
           "docs": "No base map tiles."
         }

@@ -280,50 +280,50 @@ export default MyMap;
 
 <docgen-index>
 
-- [`create(...)`](#create)
-- [`enableTouch()`](#enabletouch)
-- [`disableTouch()`](#disabletouch)
-- [`enableClustering(...)`](#enableclustering)
-- [`disableClustering()`](#disableclustering)
-- [`addMarker(...)`](#addmarker)
-- [`addMarkers(...)`](#addmarkers)
-- [`removeMarker(...)`](#removemarker)
-- [`removeMarkers(...)`](#removemarkers)
-- [`addPolygons(...)`](#addpolygons)
-- [`removePolygons(...)`](#removepolygons)
-- [`addCircles(...)`](#addcircles)
-- [`removeCircles(...)`](#removecircles)
-- [`addPolylines(...)`](#addpolylines)
-- [`removePolylines(...)`](#removepolylines)
-- [`destroy()`](#destroy)
-- [`setCamera(...)`](#setcamera)
-- [`getMapType()`](#getmaptype)
-- [`setMapType(...)`](#setmaptype)
-- [`enableIndoorMaps(...)`](#enableindoormaps)
-- [`enableTrafficLayer(...)`](#enabletrafficlayer)
-- [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
-- [`enableCurrentLocation(...)`](#enablecurrentlocation)
-- [`setPadding(...)`](#setpadding)
-- [`fitBounds(...)`](#fitbounds)
-- [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
-- [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
-- [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
-- [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
-- [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
-- [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
-- [`setOnMapClickListener(...)`](#setonmapclicklistener)
-- [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
-- [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
-- [`setOnCircleClickListener(...)`](#setoncircleclicklistener)
-- [`setOnPolylineClickListener(...)`](#setonpolylineclicklistener)
-- [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
-- [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
-- [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
-- [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
-- [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
-- [Interfaces](#interfaces)
-- [Type Aliases](#type-aliases)
-- [Enums](#enums)
+* [`create(...)`](#create)
+* [`enableTouch()`](#enabletouch)
+* [`disableTouch()`](#disabletouch)
+* [`enableClustering(...)`](#enableclustering)
+* [`disableClustering()`](#disableclustering)
+* [`addMarker(...)`](#addmarker)
+* [`addMarkers(...)`](#addmarkers)
+* [`removeMarker(...)`](#removemarker)
+* [`removeMarkers(...)`](#removemarkers)
+* [`addPolygons(...)`](#addpolygons)
+* [`removePolygons(...)`](#removepolygons)
+* [`addCircles(...)`](#addcircles)
+* [`removeCircles(...)`](#removecircles)
+* [`addPolylines(...)`](#addpolylines)
+* [`removePolylines(...)`](#removepolylines)
+* [`destroy()`](#destroy)
+* [`setCamera(...)`](#setcamera)
+* [`getMapType()`](#getmaptype)
+* [`setMapType(...)`](#setmaptype)
+* [`enableIndoorMaps(...)`](#enableindoormaps)
+* [`enableTrafficLayer(...)`](#enabletrafficlayer)
+* [`enableAccessibilityElements(...)`](#enableaccessibilityelements)
+* [`enableCurrentLocation(...)`](#enablecurrentlocation)
+* [`setPadding(...)`](#setpadding)
+* [`fitBounds(...)`](#fitbounds)
+* [`setOnBoundsChangedListener(...)`](#setonboundschangedlistener)
+* [`setOnCameraIdleListener(...)`](#setoncameraidlelistener)
+* [`setOnCameraMoveStartedListener(...)`](#setoncameramovestartedlistener)
+* [`setOnClusterClickListener(...)`](#setonclusterclicklistener)
+* [`setOnClusterInfoWindowClickListener(...)`](#setonclusterinfowindowclicklistener)
+* [`setOnInfoWindowClickListener(...)`](#setoninfowindowclicklistener)
+* [`setOnMapClickListener(...)`](#setonmapclicklistener)
+* [`setOnMarkerClickListener(...)`](#setonmarkerclicklistener)
+* [`setOnPolygonClickListener(...)`](#setonpolygonclicklistener)
+* [`setOnCircleClickListener(...)`](#setoncircleclicklistener)
+* [`setOnPolylineClickListener(...)`](#setonpolylineclicklistener)
+* [`setOnMarkerDragStartListener(...)`](#setonmarkerdragstartlistener)
+* [`setOnMarkerDragListener(...)`](#setonmarkerdraglistener)
+* [`setOnMarkerDragEndListener(...)`](#setonmarkerdragendlistener)
+* [`setOnMyLocationButtonClickListener(...)`](#setonmylocationbuttonclicklistener)
+* [`setOnMyLocationClickListener(...)`](#setonmylocationclicklistener)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -343,7 +343,8 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 
 **Returns:** <code>Promise&lt;GoogleMap&gt;</code>
 
----
+--------------------
+
 
 ### enableTouch()
 
@@ -351,7 +352,8 @@ create(options: CreateMapArgs, callback?: MapListenerCallback<MapReadyCallbackDa
 enableTouch() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### disableTouch()
 
@@ -359,7 +361,8 @@ enableTouch() => Promise<void>
 disableTouch() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### enableClustering(...)
 
@@ -371,7 +374,8 @@ enableClustering(minClusterSize?: number | undefined) => Promise<void>
 | -------------------- | ------------------- | --------------------------------------------------------------------------------------- |
 | **`minClusterSize`** | <code>number</code> | The minimum number of markers that can be clustered together. The default is 4 markers. |
 
----
+--------------------
+
 
 ### disableClustering()
 
@@ -379,7 +383,8 @@ enableClustering(minClusterSize?: number | undefined) => Promise<void>
 disableClustering() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### addMarker(...)
 
@@ -393,7 +398,8 @@ addMarker(marker: Marker) => Promise<string>
 
 **Returns:** <code>Promise&lt;string&gt;</code>
 
----
+--------------------
+
 
 ### addMarkers(...)
 
@@ -407,7 +413,8 @@ addMarkers(markers: Marker[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
----
+--------------------
+
 
 ### removeMarker(...)
 
@@ -419,7 +426,8 @@ removeMarker(id: string) => Promise<void>
 | -------- | ------------------- |
 | **`id`** | <code>string</code> |
 
----
+--------------------
+
 
 ### removeMarkers(...)
 
@@ -431,7 +439,8 @@ removeMarkers(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
----
+--------------------
+
 
 ### addPolygons(...)
 
@@ -445,7 +454,8 @@ addPolygons(polygons: Polygon[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
----
+--------------------
+
 
 ### removePolygons(...)
 
@@ -457,7 +467,8 @@ removePolygons(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
----
+--------------------
+
 
 ### addCircles(...)
 
@@ -471,7 +482,8 @@ addCircles(circles: Circle[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
----
+--------------------
+
 
 ### removeCircles(...)
 
@@ -483,7 +495,8 @@ removeCircles(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
----
+--------------------
+
 
 ### addPolylines(...)
 
@@ -497,7 +510,8 @@ addPolylines(polylines: Polyline[]) => Promise<string[]>
 
 **Returns:** <code>Promise&lt;string[]&gt;</code>
 
----
+--------------------
+
 
 ### removePolylines(...)
 
@@ -509,7 +523,8 @@ removePolylines(ids: string[]) => Promise<void>
 | --------- | --------------------- |
 | **`ids`** | <code>string[]</code> |
 
----
+--------------------
+
 
 ### destroy()
 
@@ -517,7 +532,8 @@ removePolylines(ids: string[]) => Promise<void>
 destroy() => Promise<void>
 ```
 
----
+--------------------
+
 
 ### setCamera(...)
 
@@ -529,7 +545,8 @@ setCamera(config: CameraConfig) => Promise<void>
 | ------------ | ----------------------------------------------------- |
 | **`config`** | <code><a href="#cameraconfig">CameraConfig</a></code> |
 
----
+--------------------
+
 
 ### getMapType()
 
@@ -541,7 +558,8 @@ Get current map type
 
 **Returns:** <code>Promise&lt;<a href="#maptype">MapType</a>&gt;</code>
 
----
+--------------------
+
 
 ### setMapType(...)
 
@@ -553,7 +571,8 @@ setMapType(mapType: MapType) => Promise<void>
 | ------------- | ------------------------------------------- |
 | **`mapType`** | <code><a href="#maptype">MapType</a></code> |
 
----
+--------------------
+
 
 ### enableIndoorMaps(...)
 
@@ -565,7 +584,8 @@ enableIndoorMaps(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableTrafficLayer(...)
 
@@ -577,7 +597,8 @@ enableTrafficLayer(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableAccessibilityElements(...)
 
@@ -589,7 +610,8 @@ enableAccessibilityElements(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### enableCurrentLocation(...)
 
@@ -601,7 +623,8 @@ enableCurrentLocation(enabled: boolean) => Promise<void>
 | ------------- | -------------------- |
 | **`enabled`** | <code>boolean</code> |
 
----
+--------------------
+
 
 ### setPadding(...)
 
@@ -613,7 +636,8 @@ setPadding(padding: MapPadding) => Promise<void>
 | ------------- | ------------------------------------------------- |
 | **`padding`** | <code><a href="#mappadding">MapPadding</a></code> |
 
----
+--------------------
+
 
 ### fitBounds(...)
 
@@ -628,7 +652,8 @@ Sets the map viewport to contain the given bounds.
 | **`bounds`**  | <code>LatLngBounds</code> | The bounds to fit in the viewport.                                                                                        |
 | **`padding`** | <code>number</code>       | Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed. |
 
----
+--------------------
+
 
 ### setOnBoundsChangedListener(...)
 
@@ -640,7 +665,8 @@ setOnBoundsChangedListener(callback?: MapListenerCallback<CameraIdleCallbackData
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#cameraidlecallbackdata">CameraIdleCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnCameraIdleListener(...)
 
@@ -652,7 +678,8 @@ setOnCameraIdleListener(callback?: MapListenerCallback<CameraIdleCallbackData> |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#cameraidlecallbackdata">CameraIdleCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnCameraMoveStartedListener(...)
 
@@ -664,7 +691,8 @@ setOnCameraMoveStartedListener(callback?: MapListenerCallback<CameraMoveStartedC
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#cameramovestartedcallbackdata">CameraMoveStartedCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnClusterClickListener(...)
 
@@ -676,7 +704,8 @@ setOnClusterClickListener(callback?: MapListenerCallback<ClusterClickCallbackDat
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#clusterclickcallbackdata">ClusterClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnClusterInfoWindowClickListener(...)
 
@@ -688,7 +717,8 @@ setOnClusterInfoWindowClickListener(callback?: MapListenerCallback<ClusterClickC
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#clusterclickcallbackdata">ClusterClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnInfoWindowClickListener(...)
 
@@ -700,7 +730,8 @@ setOnInfoWindowClickListener(callback?: MapListenerCallback<MarkerClickCallbackD
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMapClickListener(...)
 
@@ -712,7 +743,8 @@ setOnMapClickListener(callback?: MapListenerCallback<MapClickCallbackData> | und
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapclickcallbackdata">MapClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMarkerClickListener(...)
 
@@ -724,7 +756,8 @@ setOnMarkerClickListener(callback?: MapListenerCallback<MarkerClickCallbackData>
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnPolygonClickListener(...)
 
@@ -736,7 +769,8 @@ setOnPolygonClickListener(callback?: MapListenerCallback<PolygonClickCallbackDat
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polygonclickcallbackdata">PolygonClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnCircleClickListener(...)
 
@@ -748,7 +782,8 @@ setOnCircleClickListener(callback?: MapListenerCallback<CircleClickCallbackData>
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#circleclickcallbackdata">CircleClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnPolylineClickListener(...)
 
@@ -760,7 +795,8 @@ setOnPolylineClickListener(callback?: MapListenerCallback<PolylineCallbackData> 
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#polylinecallbackdata">PolylineCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMarkerDragStartListener(...)
 
@@ -772,7 +808,8 @@ setOnMarkerDragStartListener(callback?: MapListenerCallback<MarkerClickCallbackD
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMarkerDragListener(...)
 
@@ -784,7 +821,8 @@ setOnMarkerDragListener(callback?: MapListenerCallback<MarkerClickCallbackData> 
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMarkerDragEndListener(...)
 
@@ -796,7 +834,8 @@ setOnMarkerDragEndListener(callback?: MapListenerCallback<MarkerClickCallbackDat
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#markerclickcallbackdata">MarkerClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMyLocationButtonClickListener(...)
 
@@ -808,7 +847,8 @@ setOnMyLocationButtonClickListener(callback?: MapListenerCallback<MyLocationButt
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mylocationbuttonclickcallbackdata">MyLocationButtonClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### setOnMyLocationClickListener(...)
 
@@ -820,9 +860,11 @@ setOnMyLocationClickListener(callback?: MapListenerCallback<MapClickCallbackData
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **`callback`** | <code><a href="#maplistenercallback">MapListenerCallback</a>&lt;<a href="#mapclickcallbackdata">MapClickCallbackData</a>&gt;</code> |
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### CreateMapArgs
 
@@ -837,6 +879,7 @@ An interface containing the options used when creating a map.
 | **`forceCreate`** | <code>boolean</code>                                        | Destroy and re-create the map instance if a map with the supplied id already exists                                                                                                    | <code>false</code> |
 | **`region`**      | <code>string</code>                                         | The region parameter alters your application to serve different map tiles or bias the application (such as biasing geocoding results towards the region). Only available for web.      |                    |
 | **`language`**    | <code>string</code>                                         | The language parameter affects the names of controls, copyright notices, driving directions, and control labels, as well as the responses to service requests. Only available for web. |                    |
+
 
 #### GoogleMapConfig
 
@@ -859,6 +902,7 @@ For iOS and Android only the config options declared on <a href="#googlemapconfi
 | **`androidMapId`**     | <code>string</code>                       | A map id associated with a specific map style or feature. [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id) Only for Android.    |                    | 5.4.0 |
 | **`iOSMapId`**         | <code>string</code>                       | A map id associated with a specific map style or feature. [Use Map IDs](https://developers.google.com/maps/documentation/get-map-id) Only for iOS.        |                    | 5.4.0 |
 
+
 #### LatLng
 
 An interface representing a pair of latitude and longitude coordinates.
@@ -868,11 +912,13 @@ An interface representing a pair of latitude and longitude coordinates.
 | **`lat`** | <code>number</code> | Coordinate latitude, in degrees. This value is in the range [-90, 90].    |
 | **`lng`** | <code>number</code> | Coordinate longitude, in degrees. This value is in the range [-180, 180]. |
 
+
 #### MapReadyCallbackData
 
 | Prop        | Type                |
 | ----------- | ------------------- |
 | **`mapId`** | <code>string</code> |
+
 
 #### Marker
 
@@ -893,12 +939,14 @@ A marker is an icon placed at a particular point on the map's surface.
 | **`draggable`**  | <code>boolean</code>                                         | Controls whether this marker can be dragged interactively                                                                                                                                 | <code>false</code> |       |
 | **`zIndex`**     | <code>number</code>                                          | Specifies the stack order of this marker, relative to other markers on the map. A marker with a high z-index is drawn on top of markers with lower z-indexes                              | <code>0</code>     |       |
 
+
 #### Size
 
 | Prop         | Type                |
 | ------------ | ------------------- |
 | **`width`**  | <code>number</code> |
 | **`height`** | <code>number</code> |
+
 
 #### Point
 
@@ -910,6 +958,7 @@ https://tools.ietf.org/html/rfc7946#section-3.1.2
 | **`type`**        | <code>'<a href="#point">Point</a>'</code>     | Specifies the type of GeoJSON object. |
 | **`coordinates`** | <code><a href="#position">Position</a></code> |                                       |
 
+
 #### Polygon
 
 <a href="#polygon">Polygon</a> geometry object.
@@ -919,6 +968,7 @@ https://tools.ietf.org/html/rfc7946#section-3.1.6
 | ----------------- | --------------------------------------------- | ------------------------------------- |
 | **`type`**        | <code>'<a href="#polygon">Polygon</a>'</code> | Specifies the type of GeoJSON object. |
 | **`coordinates`** | <code>Position[][]</code>                     |                                       |
+
 
 #### Circle
 
@@ -937,6 +987,7 @@ For iOS and Android only the config options declared on <a href="#circle">Circle
 | **`title`**        | <code>string</code>  | Title, a short description of the overlay. Some overlays, such as markers, will display the title on the map. The title is also the default accessibility text. Only available on iOS. |
 | **`tag`**          | <code>string</code>  |                                                                                                                                                                                        |
 
+
 #### Polyline
 
 For web, all the javascript <a href="#polyline">Polyline</a> options are available as
@@ -953,6 +1004,7 @@ For iOS and Android only the config options declared on <a href="#polyline">Poly
 | **`tag`**           | <code>string</code>      |                                                                                                                                                                                                                                                                                                                                                                                                |
 | **`styleSpans`**    | <code>StyleSpan[]</code> | Used to specify the color of one or more segments of a polyline. The styleSpans property is an array of <a href="#stylespan">StyleSpan</a> objects. Setting the spans property is the preferred way to change the color of a polyline. Only on iOS and Android.                                                                                                                                |
 
+
 #### StyleSpan
 
 Describes the style for some region of a polyline.
@@ -961,6 +1013,7 @@ Describes the style for some region of a polyline.
 | -------------- | ------------------- | --------------------------------------------------------------------------------- |
 | **`color`**    | <code>string</code> | The stroke color. All CSS3 colors are supported except for extended named colors. |
 | **`segments`** | <code>number</code> | The length of this span in number of segments.                                    |
+
 
 #### CameraConfig
 
@@ -975,6 +1028,7 @@ Configuration properties for a Google Map Camera
 | **`animate`**           | <code>boolean</code>                      | Animate the transition to the new Camera properties.                                                                   | <code>false</code> |
 | **`animationDuration`** | <code>number</code>                       | This configuration option is not being used.                                                                           |                    |
 
+
 #### MapPadding
 
 Controls for setting padding on the 'visible' region of the view.
@@ -985,6 +1039,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`left`**   | <code>number</code> |
 | **`right`**  | <code>number</code> |
 | **`bottom`** | <code>number</code> |
+
 
 #### CameraIdleCallbackData
 
@@ -998,12 +1053,14 @@ Controls for setting padding on the 'visible' region of the view.
 | **`tilt`**      | <code>number</code>       |
 | **`zoom`**      | <code>number</code>       |
 
+
 #### CameraMoveStartedCallbackData
 
 | Prop            | Type                 |
 | --------------- | -------------------- |
 | **`mapId`**     | <code>string</code>  |
 | **`isGesture`** | <code>boolean</code> |
+
 
 #### ClusterClickCallbackData
 
@@ -1015,6 +1072,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`size`**      | <code>number</code>               |
 | **`items`**     | <code>MarkerCallbackData[]</code> |
 
+
 #### MarkerCallbackData
 
 | Prop            | Type                |
@@ -1025,11 +1083,13 @@ Controls for setting padding on the 'visible' region of the view.
 | **`title`**     | <code>string</code> |
 | **`snippet`**   | <code>string</code> |
 
+
 #### MarkerClickCallbackData
 
 | Prop        | Type                |
 | ----------- | ------------------- |
 | **`mapId`** | <code>string</code> |
+
 
 #### MapClickCallbackData
 
@@ -1039,6 +1099,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`latitude`**  | <code>number</code> |
 | **`longitude`** | <code>number</code> |
 
+
 #### PolygonClickCallbackData
 
 | Prop            | Type                |
@@ -1046,6 +1107,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`mapId`**     | <code>string</code> |
 | **`polygonId`** | <code>string</code> |
 | **`tag`**       | <code>string</code> |
+
 
 #### CircleClickCallbackData
 
@@ -1055,6 +1117,7 @@ Controls for setting padding on the 'visible' region of the view.
 | **`circleId`** | <code>string</code> |
 | **`tag`**      | <code>string</code> |
 
+
 #### PolylineCallbackData
 
 | Prop             | Type                |
@@ -1062,19 +1125,23 @@ Controls for setting padding on the 'visible' region of the view.
 | **`polylineId`** | <code>string</code> |
 | **`tag`**        | <code>string</code> |
 
+
 #### MyLocationButtonClickCallbackData
 
 | Prop        | Type                |
 | ----------- | ------------------- |
 | **`mapId`** | <code>string</code> |
 
+
 ### Type Aliases
+
 
 #### MapListenerCallback
 
 The callback function to be called when map events are emitted.
 
 <code>(data: T): void</code>
+
 
 #### Position
 
@@ -1086,16 +1153,18 @@ but the current specification only allows X, Y, and (optionally) Z to be defined
 
 <code>number[]</code>
 
+
 ### Enums
+
 
 #### MapType
 
 | Members         | Value                    | Description                              |
 | --------------- | ------------------------ | ---------------------------------------- |
-| **`Normal`**    | <code>'Normal'</code>    | Basic map.                               |
-| **`Hybrid`**    | <code>'Hybrid'</code>    | Satellite imagery with roads and labels. |
-| **`Satellite`** | <code>'Satellite'</code> | Satellite imagery with no labels.        |
-| **`Terrain`**   | <code>'Terrain'</code>   | Topographic data.                        |
-| **`None`**      | <code>'None'</code>      | No base map tiles.                       |
+| **`Normal`**    | <code>"Normal"</code>    | Basic map.                               |
+| **`Hybrid`**    | <code>"Hybrid"</code>    | Satellite imagery with roads and labels. |
+| **`Satellite`** | <code>"Satellite"</code> | Satellite imagery with no labels.        |
+| **`Terrain`**   | <code>"Terrain"</code>   | Topographic data.                        |
+| **`None`**      | <code>"None"</code>      | No base map tiles.                       |
 
 </docgen-api>
