@@ -205,10 +205,10 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
         const onMapReadyListener = await CapacitorGoogleMaps.addListener(
           "onMapReady",
           (data) => {
-            if (data.mapId == newMap.id) {
-              callback(data);
-              onMapReadyListener.remove();
-            }
+            // if (data.mapId == newMap.id) {
+            callback(data);
+            onMapReadyListener.remove();
+            // }s
           }
         );
       }
