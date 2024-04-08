@@ -208,7 +208,7 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
             // if (data.mapId == newMap.id) {
             callback(data);
             onMapReadyListener.remove();
-            // }s
+            // }
           }
         );
       }
@@ -573,23 +573,23 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
       }
     }
     /*
-        private findContainerElement(): HTMLElement | null {
-          if (!this.element) {
-            return null;
-          }
-      
-          let parentElement = this.element.parentElement;
-          while (parentElement !== null) {
-            if (window.getComputedStyle(parentElement).overflowY !== 'hidden') {
-              return parentElement;
-            }
-      
-            parentElement = parentElement.parentElement;
-          }
-      
+      private findContainerElement(): HTMLElement | null {
+        if (!this.element) {
           return null;
         }
-        */
+
+        let parentElement = this.element.parentElement;
+        while (parentElement !== null) {
+          if (window.getComputedStyle(parentElement).overflowY !== 'hidden') {
+            return parentElement;
+          }
+
+          parentElement = parentElement.parentElement;
+        }
+
+        return null;
+      }
+      */
     /**
      * Set the event listener on the map for 'onCameraIdle' events.
      *
