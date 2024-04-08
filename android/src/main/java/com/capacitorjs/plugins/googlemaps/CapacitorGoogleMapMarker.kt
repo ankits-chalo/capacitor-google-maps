@@ -1,11 +1,14 @@
 package com.capacitorjs.plugins.googlemaps
 
+import android.graphics.Color
+import android.util.Size
+import androidx.core.math.MathUtils
 import BusesMarker
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.chalo.operatorapp.R
+import com.capacitorjs.plugins.googlemaps.R
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.ClusterItem
 import org.json.JSONObject

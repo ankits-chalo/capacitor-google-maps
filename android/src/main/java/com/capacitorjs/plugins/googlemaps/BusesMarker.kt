@@ -1,3 +1,4 @@
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,9 +8,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.capacitorjs.plugins.googlemaps.BusesMarkerInfoWindow
 import com.capacitorjs.plugins.googlemaps.CapacitorGoogleMapMarker
 import com.capacitorjs.plugins.googlemaps.R
-import com.chalo.operatorapp.googleMapPlugin.BusesMarkerInfoWindow
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
