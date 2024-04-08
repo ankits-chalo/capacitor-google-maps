@@ -231,7 +231,7 @@ class CapacitorGoogleMap(
                         // Make a record of react code marker IDs that we are adding on map
                         it.getMarkerId()?.let { marker -> markerIdOnWeb.add(marker) }
 
-                        val markerOptions = it.getMarkerOptions()
+                        val markerOptions = it.getMarkerOptionsUpdated()
 
                         if (it.iconUrl.equals("buses_custom_marker")) {
                             val bridge = delegate.bridge
@@ -351,7 +351,7 @@ class CapacitorGoogleMap(
                     // Make a record of react code marker IDs that we are adding on map
                     marker.getMarkerId()?.let { markerIdOnWeb.add(it) }
 
-                    val markerOptions = marker.getMarkerOptions()
+                    val markerOptions = marker.getMarkerOptionsUpdated()
                     if(marker.rotation == 1) {
                         markerOptions.rotation(getAngle(marker.coordinate))
                     }
@@ -771,7 +771,7 @@ class CapacitorGoogleMap(
                 // add existing markers back to the map
                 if (markers.isNotEmpty()) {
                     for ((_, marker) in markers) {
-                        val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptions())
+                        val googleMapMarker = googleMap?.addMarker(marker.getMarkerOptionsUpdated())
                         marker.googleMapMarker = googleMapMarker
                     }
                 }
