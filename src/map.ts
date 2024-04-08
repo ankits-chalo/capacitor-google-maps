@@ -293,10 +293,10 @@ export class GoogleMap {
       const onMapReadyListener = await CapacitorGoogleMaps.addListener(
         "onMapReady",
         (data: MapReadyCallbackData) => {
-          if (data.mapId == newMap.id) {
+          // if (data.mapId == newMap.id) {
             callback(data);
             onMapReadyListener.remove();
-          }
+          // }s
         }
       );
     }
