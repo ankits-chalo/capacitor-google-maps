@@ -123,7 +123,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         googleMapMarker?.title =  string
     }
 
-    fun getMarkerOptions(): MarkerOptions {
+    fun getMarkerOptionsUpdated(): MarkerOptions {
         var markerOptions = MarkerOptions()
         markerOptions.position(coordinate)
         markerOptions.title(title)
