@@ -302,7 +302,7 @@ export class GoogleMap {
           // if (data.mapId == newMap.id) {
           callback(data);
           onMapReadyListener.remove();
-          // }s
+          // }
         }
       );
     }
