@@ -709,4 +709,10 @@ export class CapacitorGoogleMapsWeb
 
     return advancedMarker;
   }
+  setMarkerPosition(): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  fitBound(): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
 }
