@@ -1,14 +1,17 @@
 package com.capacitorjs.plugins.googlemaps
 
-import android.graphics.Color
-import android.util.Size
-import androidx.core.math.MathUtils
+import BusesMarker
+import android.content.Context
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.chalo.operatorapp.R
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.clustering.ClusterItem
 import org.json.JSONObject
 
 
-class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
+class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject): ClusterItem {
     var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
     private var title: String
@@ -22,6 +25,10 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
     var googleMapMarker: Marker? = null
     var colorHue: Float? = null
     var markerOptions: MarkerOptions? = null
+    var infoIcon: String? = null
+    var infoData: JSONObject? = null
+    var rotation: Int = 0
+    var id: String? = null
 
     init {
         if (!fromJSONObject.has("coordinate")) {
@@ -35,8 +42,10 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
 
         coordinate = LatLng(latLngObj.getDouble("lat"), latLngObj.getDouble("lng"))
         title = fromJSONObject.optString("title")
-        opacity = fromJSONObject.optDouble("opacity", 1.0).toFloat()
+//        opacity = fromJSONObject.optDouble("opacity", 1.0).toFloat()
         snippet = fromJSONObject.optString("snippet")
+        infoIcon = fromJSONObject.optString("infoIcon")
+        infoData = fromJSONObject.optJSONObject("infoData")
         isFlat = fromJSONObject.optBoolean("isFlat", false)
         iconUrl = fromJSONObject.optString("iconUrl")
         if (fromJSONObject.has("iconSize")) {
@@ -63,11 +72,23 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         }
 
         draggable = fromJSONObject.optBoolean("draggable", false)
-        zIndex = fromJSONObject.optLong("zIndex").toFloat()
+
+
+        id = fromJSONObject.optString("id")
+        zIndex = fromJSONObject.optDouble("zIndex", 1.0 ).toFloat()
+        rotation = fromJSONObject.optInt("rotation")
     }
 
     override fun getPosition(): LatLng {
         return LatLng(coordinate.latitude, coordinate.longitude)
+    }
+
+    fun getMarkerId(): String? {
+        return id
+    }
+
+    fun getRotation(): Int? {
+        return rotation
     }
 
     override fun getTitle(): String {
@@ -89,5 +110,91 @@ class CapacitorGoogleMapMarker(fromJSONObject: JSONObject): ClusterItem {
         val v: Float = iconAnchor.y / iconSize!!.height
 
         return CapacitorGoogleMapsPoint(u, v)
+    }
+
+    fun setPosition(latLong:LatLng) {
+        googleMapMarker?.position =  latLong
+    }
+
+    fun setTitle(string: String) {
+        googleMapMarker?.title =  string
+    }
+
+    fun getMarkerOptions(): MarkerOptions {
+        var markerOptions = MarkerOptions()
+        markerOptions.position(coordinate)
+        markerOptions.title(title)
+        //Extra space is getting added if we add empty snippet
+//        markerOptions.snippet(snippet)
+        markerOptions.alpha(opacity)
+        markerOptions.flat(isFlat)
+        markerOptions.draggable(draggable)
+        markerOptions.anchor(0.5F, 0.5F)
+
+        if (zIndex > 0) {
+            markerOptions.zIndex(zIndex)
+        }
+
+        // Marker icon pickup and conversion to bitmap
+        val resources: Resources = context.resources
+        val resourceId: Int = resources.getIdentifier(iconUrl, "drawable", context.packageName)
+        if(iconUrl?.contains("arrow_marker") == true) {
+            val arrowHeight = context.resources.getDimension(R.dimen.arrow_marker_height).toInt()
+            val arrowWidth = context.resources.getDimension(R.dimen.arrow_marker_width).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
+        } else if(iconUrl?.contains("bus_marker") == true) {
+            val size = context.resources.getDimension(R.dimen.marker_size).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        } else if(iconUrl?.contains("stop_marker") == true) {
+            val size = context.resources.getDimension(R.dimen.stop_marker).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        } else if(iconUrl?.contains("start_marker") == true || iconUrl?.contains("end_marker") == true) {
+            val markerHeight = context.resources.getDimension(R.dimen.start_end_marker_height).toInt()
+            val markerWidth = context.resources.getDimension(R.dimen.start_end_marker_width).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
+        } else if(iconUrl?.contains("alert") == true) {
+            val size = context.resources.getDimension(R.dimen.alert_marker).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        }
+        else if(iconUrl?.isEmpty() == true) {
+            // When we need to show only the infoWindow
+
+            // Hiding the default marker by making the alpha to 0
+            markerOptions.alpha(0.0f)
+
+            if(title.isNotEmpty()) {
+                markerOptions.title(title)
+            }
+            if(snippet.isNotEmpty()) {
+                markerOptions.snippet(snippet)
+            }
+        }
+        return markerOptions
+    }
+
+    fun updateIcon(newIconName: String, title: String) {
+        iconUrl = newIconName
+        val resources: Resources = context.resources
+        val resourceId: Int = resources.getIdentifier(iconUrl, "drawable", context.packageName)
+
+        if(iconUrl?.contains("arrow_marker") == true) {
+            val arrowHeight = context.resources.getDimension(R.dimen.arrow_marker_height).toInt()
+            val arrowWidth = context.resources.getDimension(R.dimen.arrow_marker_width).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
+        } else if(iconUrl?.contains("bus_marker") == true) {
+            val size = context.resources.getDimension(R.dimen.marker_size).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        } else if(iconUrl?.contains("buses_custom_marker") == true) {
+            val busesMarker = BusesMarker(context)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, iconUrl!!))
+        }
+
     }
 }

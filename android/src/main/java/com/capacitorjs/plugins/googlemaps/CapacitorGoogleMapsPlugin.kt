@@ -222,7 +222,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            val marker = CapacitorGoogleMapMarker(markerObj)
+            val marker = CapacitorGoogleMapMarker(this.context, markerObj)
             map.addMarker(marker) { result ->
                 val markerId = result.getOrThrow()
 
@@ -257,7 +257,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
             for (i in 0 until markerObjectArray.length()) {
                 val markerObj = markerObjectArray.getJSONObject(i)
-                val marker = CapacitorGoogleMapMarker(markerObj)
+                val marker = CapacitorGoogleMapMarker(this.context, markerObj)
 
                 markers.add(marker)
             }
@@ -403,6 +403,77 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     }
 
     @PluginMethod
+    fun setMarkerPosition(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val markerObj = call.getObject("marker", null)
+            markerObj ?: throw InvalidArgumentsError("marker object is missing in setMarkerPosition")
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            val marker = CapacitorGoogleMapMarker(this.context, markerObj)
+
+            map.setMarkerPosition(marker) { result ->
+                val markerId = result.getOrThrow()
+
+                val res = JSObject()
+                res.put("id", markerId)
+                call.resolve(res)
+            }
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
+
+    @PluginMethod
+    fun fitBound(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val cordsObjectsArray = call.getArray("cords", null)
+            cordsObjectsArray
+                    ?: throw InvalidArgumentsError("Coordinate array is missing for fitBound")
+
+            if (cordsObjectsArray.length() == 0) {
+                throw InvalidArgumentsError("FitBound requires at least one coordinate")
+            }
+
+            var cords: MutableList<LatLng> = mutableListOf();
+
+            for (j in 0 until (cordsObjectsArray).length()) {
+                val cord = cordsObjectsArray[j] as JSONObject
+                if (!cord.has("lat") || !cord.has("lng")) {
+                    throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property");
+                }
+                cords.add(LatLng(cord.get("lat") as Double, cord.get("lng") as Double));
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            map.fitBound(cords, 50) { err ->
+                if (err != null) {
+                    throw err
+                }
+
+                call.resolve()
+            }
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+
+    }
+/*
+    @PluginMethod
      fun addPolylines(call: PluginCall) {
          try  {
              val id = call.getString("id")
@@ -444,6 +515,125 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
              handleError(call, e)
          }
      }
+*/
+
+@PluginMethod
+    fun addPolylines(call: PluginCall) {
+        try {
+            val id = call.getString("id")
+            id ?: throw InvalidMapIdError()
+
+            val polylineObjectsArray = call.getArray("cords", null)
+            polylineObjectsArray ?: throw InvalidArgumentsError("cordinate array is missing")
+
+            val polylineProps = call.getObject("polylineProps", null)
+            polylineProps ?: throw InvalidArgumentsError("polylineProps is missing")
+
+            if(!polylineProps.has("strokeWidth") || polylineProps.get("strokeWidth") !is Int) {
+                throw InvalidArgumentsError("StrokeWidth is missing or not defined properly")
+            }
+            val strokeWidth = polylineProps.getInteger("strokeWidth")
+
+            if(!polylineProps.has("strokeColor") || (polylineProps.get("strokeColor") !is String)) {
+                throw InvalidArgumentsError("StrokeColor is missing or not defined properly")
+            }
+            val strokeColor = polylineProps.getString("strokeColor")
+
+            if(!polylineProps.has("strokeOpacity") || (polylineProps.get("strokeOpacity") !is Int)) {
+                throw InvalidArgumentsError("StrokeOpacity is missing or not defined properly")
+            }
+            val strokeOpacity = polylineProps.getInteger("strokeOpacity")
+
+            if(!polylineProps.has("zIndex") || (polylineProps.get("zIndex") !is Int)) {
+                throw InvalidArgumentsError("zIndex is missing or not defined properly")
+            }
+            val zIndex = polylineProps.getInteger("zIndex")
+
+            if (polylineObjectsArray.length() == 0) {
+                throw InvalidArgumentsError("Polylines coordinates requires at least one coordinate")
+            }
+
+            val map = maps[id]
+            map ?: throw MapNotFoundError()
+
+            var polylines: MutableList<MutableList<LatLng>> = mutableListOf();
+            var strokeColors: MutableList<String> = mutableListOf();
+            var strokeWidths: MutableList<Int> = mutableListOf();
+            var zIndexs: MutableList<Int> = mutableListOf();
+            var strokeOpacities: MutableList<Int> = mutableListOf();
+
+            for (i in 0 until polylineObjectsArray.length()) {
+                val polylineObject = polylineObjectsArray.getJSONObject(i)
+                if(!polylineObject.has("polylinePath")) {
+                    throw InvalidArgumentsError("polyline path is missing")
+                }
+
+                val cordsObjects = polylineObject.get("polylinePath") as JSONArray;
+
+                var cords: MutableList<LatLng> = mutableListOf();
+
+                for (j in 0 until (cordsObjects).length()) {
+                    val cord = cordsObjects[j] as JSONObject
+                    if(!cord.has("lat") || !cord.has("lng")){
+                        throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property");
+                    }
+                    cords.add(LatLng(cord.get("lat") as Double, cord.get("lng") as Double));
+                }
+
+                var objStokeColor: String = if(!polylineObject.has("polylineStrokeColor")) {
+                    // If the current Object doesn't have stroke color then set the default color
+                    strokeColor as String;
+                } else {
+                    polylineObject.get("polylineStrokeColor") as String;
+                }
+
+
+                var objStrokeWidth: Int = if(!polylineObject.has("polylineStrokeWeight")) {
+                    // If the current Object doesn't have stroke width then set the default width
+                    strokeWidth as Int;
+                } else {
+                    polylineObject.get("polylineStrokeWidth") as Int;
+                }
+
+                var objZIndex: Int = if(!polylineObject.has("polylineZIndex")) {
+                    // If the current Object doesn't have a Z index then set the default Z index
+                    zIndex as Int;
+                } else {
+                    polylineObject.get("polylineZIndex") as Int;
+                }
+
+                var objStrokeOpacities: Int = if(!polylineObject.has("polylineOpacity")) {
+                    // If the current Object doesn't have stroke opacity then set the default opacity
+                    strokeOpacity as Int;
+                } else {
+                    polylineObject.get("polylineOpacity") as Int;
+                }
+
+                polylines.add(cords)
+                strokeColors.add(objStokeColor)
+                strokeWidths.add(objStrokeWidth)
+                zIndexs.add(objZIndex)
+                strokeOpacities.add(objStrokeOpacities)
+            }
+
+            map.addPolylines(polylines, strokeColors, strokeWidths , zIndexs, strokeOpacities) { result ->
+                val ids = result.getOrThrow()
+
+                val jsonIDs = JSONArray()
+                ids.forEach { jsonIDs.put(it) }
+
+                val res = JSObject()
+                res.put("ids", jsonIDs)
+                call.resolve(res)
+            }
+
+
+        } catch (e: GoogleMapsError) {
+            handleError(call, e)
+        } catch (e: Exception) {
+            handleError(call, e)
+        }
+    }
 
     @PluginMethod
     fun removeCircles(call: PluginCall) {
@@ -488,18 +678,16 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val id = call.getString("id")
             id ?: throw InvalidMapIdError()
 
-            val minClusterSize = call.getInt("minClusterSize")
-
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.enableClustering(minClusterSize,  { err ->
+            map.enableClustering { err ->
                 if (err != null) {
                     throw err
                 }
 
                 call.resolve()
-            })
+            }
         } catch (e: GoogleMapsError) {
             handleError(call, e)
         } catch (e: Exception) {
