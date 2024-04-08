@@ -294,8 +294,8 @@ export class GoogleMap {
         "onMapReady",
         (data: MapReadyCallbackData) => {
           // if (data.mapId == newMap.id) {
-            callback(data);
-            onMapReadyListener.remove();
+          callback(data);
+          onMapReadyListener.remove();
           // }s
         }
       );
