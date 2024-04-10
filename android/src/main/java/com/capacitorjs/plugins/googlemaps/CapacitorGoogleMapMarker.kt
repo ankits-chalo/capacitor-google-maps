@@ -19,7 +19,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
     var opacity: Float = 1.0f
     private var title: String
     private var snippet: String
-    private var zIndex: Float = 0.0f
+    private var zIndex: Float = 1.0f
     var isFlat: Boolean = false
     var iconUrl: String? = null
     var iconSize: Size? = null

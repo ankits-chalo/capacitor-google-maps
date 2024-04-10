@@ -44,7 +44,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     override fun load() {
         super.load()
 
-        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LATEST, this)
+        MapsInitializer.initialize(this.context, MapsInitializer.Renderer.LEGACY, this)
 
 
         this.bridge.webView.setOnTouchListener(

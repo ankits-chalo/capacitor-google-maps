@@ -43,7 +43,7 @@ class BusesMarkerRenderer(
         marker.tag = item
 
         if (item.infoData?.getBoolean("showInfoIcon") == true) {
-            marker.hideInfoWindow()
+//            marker.hideInfoWindow()
             marker.showInfoWindow()
         }
 
