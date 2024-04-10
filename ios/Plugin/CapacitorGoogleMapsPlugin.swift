@@ -304,7 +304,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
-    @objc func addPolygons(_ call: CAPPluginCall) {
+@objc func addPolygons(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
                 throw GoogleMapErrors.invalidMapId
@@ -339,40 +339,40 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         }
     }
 
-    @objc func addPolylines(_ call: CAPPluginCall) {
-        do {
-            guard let id = call.getString("id") else {
-                throw GoogleMapErrors.invalidMapId
-            }
+    // @objc func addPolylines(_ call: CAPPluginCall) {
+    //     do {
+    //         guard let id = call.getString("id") else {
+    //             throw GoogleMapErrors.invalidMapId
+    //         }
 
-            guard let lineObjs = call.getArray("polylines") as? [JSObject] else {
-                throw GoogleMapErrors.invalidArguments("polylines array is missing")
-            }
+    //         guard let lineObjs = call.getArray("polylines") as? [JSObject] else {
+    //             throw GoogleMapErrors.invalidArguments("polylines array is missing")
+    //         }
 
-            if lineObjs.isEmpty {
-                throw GoogleMapErrors.invalidArguments("polylines requires at least one line")
-            }
+    //         if lineObjs.isEmpty {
+    //             throw GoogleMapErrors.invalidArguments("polylines requires at least one line")
+    //         }
 
-            guard let map = self.maps[id] else {
-                throw GoogleMapErrors.mapNotFound
-            }
+    //         guard let map = self.maps[id] else {
+    //             throw GoogleMapErrors.mapNotFound
+    //         }
 
-            var lines: [Polyline] = []
+    //         var lines: [Polyline] = []
 
-            try lineObjs.forEach { lineObj in
-                let line = try Polyline(fromJSObject: lineObj)
-                lines.append(line)
-            }
+    //         try lineObjs.forEach { lineObj in
+    //             let line = try Polyline(fromJSObject: lineObj)
+    //             lines.append(line)
+    //         }
 
-            let ids = try map.addPolylines(lines: lines)
+    //         let ids = try map.addPolylines(lines: lines)
 
-            call.resolve(["ids": ids.map({ id in
-                return String(id)
-            })])
-        } catch {
-            handleError(call, error: error)
-        }
-    }
+    //         call.resolve(["ids": ids.map({ id in
+    //             return String(id)
+    //         })])
+    //     } catch {
+    //         handleError(call, error: error)
+    //     }
+    // }
 
     @objc func removePolygons(_ call: CAPPluginCall) {
         do {
@@ -687,7 +687,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
 
-            try map.enableCurrentLocation(enabled: enabled)
+// Uncomment when user loaction is required
+//            try map.enableCurrentLocation(enabled: enabled)
 
             call.resolve()
         } catch {
@@ -705,9 +706,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.mapNotFound
             }
 
-            let minClusterSize = call.getInt("minClusterSize")
-
-            map.enableClustering(minClusterSize)
+            map.enableClustering()
             call.resolve()
 
         } catch {
@@ -958,6 +957,296 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         return ""
     }
 
+
+    @objc func toogleScrollGesture(_ call: CAPPluginCall){
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            let isEnabled = call.getBool("enabled") ?? false
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+             try map.toogleScrollGesture(enabled:isEnabled)
+
+            call.resolve(["id": String(id)])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    
+    @objc func drawCircle(_ call: CAPPluginCall){
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let circleObj = call.getObject("circleProps") else {
+                throw GoogleMapErrors.invalidArguments("circle object is missing")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            try map.drawCircle(circleProps:circleObj,id:id)
+
+            call.resolve(["id": String(id)])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func setMarkerPosition(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let markerObj = call.getObject("marker") else {
+                throw GoogleMapErrors.invalidArguments("marker object is missing")
+            }
+            let marker = try Marker(fromJSObject: markerObj)
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let markerId = try map.setMarkerPosition(marker: marker)
+
+            call.resolve(["id": String(markerId)])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    
+    @objc func fitBound(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+            
+            guard let cordsObjectsArray = call.getArray("cords") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("Coordinate array is missing for fitBound")
+            }
+            
+            if cordsObjectsArray.isEmpty {
+                throw GoogleMapErrors.invalidArguments("FitBound requires at least one coordinate")
+            }
+            
+            var cords: [LatLng] = []
+            
+            try cordsObjectsArray.forEach { cord in
+            guard let lat = cord["lat"] as? Double, let lng = cord["lng"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
+            }
+                let cord = LatLng(lat: lat, lng: lng)
+                cords.append(cord)
+            }
+            
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            
+            map.fitBound(cords: cords, padding: 100)
+            call.resolve()
+            
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+    
+    @objc func updateInfoWindow(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let markerObj = call.getObject("marker") else {
+                throw GoogleMapErrors.invalidArguments("marker object is missing")
+            }
+            let marker = try Marker(fromJSObject: markerObj)
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            let markerId = try map.updateInfoWindow(marker: marker)
+
+            call.resolve(["id": String(markerId)])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func addPolyline(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let cordsObjs = call.getArray("cords") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("cordinate array is missing")
+            }
+
+             guard let polylineProps = call.getObject("polylineProps") else {
+                throw GoogleMapErrors.invalidArguments("polylineProps is missing")
+            }
+
+            guard let strokeWidth = polylineProps["strokeWidth"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("strokeWidth is missing")
+            }
+
+            guard let strokeColor = polylineProps["strokeColor"] as? String else {
+                throw GoogleMapErrors.invalidArguments("strokeColor is missing")
+            }
+
+            guard let strokeOpacity = polylineProps["strokeOpacity"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("strokeOpacity is missing")
+            }
+
+            if cordsObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("cordinates requires at least one cordinate")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            var cords: [LatLng] = []
+
+            try cordsObjs.forEach { cord in
+            guard let lat = cord["lat"] as? Double, let lng = cord["lng"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
+            }
+                let cord = LatLng(lat: lat, lng: lng)
+                cords.append(cord)
+            }
+
+            let ids = try map.addPolyline(cords: cords, strokeWidth:strokeWidth, strokeColor:strokeColor, strokeOpacity:strokeOpacity)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
+    @objc func addPolylines(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let polylineObjs = call.getArray("cords") as? [JSObject] else {
+                throw GoogleMapErrors.invalidArguments("cordinate array is missing")
+            }
+            
+            guard let polylineProps = call.getObject("polylineProps") else {
+               throw GoogleMapErrors.invalidArguments("polylineProps is missing")
+           }
+
+            guard let strokeWidth = polylineProps["strokeWidth"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("strokeWidth is missing")
+            }
+
+            guard let strokeColor = polylineProps["strokeColor"] as? String else {
+                throw GoogleMapErrors.invalidArguments("strokeColor is missing")
+            }
+
+            guard let strokeOpacity = polylineProps["strokeOpacity"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("strokeOpacity is missing")
+            }
+            
+            guard let zIndex = polylineProps["zIndex"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("zIndex is missing")
+            }
+
+            if polylineObjs.isEmpty {
+                throw GoogleMapErrors.invalidArguments("cordinates requires at least one cordinate")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+            var polylines: [[LatLng]] = []
+            var strokeColors: [String] = []
+            var strokeWidths: [Double] = []
+            var zIndexs: [Double] = []
+            var strokeOpacities: [Double] = []
+            
+            try polylineObjs.forEach { polylineObject in
+                guard let cordsObjs = polylineObject["polylinePath"] as? [JSObject] else {
+                    throw GoogleMapErrors.invalidArguments("polyline path is missing")
+                }
+                var cords: [LatLng] = []
+
+                try cordsObjs.forEach { cord in
+                guard let lat = cord["lat"] as? Double, let lng = cord["lng"] as? Double else {
+                    throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
+                }
+                    let cord = LatLng(lat: lat, lng: lng)
+                    cords.append(cord)
+                }
+                
+                var objStokeColor: String
+                if let polylineStrokeColor = polylineObject["polylineStrokeColor"] as? String {
+                    objStokeColor = polylineStrokeColor
+                } else {
+                    // If the current object doesn't have stroke color, set the default color
+                    objStokeColor = strokeColor as String
+                }
+
+                var objStrokeWidth: Double
+                if let polylineStrokeWidth = polylineObject["polylineStrokeWidth"] as? Double {
+                    objStrokeWidth = polylineStrokeWidth
+                } else {
+                    // If the current object doesn't have stroke width, set the default width
+                    objStrokeWidth = strokeWidth as Double
+                }
+
+                var objZIndex: Double
+                if let polylineZIndex = polylineObject["polylineZIndex"] as? Double {
+                    objZIndex = polylineZIndex
+                } else {
+                    // If the current object doesn't have a Z index, set the default Z index
+                    objZIndex = zIndex as Double
+                }
+
+                var objStrokeOpacities: Double
+                if let polylineOpacity = polylineObject["polylineOpacity"] as? Double {
+                    objStrokeOpacities = polylineOpacity
+                } else {
+                    // If the current object doesn't have stroke opacity, set the default opacity
+                    objStrokeOpacities = strokeOpacity as Double
+                }
+                
+                strokeColors.append(objStokeColor)
+                strokeWidths.append(objStrokeWidth)
+                zIndexs.append(objZIndex)
+                strokeOpacities.append(objStrokeOpacities)
+                polylines.append(cords)
+            }
+      
+            let ids = try map.addPolylines(polylines:polylines, strokeColors:strokeColors, strokeWidths:strokeWidths, zIndexs:zIndexs, strokeOpacities:strokeOpacities)
+
+            call.resolve(["ids": ids.map({ id in
+                return String(id)
+            })])
+
+        } catch {
+            handleError(call, error: error)
+        }
+    }
+
     // --- EVENT LISTENERS ---
 
     // onCameraIdle
@@ -984,12 +1273,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     }
 
     // onCameraMoveStarted
-    public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
-        self.notifyListeners("onCameraMoveStarted", data: [
-            "mapId": self.findMapIdByMapView(mapView),
-            "isGesture": gesture
-        ])
-    }
+    // public func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
+    //     self.notifyListeners("onCameraMoveStarted", data: [
+    //         "mapId": self.findMapIdByMapView(mapView),
+    //         "isGesture": gesture
+    //     ])
+    // }
 
     // onMapClick
     public func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
@@ -1035,6 +1324,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
         if let cluster = marker.userData as? GMUCluster {
             var items: [[String: Any?]] = []
 
+            var bounds = GMSCoordinateBounds()
+            
             for item in cluster.items {
                 items.append([
                     "markerId": String(item.hash.hashValue),
@@ -1043,7 +1334,13 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     "title": item.title ?? "",
                     "snippet": item.snippet ?? ""
                 ])
+                
+                let coordinate = CLLocationCoordinate2D(latitude: item.position.latitude, longitude: item.position.longitude)
+                bounds = bounds.includingCoordinate(coordinate)
             }
+            
+            let update = GMSCameraUpdate.fit(bounds, withPadding: 100) // Adjust padding as needed
+            mapView.animate(with: update)
 
             self.notifyListeners("onClusterClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
@@ -1100,6 +1397,57 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "snippet": marker.snippet ?? ""
         ])
     }
+    public func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
+        guard let userData = marker.userData as? Marker,
+              let imageUrl = userData.infoIcon else {
+               return nil
+        }
+//        if let userData = marker.userData as? Marker {
+        if(imageUrl == "buses_info_icon") {
+                let infoWindow = BusesMarkerInfoWindow.instanceFromNib()
+                infoWindow.busCardName.text = marker.title
+            
+                let totalCollection = userData.infoData?["totalCollctn"] as? String ?? "0"
+                let tripStartTime = userData.infoData?["tripStartTime"] as? String ?? "trip time"
+                let currentPassengerCount = userData.infoData?["currPsgCount"] as? Int ?? 0
+                let occupancyLevel = userData.infoData?["occupancyLevel"] as? String ?? "N/A"
+                let routeName = userData.infoData?["routeName"] as? String ?? "route"
+                
+            if let loading = userData.infoData?["loading"] as? Bool, loading {
+                infoWindow.frame.size.height = 70
+                infoWindow.busCardTopConstrain.constant = -10
+                infoWindow.loadingText.isHidden = false
+                infoWindow.busTime.isHidden = true
+                infoWindow.busFromTo.isHidden = true
+                infoWindow.collectionSoFar.isHidden = true
+                infoWindow.collectionSoFarText.isHidden = true
+                infoWindow.currentOccupancy.isHidden = true
+                infoWindow.currentOccupancyText.isHidden = true
+                infoWindow.viewDetailsText.isHidden = true
+                infoWindow.occupancyLevelImage.isHidden = true
+            } else {
+                infoWindow.loadingText.isHidden = true
+                infoWindow.frame.size.height = 170
+                infoWindow.busCardTopConstrain.constant = 7
+                infoWindow.collectionSoFar.text = String(totalCollection)
+                infoWindow.busTime.text = tripStartTime
+                infoWindow.currentOccupancy.text = String(currentPassengerCount)
+                infoWindow.occupancyLevelImage.image = UIImage(named: occupancyLevel )
+                infoWindow.busFromTo.text = routeName
+            }
+                
+                return infoWindow
+            } else {
+                let infoWindow = InfoWindowWithImage.instanceFromNib()
+                infoWindow.titleLabel.text = marker.title
+                infoWindow.snippetLabel.text = marker.snippet
+                infoWindow.infoIcon.image = UIImage(named: imageUrl)
+                return infoWindow
+            }
+//        }
+        
+        return nil
+    }
 
     // onClusterInfoWindowClick, onInfoWindowClick
     public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
@@ -1151,9 +1499,36 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "longitude": location.longitude
         ])
     }
+    public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        for (mapId, map) in self.maps {
+            if map.mapViewController.GMapView === mapView {
+                if(map.mapViewController.isCircleShow == true){
+                    let height = map.mapViewController.circleView.frame.height
+                    let xCenter = map.mapViewController.circleView.frame.origin.x
+                    let yCenter = map.mapViewController.circleView.frame.origin.y
+                    let region = mapView.projection.visibleRegion()
+                    let distance=region.nearLeft.distance(to: region.farLeft)
+                    let x = mapView.projection.point(for: region.farLeft)
+                    let y = mapView.projection.point(for: region.nearLeft)
+                    let center=mapView.projection.point(for: position.target)
+                    let left=y.y-x.y
+                    let radius=(left*2)*((500)/distance)
+                    let height1 = radius * 2 - height
+                    
+                    map.mapViewController.circleView.frame = CGRect(x: center.x-radius, y: center.y-radius, width: map.mapViewController.circleView.frame.width + height1, height: map.mapViewController.circleView.frame.height + height1)
+                    map.mapViewController.circleView.layoutIfNeeded()
+                    map.mapViewController.circleView.layer.cornerRadius = radius
+                }
+            }
+        }
+        self.notifyListeners("onCameraMoveStarted", data: [
+            "mapId": self.findMapIdByMapView(mapView),
+            "latitude": position.target.latitude,
+            "longitude": position.target.longitude,
+        ])
+     }
 }
 
-// snippet from https://www.hackingwithswift.com/example-code/uicolor/how-to-convert-a-hex-color-to-a-uicolor
 extension UIColor {
     public convenience init?(hex: String) {
         let r, g, b, a: CGFloat

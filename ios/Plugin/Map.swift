@@ -36,19 +36,22 @@ class GMViewController: UIViewController {
         self.view = GMapView
     }
 
-    func initClusterManager(_ minClusterSize: Int?) {
+    func initClusterManager() {
         let iconGenerator = GMUDefaultClusterIconGenerator()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
-        self.minimumClusterSize = minClusterSize
-        if let minClusterSize = minClusterSize {
-            renderer.minimumClusterSize = UInt(minClusterSize)
-        }
+
         self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
     }
 
     func destroyClusterManager() {
         self.clusterManager = nil
+    }
+    
+    func clusterMarker() {
+        if let clusterManager = clusterManager {
+            clusterManager.cluster()
+        }
     }
 
     func addMarkersToCluster(markers: [GMSMarker]) {
@@ -68,7 +71,15 @@ class GMViewController: UIViewController {
     }
 }
 
-// swiftlint:disable type_body_length
+ class removeArrayClass {
+     let id: String
+     var keyValue: Int
+     init(id: String, keyValue: Int) {
+         self.id = id
+         self.keyValue = keyValue
+     }
+ }
+
 public class Map {
     var id: String
     var config: GoogleMapConfig
@@ -79,13 +90,16 @@ public class Map {
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
     var markerIcons = [String: UIImage]()
-
+    var removeMarkersArray = [removeArrayClass]()
+    var polylineCords = [LatLng]()
+    var timer : Timer?
     // swiftlint:disable identifier_name
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
+    var markerIdOnWeb = [String : Int]()
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
         self.id = id
@@ -93,11 +107,11 @@ public class Map {
         self.delegate = delegate
         self.mapViewController = GMViewController()
         self.mapViewController.mapId = config.mapId
-
+        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.render), userInfo: nil, repeats: true)
         self.render()
     }
 
-    func render() {
+    @objc func render() {
         DispatchQueue.main.async {
             self.mapViewController.mapViewBounds = [
                 "width": self.config.width,
@@ -113,44 +127,79 @@ public class Map {
             ]
 
             self.targetViewController = self.getTargetContainer(refWidth: self.config.width, refHeight: self.config.height)
+            self.mapViewController.isCircleShow = self.config.isCircleShow ?? false
+            
+            if let bridge = self.delegate.bridge {
 
-            if let target = self.targetViewController {
-                target.tag = Map.MAP_TAG
-                target.removeAllSubview()
-                self.mapViewController.view.frame = target.bounds
-                target.addSubview(self.mapViewController.view)
-                self.mapViewController.GMapView.delegate = self.delegate
-            }
+                for item in bridge.webView!.getAllSubViews() {
+                    if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
+                        (item as? UIScrollView)?.isScrollEnabled = true
+                        if item.bounds.width == self.config.width && item.bounds.height == self.config.height && (item as? UIView)?.tag == 0 {
+                            self.timer?.invalidate()
+                            self.targetViewController = item
+                            break
+                        }
+                    }
+                }
 
-            if let styles = self.config.styles {
-                do {
-                    self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
-                } catch {
-                    CAPLog.print("Invalid Google Maps styles")
+                if let target = self.targetViewController {
+                    target.tag = 1
+                    target.removeAllSubview()
+                    self.mapViewController.view.frame = target.bounds
+                    target.addSubview(self.mapViewController.view)
+                    self.mapViewController.GMapView.delegate = self.delegate
+                    
+                    if let styles = self.config.styles {
+                        do {
+                            self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                        } catch {
+                            CAPLog.print("Invalid Google Maps styles")
+                        }           
+                    }
+
+                    self.delegate.notifyListeners("onMapReady", data: [
+                        "mapId": self.id
+                    ])
                 }
             }
-
-            self.delegate.notifyListeners("onMapReady", data: [
-                "mapId": self.id
-            ])
         }
     }
 
-    func updateRender(mapBounds: CGRect) {
-        DispatchQueue.main.sync {
-            let newWidth = round(Double(mapBounds.width))
-            let newHeight = round(Double(mapBounds.height))
-            let isWidthEqual = round(Double(self.mapViewController.view.bounds.width)) == newWidth
-            let isHeightEqual = round(Double(self.mapViewController.view.bounds.height)) == newHeight
+    func updateRender(frame: CGRect, mapBounds: CGRect) {
+        DispatchQueue.main.async {
+            self.mapViewController.view.layer.mask = nil
 
-            if !isWidthEqual || !isHeightEqual {
-                CATransaction.begin()
-                CATransaction.setDisableActions(true)
-                self.mapViewController.view.frame.size.width = newWidth
-                self.mapViewController.view.frame.size.height = newHeight
-                CATransaction.commit()
+            var updatedFrame = self.mapViewController.view.frame
+            updatedFrame.origin.x = mapBounds.origin.x
+            updatedFrame.origin.y = mapBounds.origin.y
+
+            self.mapViewController.view.frame = updatedFrame
+
+            var maskBounds: [CGRect] = []
+
+            if !frame.contains(mapBounds) {
+                maskBounds.append(contentsOf: self.getFrameOverflowBounds(frame: frame, mapBounds: mapBounds))
             }
+
+            if maskBounds.count > 0 {
+                let maskLayer = CAShapeLayer()
+                let path = CGMutablePath()
+
+                path.addRect(self.mapViewController.view.bounds)
+                maskBounds.forEach { b in
+                    path.addRect(b)
+                }
+
+                maskLayer.path = path
+                maskLayer.fillRule = .evenOdd
+
+                self.mapViewController.view.layer.mask = maskLayer
+
+            }
+
+            self.mapViewController.view.layoutIfNeeded()
         }
+
     }
 
     func rebindTargetContainer(mapBounds: CGRect) {
@@ -197,10 +246,9 @@ public class Map {
 
     func destroy() {
         DispatchQueue.main.async {
-            self.mapViewController.GMapView = nil
             self.targetViewController?.tag = 0
             self.mapViewController.view = nil
-            self.enableTouch()
+
         }
     }
 
@@ -224,47 +272,381 @@ public class Map {
         var markerHash = 0
 
         DispatchQueue.main.sync {
-            let newMarker = self.buildMarker(marker: marker)
-
-            if self.mapViewController.clusteringEnabled {
-                self.mapViewController.addMarkersToCluster(markers: [newMarker])
-            } else {
-                newMarker.map = self.mapViewController.GMapView
+            if(self.markerIdOnWeb[marker.id!] != nil ){
+                markerHash = self.markerIdOnWeb[marker.id!]!
             }
+            else {
+                var newMarker: GMSMarker
 
-            self.markers[newMarker.hash.hashValue] = newMarker
-
-            markerHash = newMarker.hash.hashValue
-        }
-
-        return markerHash
-    }
-
-    func addMarkers(markers: [Marker]) throws -> [Int] {
-        var markerHashes: [Int] = []
-
-        DispatchQueue.main.sync {
-            var googleMapsMarkers: [GMSMarker] = []
-
-            markers.forEach { marker in
-                let newMarker = self.buildMarker(marker: marker)
-
+                newMarker = GMSMarker();
+                newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                newMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                if !(marker.title ?? "").isEmpty {
+                    newMarker.title = marker.title
+                }
+                if !(marker.snippet ?? "").isEmpty {
+                    newMarker.snippet = marker.snippet
+                }
+                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView {
+                    newMarker.userData = marker
+                    newMarker.map = mapView
+                    
+//                    To show the info window
+//                    mapView.selectedMarker = newMarker
+                }
+                
+                newMarker.isFlat = marker.isFlat ?? false
+                newMarker.opacity = marker.opacity ?? 1
+                newMarker.isDraggable = marker.draggable ?? false
+                if (marker.iconUrl ?? "").isEmpty {
+                    //                Hiding the default marker whose iconUrl is not present
+                    newMarker.opacity = 0.0
+                    //                Show the infowindow which is present
+                    newMarker.map = self.mapViewController.GMapView
+                    self.mapViewController.GMapView.selectedMarker = newMarker
+                } else {
+                    if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                        let busesMarker = BusesMarker.instanceFromNib()
+                        busesMarker.BusNumberMarkerText.text = marker.title
+                        busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
+                        newMarker.iconView = busesMarker
+                    } else {
+                        // If it is present in assets folder then the icon is picked from it
+                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                    }
+                }
+                do {
+                    if((marker.rotation) == 1){
+                        newMarker.rotation =  try getAngle(marker: marker)
+                    }else{
+                        newMarker.rotation =  0
+                    }
+                } catch {
+                    NSLog("Error in angle. \(error)")
+                }
+                if (marker.zIndex != nil) {
+                    newMarker.zIndex = marker.zIndex ?? 1
+                }
+                
                 if self.mapViewController.clusteringEnabled {
-                    googleMapsMarkers.append(newMarker)
+                    self.mapViewController.addMarkersToCluster(markers: [newMarker])
                 } else {
                     newMarker.map = self.mapViewController.GMapView
                 }
-
+                
                 self.markers[newMarker.hash.hashValue] = newMarker
-
-                markerHashes.append(newMarker.hash.hashValue)
-            }
-
-            if self.mapViewController.clusteringEnabled {
-                self.mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
+                self.markerIdOnWeb[marker.id!] = newMarker.hash.hashValue
+                markerHash = newMarker.hash.hashValue
             }
         }
+        return markerHash
+        
+    }
+    
+    func setMarkerPosition(marker: Marker) throws  -> String  {
+        if let oldMarker = self.markers[Int(marker.id!)!] {
+            DispatchQueue.main.sync {
+                if !self.mapViewController.clusteringEnabled {
+                    CATransaction.begin()
+                    CATransaction.setAnimationDuration(2.0)
+                    oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                    oldMarker.title = marker.title
+                    
+                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 15)
+                    
+                    //                CATransaction.beg`in()
+                    //                CATransaction.setAnimationDuration(5.0)
+                    //                self.mapViewController.GMapView.animate(to: newCamera)
+                    //                CATransaction.commit()
+                    //                if marker.title?.range(of:"showInfoWindowTrue") != nil {
+                    //                    let customMarker = CustomMarker(title: marker.title!,coordinate: marker.coordinate)
+                    //                    oldMarker.iconView = customMarker.iconView
+                    //                }
+                    //               else if marker.title?.range(of:"busesAroundYou") != nil {
+                    //                   let customMarker = BusesAroundYou(title: marker.title!,coordinate: marker.coordinate)
+                    //                   oldMarker.iconView = customMarker.iconView
+                    //               }
+                    //                else{
+                    //                    oldMarker.title = marker.title
+                    //                }
+                    if((marker.iconUrl ) != nil){
+                        if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                            if let busesMarker = oldMarker.iconView as? BusesMarker {
+                                busesMarker.BusNumberMarkerText.text = marker.title
+                                busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
+                            } else if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
+                                // Create new BusesMarker if necessary
+                                let busesMarker = BusesMarker.instanceFromNib()
+                                busesMarker.BusNumberMarkerText.text = marker.title
+                                busesMarker.updateCardColorBasedOnIconUrl(iconUrl: iconUrl)
+                                oldMarker.iconView = busesMarker
+                            }
+                        } else {
+                            // If it is present in assets folder then the icon is picked from it
+                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                        }
+                        
+                    } else {
+                        //                Hiding the default marker whose iconUrl is not present by setting the opacity
+                        oldMarker.opacity = 0.0
+                        //                Show the infowindow which is present
+                        oldMarker.map = self.mapViewController.GMapView
+                        self.mapViewController.GMapView.selectedMarker = oldMarker
+                    }
+                    
+                    if let infoIcon = marker.infoIcon, let infoData = marker.infoData, let mapView = self.mapViewController.GMapView{
+                        oldMarker.userData = marker
+                        oldMarker.map = mapView
+                        let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
+                        //                    To show the info window
+                        if(showInfoIcon) {
+                            mapView.selectedMarker = nil
+                            mapView.selectedMarker = oldMarker
+                        }
+                    }
+                    
+                    do {
+                        // Set the map style by passing the URL of the local file.
+                        if((marker.rotation) == 1){
+                            oldMarker.rotation =  try self.getAngle(marker: marker)
+                        }else{
+                            oldMarker.rotation =  0
+                        }
+                    } catch {
+                        NSLog("Error in angle. \(error)")
+                    }
+                    CATransaction.commit()
+                } else {  
+                    oldMarker.userData = marker
+                    
+                    CATransaction.begin()
+                    CATransaction.setAnimationDuration(2.0)
+                    oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                    // Re-cluster the markers to reflect the changes
+                    self.mapViewController.clusterMarker()
+                    
+                    if((marker.iconUrl ) != nil){
+                        if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                            if let busesMarker = oldMarker.iconView as? BusesMarker {
+                                busesMarker.BusNumberMarkerText.text = marker.title
+                                busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
+                            } else if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
+                                // Create new BusesMarker if necessary
+                                let busesMarker = BusesMarker.instanceFromNib()
+                                busesMarker.BusNumberMarkerText.text = marker.title
+                                busesMarker.updateCardColorBasedOnIconUrl(iconUrl: iconUrl)
+                                oldMarker.iconView = busesMarker
+                            }
+                        } else {
+                            // If it is present in assets folder then the icon is picked from it
+                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                        }
+                        
+                    }
+                    
+                    // If the marker is the selected marker, refresh the info window
+                    if let mapView = self.mapViewController.GMapView, mapView.selectedMarker == oldMarker {
+                        let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false
+                        if showInfoIcon {
+                            mapView.selectedMarker = nil
+                            mapView.selectedMarker = oldMarker
+                        }
+                    }
+                    
+                    CATransaction.commit()
+                    
+                }
+            }
+        } else {
+            throw GoogleMapErrors.markerNotFound
+        }
+        return marker.id!
+    }
+    
+    func fitBound(cords: [LatLng], padding: CGFloat) {
+        DispatchQueue.main.sync {
+            // Initialize the GMSCoordinateBounds
+            var bounds = GMSCoordinateBounds()
 
+            // Loop through the list of coordinates
+            for cord in cords {
+                let coordinate = CLLocationCoordinate2D(latitude: cord.lat, longitude: cord.lng)
+                bounds = bounds.includingCoordinate(coordinate)
+            }
+            let cameraUpdate = GMSCameraUpdate.fit(bounds, withPadding: padding)
+            if let mapView = self.mapViewController.GMapView {
+                mapView.animate(with: cameraUpdate)
+            }
+        }
+    }
+    
+     func setMarkerPositionNew(marker: Marker) throws  -> String  {
+             let element = self.removeMarkersArray.first(where:{$0.id == marker.id})
+            
+             if let oldMarker = self.markers[element?.keyValue ?? 0]  {
+                 DispatchQueue.main.sync {
+                     CATransaction.begin()
+                     CATransaction.setAnimationDuration(2.0)
+                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                     oldMarker.title = marker.title
+                     if marker.title?.range(of:"showInfoWindowTrue") != nil {
+                         let customMarker = CustomMarker(title: marker.title!,coordinate: marker.coordinate)
+                     oldMarker.iconView = customMarker.iconView
+                 }
+     //               else if marker.title?.range(of:"busesAroundYou") != nil {
+     //                   let customMarker = BusesAroundYou(title: marker.title!,coordinate: marker.coordinate)
+     //                   oldMarker.iconView = customMarker.iconView
+     //               }
+                 else{
+                     oldMarker.title = marker.title
+                 }
+                 if((marker.iconUrl ) != nil){
+                     oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                 }
+                 do {
+                     // Set the map style by passing the URL of the local file.
+                     if((marker.rotation) == 1){
+                             oldMarker.rotation =  try self.getAngle(marker: marker)
+                     }else{
+                         oldMarker.rotation =  0
+                     }
+                     } catch {
+                     NSLog("Error in angle. \(error)")
+                 }
+                 CATransaction.commit()
+             }
+         } else {
+             throw GoogleMapErrors.markerNotFound
+         }
+         return marker.id!
+     }
+    
+    func updateInfoWindow(marker: Marker) throws  -> String  {
+        if let oldMarker = self.markers[Int(marker.id!)!] {
+            if(oldMarker.snippet == self.mapViewController.GMapView.selectedMarker?.snippet){
+                DispatchQueue.main.sync {
+                    oldMarker.title = marker.title
+                    self.mapViewController.GMapView.selectedMarker = oldMarker
+                }
+            }else{
+                DispatchQueue.main.sync {
+                    oldMarker.title = marker.title
+                }
+            }
+        } else {
+            throw GoogleMapErrors.markerNotFound
+        }
+        return marker.id!
+    }
+    
+    func drawCircle(circleProps: JSObject,id:String) throws  -> String  {
+        let center = circleProps["center"] as? JSObject
+        let _lat = center?["lat"] as? Double
+        let _lng = center?["lng"] as? Double
+        let circleCenter = CLLocationCoordinate2D(latitude: _lat!, longitude: _lng!)
+        let circle = GMSCircle(position: circleCenter, radius:circleProps["radius"] as! CLLocationDistance)
+        circle.fillColor = UIColor(red: 0, green: 0.35, blue: 0, alpha: 0.1)
+        circle.strokeColor = .green
+        circle.strokeWidth = 1
+        circle.map = self.mapViewController.GMapView
+        self.mapViewController.circle = circle;
+//        self.mapViewController.isCircleShow=circleProps["isCircleShow"] as? Bool ?? false
+        return id
+    }
+    
+    func getAngle(marker:Marker) throws -> Double {
+        var angle : Double = 0
+        var minDistance : Double = Double.greatestFiniteMagnitude
+        var index : Int = 0
+        var nearestPointIndex : Int = 0
+        let markerLat = marker.coordinate.lat
+        let markerLng = marker.coordinate.lng
+        self.polylineCords.forEach { cord in
+          let _markerLocation1 = CLLocation(latitude: markerLat, longitude: markerLng)
+            let _polyLinePointLocation = CLLocation(latitude: cord.lat, longitude: cord.lng)
+            let distance = _markerLocation1.distance(from: _polyLinePointLocation)
+            index+=1
+            if (distance < minDistance) {
+                   minDistance = distance;
+                   nearestPointIndex = index;
+                 }
+        }
+        nearestPointIndex = nearestPointIndex < self.polylineCords.count - 1 ? nearestPointIndex + 1 : self.polylineCords.count - 1;
+        if (nearestPointIndex >= 0 && nearestPointIndex <= self.polylineCords.count - 1) {
+            let _markerLocation2 = CLLocationCoordinate2D(latitude: markerLat, longitude: markerLng)
+            let _polyLinePointLocation2 = CLLocationCoordinate2D(latitude: self.polylineCords[nearestPointIndex].lat, longitude: self.polylineCords[nearestPointIndex].lng)
+            angle = GMSGeometryHeading(_markerLocation2, _polyLinePointLocation2)
+        }
+        return angle
+    }
+
+    func addMarkers(markers: [Marker]) throws -> [Int] {
+         var markerHashes: [Int] = []
+        var flag = true
+        var markersNew = [removeArrayClass]()
+       try self.removeMarkersArray.forEach { marker in
+             if((markers.first{$0.id == marker.id}) != nil){
+                 let element = markers.first{$0.id == marker.id}
+                 var data = try setMarkerPositionNew(marker: element!)
+                 markersNew.insert(marker, at: 0)
+                 self.removeMarkersArray.removeAll{$0.id == marker.id}
+             }
+        }
+        
+        if(flag){
+               if(!self.removeMarkersArray.isEmpty){
+                  flag = false
+                  try removeMarkers(ids: self.removeMarkersArray.map{$0.keyValue})
+                  self.removeMarkersArray = []
+               }
+          }
+        
+        if(!markersNew.isEmpty){
+            markersNew.forEach{marker in
+                self.removeMarkersArray.insert(marker, at: 0)
+            }
+        }
+        
+         DispatchQueue.main.sync {
+             var googleMapsMarkers: [GMSMarker] = []
+             markers.forEach { marker in
+                 if(marker.title != "" || (marker.skipTitle == true)){
+                 if((markersNew.first{$0.id == marker.id}) == nil ){
+                 var newMarker = GMSMarker()
+                      if marker.secondaryImageUrl == nil {
+                          newMarker = BusesAroundYou(title: marker.title!,coordinate: marker.coordinate)
+                     }
+                     else{
+                         newMarker = GMSMarker();
+                         newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                         if(marker.skipTitle != true){
+                             newMarker.title = marker.title
+                         }
+                         newMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                     }
+                 newMarker.snippet = marker.snippet
+                 newMarker.isFlat = marker.isFlat ?? false
+                 newMarker.opacity = marker.opacity ?? 1
+                 newMarker.isDraggable = marker.draggable ?? false
+                 newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+
+                 if self.mapViewController.clusteringEnabled {
+                     googleMapsMarkers.append(newMarker)
+                 } else {
+                     newMarker.map = self.mapViewController.GMapView
+                 }
+
+                 self.markers[newMarker.hash.hashValue] = newMarker
+                 markerHashes.append(newMarker.hash.hashValue)
+                     self.removeMarkersArray.append(removeArrayClass(id: marker.id!, keyValue: newMarker.hash.hashValue))
+             }
+                 }
+             }
+
+             if self.mapViewController.clusteringEnabled {
+                 self.mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
+             }
+         }
         return markerHashes
     }
 
@@ -300,29 +682,111 @@ public class Map {
         }
 
         return circleHashes
-    }
+    }  
 
-    func addPolylines(lines: [Polyline]) throws -> [Int] {
+    // func addPolylines(lines: [Polyline]) throws -> [Int] {
+    //     var polylineHashes: [Int] = []
+
+    //     DispatchQueue.main.sync {
+    //         lines.forEach { line in
+    //             let newLine = self.buildPolyline(line: line)
+    //             newLine.map = self.mapViewController.GMapView
+
+    //             self.polylines[newLine.hash.hashValue] = newLine
+
+    //             polylineHashes.append(newLine.hash.hashValue)
+    //         }
+    //     }
+
+    //     return polylineHashes
+    // }
+
+    func addPolyline(cords: [LatLng], strokeWidth: Double, strokeColor: String, strokeOpacity:Double ) throws -> [Int] {
         var polylineHashes: [Int] = []
 
         DispatchQueue.main.sync {
-            lines.forEach { line in
-                let newLine = self.buildPolyline(line: line)
-                newLine.map = self.mapViewController.GMapView
+            var googleMapsMarkers: [GMSPolyline] = []
 
-                self.polylines[newLine.hash.hashValue] = newLine
-
-                polylineHashes.append(newLine.hash.hashValue)
+            let path = GMSMutablePath()
+            self.polylineCords = cords
+            cords.forEach { cord in
+                path.addLatitude(cord.lat, longitude: cord.lng)
             }
-        }
+                let newPolyline = GMSPolyline(path: path)
+                newPolyline.geodesic = true
+                newPolyline.map = self.mapViewController.GMapView
+                newPolyline.strokeWidth = strokeWidth
+                newPolyline.strokeColor = .black
 
+                polylineHashes.append(newPolyline.hash.hashValue)
+            let startCord = CLLocation(latitude: cords[0].lat, longitude: cords[0].lng)
+            var farestLocation: CLLocation?
+            var longestDistance: CLLocationDistance?
+
+            cords.forEach { cord in
+                let location = CLLocation(latitude: cord.lat, longitude: cord.lng)
+                let distance = startCord.distance(from: location)
+                if longestDistance == nil || distance > longestDistance! {
+                  farestLocation = location
+                  longestDistance = distance
+              }
+            }
+            let bounds = GMSCoordinateBounds(coordinate:CLLocationCoordinate2D(latitude: cords[0].lat, longitude: cords[0].lng),coordinate:CLLocationCoordinate2D(latitude: farestLocation?.coordinate.latitude ?? cords[cords.count - 1].lat, longitude: farestLocation?.coordinate.longitude ?? cords[cords.count - 1].lng))
+            let update = GMSCameraUpdate.fit(bounds)
+//            let newCamera = self.mapViewController.GMapView.camera(for: bounds, insets: UIEdgeInsets())!
+//            let newCamera = GMSCameraPosition(latitude: lat, longitude: lng, zoom: nil, bearing: bearing, viewingAngle: angle)
+
+            CATransaction.begin()
+            CATransaction.setAnimationDuration(1.0)
+            self.mapViewController.GMapView.animate(with: update)
+            CATransaction.commit()
+
+            }
         return polylineHashes
     }
 
-    func enableClustering(_ minClusterSize: Int?) {
+    func addPolylines(polylines:[[LatLng]],strokeColors: [String], strokeWidths: [Double], zIndexs: [Double], strokeOpacities:[Double] ) throws -> [Int] {
+        var polylineHashes: [Int] = []
+       
+        DispatchQueue.main.sync {
+            let startCord = CLLocation(latitude: polylines[0][0].lat, longitude: polylines[0][0].lng)
+            
+            polylines.enumerated().forEach { index, polyline in
+               let path = GMSMutablePath()
+               self.polylineCords = polyline
+                polyline.forEach { cord in
+                   path.addLatitude(cord.lat, longitude: cord.lng)
+                   
+               }
+                   let newPolyline = GMSPolyline(path: path)
+                   newPolyline.geodesic = true
+                   newPolyline.map = self.mapViewController.GMapView
+                   newPolyline.strokeWidth = strokeWidths[index]
+                   newPolyline.zIndex = Int32(zIndexs[index])
+                   if let strokeColor = UIColor(hexString: strokeColors[index]) {
+                        newPolyline.strokeColor = strokeColor
+                   }
+                   newPolyline.zIndex = Int32(zIndexs[index])
+                   polylineHashes.append(newPolyline.hash.hashValue)
+            }
+            
+//            let lastArray = polylines[polylines.count - 1]
+//            let lastElement = lastArray[lastArray.count - 1]
+//            let bounds = GMSCoordinateBounds(coordinate:CLLocationCoordinate2D(latitude: polylines[0][0].lat, longitude: polylines[0][0].lng),coordinate:CLLocationCoordinate2D(latitude: farestLocation?.coordinate.latitude ?? lastElement.lat, longitude: farestLocation?.coordinate.longitude ?? lastElement.lng))
+//            let update = GMSCameraUpdate.fit(bounds)
+//
+//            CATransaction.begin()
+//            CATransaction.setAnimationDuration(1.0)
+//            self.mapViewController.GMapView.animate(with: update)
+//            CATransaction.commit()
+        }
+        return polylineHashes
+    }
+
+    func enableClustering() {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
-                self.mapViewController.initClusterManager(minClusterSize)
+                self.mapViewController.initClusterManager()
 
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {
@@ -335,9 +799,6 @@ public class Map {
                     self.mapViewController.addMarkersToCluster(markers: existingMarkers)
                 }
             }
-        } else if self.mapViewController.minimumClusterSize != minClusterSize {
-            self.mapViewController.destroyClusterManager()
-            enableClustering(minClusterSize)
         }
     }
 
@@ -355,6 +816,7 @@ public class Map {
     }
 
     func removeMarker(id: Int) throws {
+        if (id != 0) {
         if let marker = self.markers[id] {
             DispatchQueue.main.async {
                 if self.mapViewController.clusteringEnabled {
@@ -458,6 +920,43 @@ public class Map {
     func enableCurrentLocation(enabled: Bool) throws {
         DispatchQueue.main.sync {
             self.mapViewController.GMapView.isMyLocationEnabled = enabled
+        }
+    }
+
+// Uncomment when user loaction is required
+    // func enableCurrentLocation(enabled: Bool) throws {
+    //     DispatchQueue.main.sync {
+    //         self.mapViewController.GMapView.isMyLocationEnabled = enabled
+    //     self.mapViewController.GMapView.settings.myLocationButton = enabled
+    //     self.mapViewController.GMapView.padding = UIEdgeInsets(top: 0, left: 0, bottom: 34, right: 0)
+
+    //     }
+    // }
+    
+    func toogleScrollGesture(enabled: Bool) throws {
+        DispatchQueue.main.sync {
+            if(self.mapViewController.GMapView != nil){
+                self.mapViewController.GMapView.settings.scrollGestures = enabled
+                self.mapViewController.GMapView.settings.zoomGestures = enabled
+                self.mapViewController.GMapView.settings.rotateGestures = enabled
+                let view = self.mapViewController.GMapView.viewWithTag(5)
+                if(enabled == false){
+                    if((view) == nil){
+                    let btnFloor = UIView()
+                    btnFloor.frame = CGRect(x: 0, y: 0, width: self.mapViewController.GMapView.frame.width, height: self.mapViewController.GMapView.frame.height)
+                    btnFloor.contentMode = UIView.ContentMode.scaleToFill
+                    btnFloor.tag = 5
+                    self.mapViewController.view.addSubview(btnFloor)
+                    }
+                }else{
+                    if((view) != nil){
+                        view?.isHidden = true
+                        self.mapViewController.GMapView.bringSubviewToFront(view!)
+                        view?.removeFromSuperview()
+                    }
+                }
+
+            }
         }
     }
 
