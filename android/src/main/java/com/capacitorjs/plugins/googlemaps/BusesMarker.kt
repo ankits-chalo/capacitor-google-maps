@@ -42,9 +42,10 @@ class BusesMarkerRenderer(
 
         marker.tag = item
 
-        if (item.infoData?.getBoolean("showInfoIcon") == true) {
-//            marker.hideInfoWindow()
+        if (item.infoData?.getBoolean("showInfoIcon") == true) { 
             marker.showInfoWindow()
+        } else {
+            marker.hideInfoWindow()
         }
 
         val busesMarker = BusesMarker(context)
