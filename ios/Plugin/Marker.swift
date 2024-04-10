@@ -12,7 +12,13 @@ public struct Marker {
     let iconAnchor: CGPoint?
     let draggable: Bool?
     let color: UIColor?
-    let zIndex: Int32
+    let zIndex: Int32?
+    let rotation: Double?
+    let id: String?
+    let secondaryImageUrl: String?
+    let skipTitle : Bool?
+    let infoData: JSObject?
+    let infoIcon: String?
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -64,6 +70,13 @@ public struct Marker {
         self.iconAnchor = iconAnchor
         self.color = tintColor
         self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
+        self.rotation = fromJSObject["rotation"] as? Double
+        self.infoData = fromJSObject["infoData"] as? JSObject
+        self.infoIcon = fromJSObject["infoIcon"] as? String
+        self.id = fromJSObject["id"] as? String
+        self.secondaryImageUrl = fromJSObject["secondaryImage"] as? String
+        self.skipTitle = fromJSObject["skipTitle"] as? Bool 
+
     }
 }
 
