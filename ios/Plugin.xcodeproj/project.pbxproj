@@ -24,8 +24,22 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m */; };
 		50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */; };
+		EC57EED62BC7FC6E00595939 /* infoWindowNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EEC72BC7FC6D00595939 /* infoWindowNew.swift */; };
+		EC57EED72BC7FC6E00595939 /* BusesMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EEC82BC7FC6D00595939 /* BusesMarker.swift */; };
+		EC57EED82BC7FC6E00595939 /* infoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EEC92BC7FC6D00595939 /* infoWindow.xib */; };
+		EC57EED92BC7FC6E00595939 /* BusesMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EECA2BC7FC6D00595939 /* BusesMarkerInfoWindow.swift */; };
+		EC57EEDA2BC7FC6E00595939 /* infoWindowBackground.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EECB2BC7FC6D00595939 /* infoWindowBackground.xib */; };
+		EC57EEDB2BC7FC6E00595939 /* InfoWindowWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EECC2BC7FC6D00595939 /* InfoWindowWithImage.swift */; };
+		EC57EEDC2BC7FC6E00595939 /* BusesAround.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EECD2BC7FC6D00595939 /* BusesAround.xib */; };
+		EC57EEDD2BC7FC6E00595939 /* BusesAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EECE2BC7FC6D00595939 /* BusesAround.swift */; };
+		EC57EEDE2BC7FC6E00595939 /* infoWindowNew.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EECF2BC7FC6D00595939 /* infoWindowNew.xib */; };
+		EC57EEDF2BC7FC6E00595939 /* BusesMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EED02BC7FC6D00595939 /* BusesMarkerInfoWindow.xib */; };
+		EC57EEE02BC7FC6E00595939 /* BusesMarker.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EED12BC7FC6E00595939 /* BusesMarker.xib */; };
+		EC57EEE12BC7FC6E00595939 /* infoWindowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EED22BC7FC6E00595939 /* infoWindowBackground.swift */; };
+		EC57EEE22BC7FC6E00595939 /* InfoWindowWithImage.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC57EED32BC7FC6E00595939 /* InfoWindowWithImage.xib */; };
+		EC57EEE32BC7FC6E00595939 /* infoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC57EED42BC7FC6E00595939 /* infoWindow.swift */; };
+		EC57EEE42BC7FC6E00595939 /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = EC57EED52BC7FC6E00595939 /* mapStyle.json */; };
 		EC8FA7682BC7F4A300C60454 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */; };
-		EC8FA76C2BC7F4A300C60454 /* Views in Resources */ = {isa = PBXBuildFile; fileRef = EC8FA75B2BC7F4A300C60454 /* Views */; };
 		EC8FA76D2BC7F4A300C60454 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */; };
 		EC8FA7702BC7F4A400C60454 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */; };
 /* End PBXBuildFile section */
@@ -63,8 +77,22 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EC57EEC72BC7FC6D00595939 /* infoWindowNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowNew.swift; sourceTree = "<group>"; };
+		EC57EEC82BC7FC6D00595939 /* BusesMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarker.swift; sourceTree = "<group>"; };
+		EC57EEC92BC7FC6D00595939 /* infoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindow.xib; sourceTree = "<group>"; };
+		EC57EECA2BC7FC6D00595939 /* BusesMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkerInfoWindow.swift; sourceTree = "<group>"; };
+		EC57EECB2BC7FC6D00595939 /* infoWindowBackground.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindowBackground.xib; sourceTree = "<group>"; };
+		EC57EECC2BC7FC6D00595939 /* InfoWindowWithImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindowWithImage.swift; sourceTree = "<group>"; };
+		EC57EECD2BC7FC6D00595939 /* BusesAround.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesAround.xib; sourceTree = "<group>"; };
+		EC57EECE2BC7FC6D00595939 /* BusesAround.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAround.swift; sourceTree = "<group>"; };
+		EC57EECF2BC7FC6D00595939 /* infoWindowNew.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindowNew.xib; sourceTree = "<group>"; };
+		EC57EED02BC7FC6D00595939 /* BusesMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindow.xib; sourceTree = "<group>"; };
+		EC57EED12BC7FC6E00595939 /* BusesMarker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarker.xib; sourceTree = "<group>"; };
+		EC57EED22BC7FC6E00595939 /* infoWindowBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowBackground.swift; sourceTree = "<group>"; };
+		EC57EED32BC7FC6E00595939 /* InfoWindowWithImage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindowWithImage.xib; sourceTree = "<group>"; };
+		EC57EED42BC7FC6E00595939 /* infoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindow.swift; sourceTree = "<group>"; };
+		EC57EED52BC7FC6E00595939 /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
 		EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BusesAroundYou.swift; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/BusesAroundYou.swift"; sourceTree = "<group>"; };
-		EC8FA75B2BC7F4A300C60454 /* Views */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Views; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/Views"; sourceTree = "<group>"; };
 		EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+Hex.swift"; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/UIColor+Hex.swift"; sourceTree = "<group>"; };
 		EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomMarker.swift; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/CustomMarker.swift"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,9 +145,23 @@
 			isa = PBXGroup;
 			children = (
 				EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */,
+				EC57EECE2BC7FC6D00595939 /* BusesAround.swift */,
+				EC57EECD2BC7FC6D00595939 /* BusesAround.xib */,
+				EC57EEC82BC7FC6D00595939 /* BusesMarker.swift */,
+				EC57EED12BC7FC6E00595939 /* BusesMarker.xib */,
+				EC57EECA2BC7FC6D00595939 /* BusesMarkerInfoWindow.swift */,
+				EC57EED02BC7FC6D00595939 /* BusesMarkerInfoWindow.xib */,
+				EC57EED42BC7FC6E00595939 /* infoWindow.swift */,
+				EC57EEC92BC7FC6D00595939 /* infoWindow.xib */,
+				EC57EED22BC7FC6E00595939 /* infoWindowBackground.swift */,
+				EC57EECB2BC7FC6D00595939 /* infoWindowBackground.xib */,
+				EC57EEC72BC7FC6D00595939 /* infoWindowNew.swift */,
+				EC57EECF2BC7FC6D00595939 /* infoWindowNew.xib */,
+				EC57EECC2BC7FC6D00595939 /* InfoWindowWithImage.swift */,
+				EC57EED32BC7FC6E00595939 /* InfoWindowWithImage.xib */,
+				EC57EED52BC7FC6E00595939 /* mapStyle.json */,
 				EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */,
 				EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */,
-				EC8FA75B2BC7F4A300C60454 /* Views */,
 				50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */,
 				02C6EDF12798803E00D51BF6 /* Map.swift */,
 				50ADFF8B201F53D600D50D53 /* CapacitorGoogleMapsPlugin.h */,
@@ -268,7 +310,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC8FA76C2BC7F4A300C60454 /* Views in Resources */,
+				EC57EEDF2BC7FC6E00595939 /* BusesMarkerInfoWindow.xib in Resources */,
+				EC57EEDE2BC7FC6E00595939 /* infoWindowNew.xib in Resources */,
+				EC57EEE22BC7FC6E00595939 /* InfoWindowWithImage.xib in Resources */,
+				EC57EEE02BC7FC6E00595939 /* BusesMarker.xib in Resources */,
+				EC57EEE42BC7FC6E00595939 /* mapStyle.json in Resources */,
+				EC57EEDC2BC7FC6E00595939 /* BusesAround.xib in Resources */,
+				EC57EED82BC7FC6E00595939 /* infoWindow.xib in Resources */,
+				EC57EEDA2BC7FC6E00595939 /* infoWindowBackground.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,20 +430,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC57EED72BC7FC6E00595939 /* BusesMarker.swift in Sources */,
+				EC57EEDD2BC7FC6E00595939 /* BusesAround.swift in Sources */,
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
+				EC57EEE32BC7FC6E00595939 /* infoWindow.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
 				EC8FA76D2BC7F4A300C60454 /* UIColor+Hex.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
+				EC57EEE12BC7FC6E00595939 /* infoWindowBackground.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
 				EC8FA7702BC7F4A400C60454 /* CustomMarker.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
+				EC57EED62BC7FC6E00595939 /* infoWindowNew.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				EC8FA7682BC7F4A300C60454 /* BusesAroundYou.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,
+				EC57EEDB2BC7FC6E00595939 /* InfoWindowWithImage.swift in Sources */,
 				02C012C327A9D20200FAAE78 /* Marker.swift in Sources */,
+				EC57EED92BC7FC6E00595939 /* BusesMarkerInfoWindow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
