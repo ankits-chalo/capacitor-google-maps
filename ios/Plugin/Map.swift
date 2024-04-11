@@ -14,6 +14,9 @@ class GMViewController: UIViewController {
     var cameraPosition: [String: Double]!
     var minimumClusterSize: Int?
     var mapId: String?
+    var isCircleShow: Bool = false
+    var circleView: UIView!
+    var circle: GMSCircle!
 
     private var clusterManager: GMUClusterManager?
 
@@ -817,18 +820,18 @@ public class Map {
 
     func removeMarker(id: Int) throws {
         if (id != 0) {
-        if let marker = self.markers[id] {
-            DispatchQueue.main.async {
-                if self.mapViewController.clusteringEnabled {
-                    self.mapViewController.removeMarkersFromCluster(markers: [marker])
-                }
+            if let marker = self.markers[id] {
+                DispatchQueue.main.async {
+                    if self.mapViewController.clusteringEnabled {
+                        self.mapViewController.removeMarkersFromCluster(markers: [marker])
+                    }
 
                 marker.map = nil
                 self.markers.removeValue(forKey: id)
-
             }
         } else {
             throw GoogleMapErrors.markerNotFound
+        }
         }
     }
 
@@ -1110,7 +1113,7 @@ public class Map {
         newMarker.isFlat = marker.isFlat ?? false
         newMarker.opacity = marker.opacity ?? 1
         newMarker.isDraggable = marker.draggable ?? false
-        newMarker.zIndex = marker.zIndex
+        newMarker.zIndex = marker.zIndex ?? 0
         if let iconAnchor = marker.iconAnchor {
             newMarker.groundAnchor = iconAnchor
         }
