@@ -39,6 +39,9 @@
 		ECAD59A62BC915B100158D06 /* BusesMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59972BC915B100158D06 /* BusesMarkerInfoWindow.xib */; };
 		ECAD59A72BC915B100158D06 /* BusesMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59982BC915B100158D06 /* BusesMarker.swift */; };
 		ECAD59A82BC915B100158D06 /* BusesAround.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59992BC915B100158D06 /* BusesAround.xib */; };
+		ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */; };
+		ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B02BC917E500158D06 /* CustomMarker.swift */; };
+		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +92,9 @@
 		ECAD59972BC915B100158D06 /* BusesMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindow.xib; sourceTree = "<group>"; };
 		ECAD59982BC915B100158D06 /* BusesMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarker.swift; sourceTree = "<group>"; };
 		ECAD59992BC915B100158D06 /* BusesAround.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesAround.xib; sourceTree = "<group>"; };
+		ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAroundYou.swift; sourceTree = "<group>"; };
+		ECAD59B02BC917E500158D06 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMarker.swift; sourceTree = "<group>"; };
+		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -139,6 +145,9 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */,
+				ECAD59B02BC917E500158D06 /* CustomMarker.swift */,
+				ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */,
 				50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */,
 				02C6EDF12798803E00D51BF6 /* Map.swift */,
 				50ADFF8B201F53D600D50D53 /* CapacitorGoogleMapsPlugin.h */,
@@ -431,8 +440,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */,
 				ECAD59A02BC915B100158D06 /* InfoWindowWithImage.swift in Sources */,
 				ECAD599D2BC915B100158D06 /* infoWindowBackground.swift in Sources */,
+				ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */,
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				ECAD59A72BC915B100158D06 /* BusesMarker.swift in Sources */,
@@ -442,6 +453,7 @@
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
+				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
