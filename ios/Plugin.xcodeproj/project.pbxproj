@@ -124,7 +124,6 @@
 		50ADFF7E201F53D600D50D53 = {
 			isa = PBXGroup;
 			children = (
-				EC13E23C2BC9155500EB36E7 /* Views */,
 				50ADFF8A201F53D600D50D53 /* Plugin */,
 				50ADFF95201F53D600D50D53 /* PluginTests */,
 				50ADFF89201F53D600D50D53 /* Products */,
@@ -145,6 +144,7 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				EC13E23C2BC9155500EB36E7 /* Views */,
 				ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */,
 				ECAD59B02BC917E500158D06 /* CustomMarker.swift */,
 				ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */,
@@ -214,7 +214,8 @@
 				ECAD598F2BC915B100158D06 /* InfoWindowWithImage.xib */,
 				ECAD59932BC915B100158D06 /* mapStyle.json */,
 			);
-			path = Views;
+			name = Views;
+			path = ../Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
