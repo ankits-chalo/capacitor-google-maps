@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.homepage = 'https://capacitorjs.com'
   s.author = package['author']
   s.source = { :git => 'https://github.com/ionic-team/capacitor-plugins.git', :tag => package['name'] + '@' + package['version'] }
-  s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}', 'google-maps/ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
+  s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}', 'google-maps/ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}', '!ios/Plugin/Views/*.swift'
   s.resource_bundles = {'GoogleMapXib' => ['ios/Plugin/Views/*.xib', 'ios/Plugin/Views/*.swift'] }
   s.ios.deployment_target  = '13.0'
   s.dependency 'Capacitor'
