@@ -24,10 +24,21 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m */; };
 		50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */; };
-		EC8FA7682BC7F4A300C60454 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */; };
-		EC8FA76C2BC7F4A300C60454 /* Views in Resources */ = {isa = PBXBuildFile; fileRef = EC8FA75B2BC7F4A300C60454 /* Views */; };
-		EC8FA76D2BC7F4A300C60454 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */; };
-		EC8FA7702BC7F4A400C60454 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */; };
+		ECAD599A2BC915B100158D06 /* BusesMarker.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD598B2BC915B000158D06 /* BusesMarker.xib */; };
+		ECAD599B2BC915B100158D06 /* infoWindowNew.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD598C2BC915B100158D06 /* infoWindowNew.xib */; };
+		ECAD599C2BC915B100158D06 /* BusesMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD598D2BC915B100158D06 /* BusesMarkerInfoWindow.swift */; };
+		ECAD599D2BC915B100158D06 /* infoWindowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD598E2BC915B100158D06 /* infoWindowBackground.swift */; };
+		ECAD599E2BC915B100158D06 /* InfoWindowWithImage.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD598F2BC915B100158D06 /* InfoWindowWithImage.xib */; };
+		ECAD599F2BC915B100158D06 /* infoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59902BC915B100158D06 /* infoWindow.swift */; };
+		ECAD59A02BC915B100158D06 /* InfoWindowWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59912BC915B100158D06 /* InfoWindowWithImage.swift */; };
+		ECAD59A12BC915B100158D06 /* infoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59922BC915B100158D06 /* infoWindow.xib */; };
+		ECAD59A22BC915B100158D06 /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59932BC915B100158D06 /* mapStyle.json */; };
+		ECAD59A32BC915B100158D06 /* infoWindowNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59942BC915B100158D06 /* infoWindowNew.swift */; };
+		ECAD59A42BC915B100158D06 /* BusesAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59952BC915B100158D06 /* BusesAround.swift */; };
+		ECAD59A52BC915B100158D06 /* infoWindowBackground.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59962BC915B100158D06 /* infoWindowBackground.xib */; };
+		ECAD59A62BC915B100158D06 /* BusesMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59972BC915B100158D06 /* BusesMarkerInfoWindow.xib */; };
+		ECAD59A72BC915B100158D06 /* BusesMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59982BC915B100158D06 /* BusesMarker.swift */; };
+		ECAD59A82BC915B100158D06 /* BusesAround.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECAD59992BC915B100158D06 /* BusesAround.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,10 +74,21 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
-		EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BusesAroundYou.swift; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/BusesAroundYou.swift"; sourceTree = "<group>"; };
-		EC8FA75B2BC7F4A300C60454 /* Views */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Views; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/Views"; sourceTree = "<group>"; };
-		EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+Hex.swift"; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/UIColor+Hex.swift"; sourceTree = "<group>"; };
-		EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomMarker.swift; path = "../../../dev_app_2/operator-app-frontend/node_modules/@capacitor/google-maps/ios/Plugin/CustomMarker.swift"; sourceTree = "<group>"; };
+		ECAD598B2BC915B000158D06 /* BusesMarker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarker.xib; sourceTree = "<group>"; };
+		ECAD598C2BC915B100158D06 /* infoWindowNew.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindowNew.xib; sourceTree = "<group>"; };
+		ECAD598D2BC915B100158D06 /* BusesMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkerInfoWindow.swift; sourceTree = "<group>"; };
+		ECAD598E2BC915B100158D06 /* infoWindowBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowBackground.swift; sourceTree = "<group>"; };
+		ECAD598F2BC915B100158D06 /* InfoWindowWithImage.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindowWithImage.xib; sourceTree = "<group>"; };
+		ECAD59902BC915B100158D06 /* infoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindow.swift; sourceTree = "<group>"; };
+		ECAD59912BC915B100158D06 /* InfoWindowWithImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindowWithImage.swift; sourceTree = "<group>"; };
+		ECAD59922BC915B100158D06 /* infoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindow.xib; sourceTree = "<group>"; };
+		ECAD59932BC915B100158D06 /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
+		ECAD59942BC915B100158D06 /* infoWindowNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowNew.swift; sourceTree = "<group>"; };
+		ECAD59952BC915B100158D06 /* BusesAround.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAround.swift; sourceTree = "<group>"; };
+		ECAD59962BC915B100158D06 /* infoWindowBackground.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindowBackground.xib; sourceTree = "<group>"; };
+		ECAD59972BC915B100158D06 /* BusesMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindow.xib; sourceTree = "<group>"; };
+		ECAD59982BC915B100158D06 /* BusesMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarker.swift; sourceTree = "<group>"; };
+		ECAD59992BC915B100158D06 /* BusesAround.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesAround.xib; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -96,6 +118,7 @@
 		50ADFF7E201F53D600D50D53 = {
 			isa = PBXGroup;
 			children = (
+				EC13E23C2BC9155500EB36E7 /* Views */,
 				50ADFF8A201F53D600D50D53 /* Plugin */,
 				50ADFF95201F53D600D50D53 /* PluginTests */,
 				50ADFF89201F53D600D50D53 /* Products */,
@@ -116,10 +139,6 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
-				EC8FA7572BC7F4A300C60454 /* BusesAroundYou.swift */,
-				EC8FA75F2BC7F4A300C60454 /* CustomMarker.swift */,
-				EC8FA75C2BC7F4A300C60454 /* UIColor+Hex.swift */,
-				EC8FA75B2BC7F4A300C60454 /* Views */,
 				50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */,
 				02C6EDF12798803E00D51BF6 /* Map.swift */,
 				50ADFF8B201F53D600D50D53 /* CapacitorGoogleMapsPlugin.h */,
@@ -165,6 +184,28 @@
 				F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EC13E23C2BC9155500EB36E7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ECAD59952BC915B100158D06 /* BusesAround.swift */,
+				ECAD59992BC915B100158D06 /* BusesAround.xib */,
+				ECAD59982BC915B100158D06 /* BusesMarker.swift */,
+				ECAD598B2BC915B000158D06 /* BusesMarker.xib */,
+				ECAD598D2BC915B100158D06 /* BusesMarkerInfoWindow.swift */,
+				ECAD59972BC915B100158D06 /* BusesMarkerInfoWindow.xib */,
+				ECAD59902BC915B100158D06 /* infoWindow.swift */,
+				ECAD59922BC915B100158D06 /* infoWindow.xib */,
+				ECAD598E2BC915B100158D06 /* infoWindowBackground.swift */,
+				ECAD59962BC915B100158D06 /* infoWindowBackground.xib */,
+				ECAD59942BC915B100158D06 /* infoWindowNew.swift */,
+				ECAD598C2BC915B100158D06 /* infoWindowNew.xib */,
+				ECAD59912BC915B100158D06 /* InfoWindowWithImage.swift */,
+				ECAD598F2BC915B100158D06 /* InfoWindowWithImage.xib */,
+				ECAD59932BC915B100158D06 /* mapStyle.json */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,7 +309,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EC8FA76C2BC7F4A300C60454 /* Views in Resources */,
+				ECAD59A62BC915B100158D06 /* BusesMarkerInfoWindow.xib in Resources */,
+				ECAD599B2BC915B100158D06 /* infoWindowNew.xib in Resources */,
+				ECAD59A52BC915B100158D06 /* infoWindowBackground.xib in Resources */,
+				ECAD59A82BC915B100158D06 /* BusesAround.xib in Resources */,
+				ECAD599A2BC915B100158D06 /* BusesMarker.xib in Resources */,
+				ECAD59A22BC915B100158D06 /* mapStyle.json in Resources */,
+				ECAD599E2BC915B100158D06 /* InfoWindowWithImage.xib in Resources */,
+				ECAD59A12BC915B100158D06 /* infoWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,19 +429,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECAD59A02BC915B100158D06 /* InfoWindowWithImage.swift in Sources */,
+				ECAD599D2BC915B100158D06 /* infoWindowBackground.swift in Sources */,
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
+				ECAD59A72BC915B100158D06 /* BusesMarker.swift in Sources */,
+				ECAD59A42BC915B100158D06 /* BusesAround.swift in Sources */,
+				ECAD599F2BC915B100158D06 /* infoWindow.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
-				EC8FA76D2BC7F4A300C60454 /* UIColor+Hex.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
-				EC8FA7702BC7F4A400C60454 /* CustomMarker.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
-				EC8FA7682BC7F4A300C60454 /* BusesAroundYou.swift in Sources */,
+				ECAD59A32BC915B100158D06 /* infoWindowNew.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,
+				ECAD599C2BC915B100158D06 /* BusesMarkerInfoWindow.swift in Sources */,
 				02C012C327A9D20200FAAE78 /* Marker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
