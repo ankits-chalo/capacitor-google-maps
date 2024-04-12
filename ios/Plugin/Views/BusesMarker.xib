@@ -21,10 +21,6 @@
                             <rect key="frame" x="0.0" y="0.0" width="169" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="white_bus" translatesAutoresizingMaskIntoConstraints="NO" id="Vra-fw-b7H">
-                                    <rect key="frame" x="12" y="13.666666666666668" width="20" height="16"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </imageView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="KL14AB3077" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nln-p9-oRs">
                                     <rect key="frame" x="40" y="13" width="121" height="23"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -47,7 +43,4 @@
             <point key="canvasLocation" x="307.63358778625951" y="-136.97183098591549"/>
         </view>
     </objects>
-    <resources>
-        <image name="white_bus" width="16" height="16"/>
-    </resources>
 </document>
