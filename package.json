@@ -18,7 +18,8 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorGoogleMaps.podspec"
+    "CapacitorGoogleMaps.podspec",
+    "ios/Views/"
   ],
   "author": "Ionic <hi@ionicframework.com>",
   "license": "MIT",
