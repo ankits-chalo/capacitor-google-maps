@@ -139,7 +139,6 @@ public class Map {
         self.delegate = delegate
         self.mapViewController = GMViewController()
         self.mapViewController.mapId = config.mapId
-        self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.render), userInfo: nil, repeats: true)
         self.render()
     }
 
@@ -167,7 +166,6 @@ public class Map {
                     if let typeClass = NSClassFromString("WKChildScrollView"), item.isKind(of: typeClass) {
                         (item as? UIScrollView)?.isScrollEnabled = true
                         if item.bounds.width == self.config.width && item.bounds.height == self.config.height && (item as? UIView)?.tag == 0 {
-                            self.timer?.invalidate()
                             self.targetViewController = item
                             break
                         }
