@@ -52,7 +52,7 @@ class BusesMarker: UIView {
 
     class func instanceFromNib() -> BusesMarker {
         let pluginBundle = Bundle( for: BusesMarker.self )
-        let pluginResourceURL = pluginBundle.resourceURL?.appendingPathComponent("GoogleMapXib.bundle")
+        let pluginResourceURL = pluginBundle.resourceURL?.appendingPathComponent("CapacitorGoogleMaps.bundle")
         let resourceBundle = Bundle(url: pluginResourceURL!)
         return UINib(nibName: "BusesMarker", bundle: resourceBundle).instantiate(withOwner: self, options: nil)[0] as! BusesMarker
     }
