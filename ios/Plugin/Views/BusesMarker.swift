@@ -17,7 +17,7 @@ class BusesMarker: UIView {
         super.awakeFromNib()
         
         // Applying card-like background to infoCardView
-        BusMarkerCard.layer.cornerRadius = 20
+        BusMarkerCard.layer.cornerRadius = 15
         BusMarkerCard.layer.shadowColor = UIColor.black.cgColor
         BusMarkerCard.layer.shadowOpacity = 0.5
         BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)

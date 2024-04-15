@@ -40,7 +40,11 @@ class GMViewController: UIViewController {
     }
 
     func initClusterManager() {
+        var customColor = UIColor(hexString: "#FE7C00")
         let iconGenerator = GMUDefaultClusterIconGenerator()
+        if let customColor = UIColor(hexString: "#FE7C00") {
+            iconGenerator = GMUDefaultClusterIconGenerator(buckets: [99999], backgroundColors: [customColor])
+        }
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
 
@@ -56,6 +60,31 @@ class GMViewController: UIViewController {
             clusterManager.cluster()
         }
     }
+    
+    func updateMarkerPosition(marker: GMSMarker, newPosition: CLLocationCoordinate2D) {
+            guard let clusterManager = clusterManager else { return }
+                
+                // Check if the marker is visible (not clustered)
+            if marker.map != nil &&
+                (marker.position.latitude != newPosition.latitude ||
+                marker.position.longitude != newPosition.longitude) {
+                    // The marker is visible on the map
+                    clusterManager.remove(marker)
+                    
+                    // Update the marker's position
+                    marker.position = newPosition
+                    
+                    clusterManager.add(marker)
+                    
+                    // Since the marker's position has changed, it may need to be re-clustered
+                    clusterManager.cluster()
+                } else {
+                    print("Not inside the map", marker.title)
+                    // The marker is not visible (it's inside a cluster)
+                    // Do not update the position
+                }
+
+            }
 
     func addMarkersToCluster(markers: [GMSMarker]) {
         if let clusterManager = clusterManager {
@@ -422,11 +451,7 @@ public class Map {
                 } else {  
                     oldMarker.userData = marker
                     
-                    CATransaction.begin()
-                    CATransaction.setAnimationDuration(2.0)
-                    oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    // Re-cluster the markers to reflect the changes
-                    self.mapViewController.clusterMarker()
+                    self.mapViewController.updateMarkerPosition(marker: oldMarker, newPosition: CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng))
                     
                     if((marker.iconUrl ) != nil){
                         if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
@@ -448,15 +473,14 @@ public class Map {
                     }
                     
                     // If the marker is the selected marker, refresh the info window
-                    if let mapView = self.mapViewController.GMapView, mapView.selectedMarker == oldMarker {
-                        let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false
-                        if showInfoIcon {
-                            mapView.selectedMarker = nil
-                            mapView.selectedMarker = oldMarker
-                        }
+                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil
+                    if showInfoIcon {
+//                            self.mapViewController.GMapView.selectedMarker = nil
+                        oldMarker.map = self.mapViewController.GMapView
+                        self.mapViewController.GMapView.selectedMarker = oldMarker
+                    } else {
+                        self.mapViewController.GMapView.selectedMarker = nil
                     }
-                    
-                    CATransaction.commit()
                     
                 }
             }

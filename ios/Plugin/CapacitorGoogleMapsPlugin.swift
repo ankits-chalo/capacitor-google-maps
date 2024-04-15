@@ -1397,46 +1397,49 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "snippet": marker.snippet ?? ""
         ])
     }
+    
     public func mapView(_ mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
-        guard let userData = marker.userData as? Marker,
-              let imageUrl = userData.infoIcon else {
-               return nil
-        }
-//        if let userData = marker.userData as? Marker {
-        if(imageUrl == "buses_info_icon") {
-                let infoWindow = BusesMarkerInfoWindow.instanceFromNib()
-                infoWindow.busCardName.text = marker.title
-            
+            guard let userData = marker.userData as? Marker,
+                  let imageUrl = userData.infoIcon else {
+                   return nil
+            }
+            if(imageUrl == "buses_info_icon") {
+                let busesMarkerInfo = BusesMarkerInfoWindow.instanceFromNib()
+                let busesMarkerLoading = BusesMarkerInfoWindowLoading.instanceFromNib()
+                let busesTripNotRun = BusesTripNotRun.instanceFromNib()
+                
+                busesMarkerInfo.busCardName.text = marker.title
+                busesMarkerLoading.busCardName.text = marker.title
+                busesTripNotRun.busCardName.text = marker.title
+                
                 let totalCollection = userData.infoData?["totalCollctn"] as? String ?? "0"
                 let tripStartTime = userData.infoData?["tripStartTime"] as? String ?? "trip time"
                 let currentPassengerCount = userData.infoData?["currPsgCount"] as? Int ?? 0
-                let occupancyLevel = userData.infoData?["occupancyLevel"] as? String ?? "N/A"
+                let occupancyLevel = userData.infoData?["occupancyLevel"] as? String ?? ""
                 let routeName = userData.infoData?["routeName"] as? String ?? "route"
-                
-            if let loading = userData.infoData?["loading"] as? Bool, loading {
-                infoWindow.frame.size.height = 70
-                infoWindow.busCardTopConstrain.constant = -10
-                infoWindow.loadingText.isHidden = false
-                infoWindow.busTime.isHidden = true
-                infoWindow.busFromTo.isHidden = true
-                infoWindow.collectionSoFar.isHidden = true
-                infoWindow.collectionSoFarText.isHidden = true
-                infoWindow.currentOccupancy.isHidden = true
-                infoWindow.currentOccupancyText.isHidden = true
-                infoWindow.viewDetailsText.isHidden = true
-                infoWindow.occupancyLevelImage.isHidden = true
-            } else {
-                infoWindow.loadingText.isHidden = true
-                infoWindow.frame.size.height = 170
-                infoWindow.busCardTopConstrain.constant = 7
-                infoWindow.collectionSoFar.text = String(totalCollection)
-                infoWindow.busTime.text = tripStartTime
-                infoWindow.currentOccupancy.text = String(currentPassengerCount)
-                infoWindow.occupancyLevelImage.image = UIImage(named: occupancyLevel )
-                infoWindow.busFromTo.text = routeName
-            }
-                
-                return infoWindow
+                let tripNotRunning = userData.infoData?["tripNotRunning"] as? Bool ?? false
+                let ticketStatus = userData.infoData?["ticketStatus"] as? String ?? ""
+                    
+                if let loading = userData.infoData?["loading"] as? Bool, loading {
+                    return busesMarkerLoading
+                } else if (tripNotRunning == true) {
+                    return busesTripNotRun
+                } else {
+                    busesMarkerInfo.collectionSoFar.text = String(totalCollection)
+                    busesMarkerInfo.busTime.text = tripStartTime
+                    busesMarkerInfo.currentOccupancy.text = String(currentPassengerCount)
+                    busesMarkerInfo.occupancyLevelImage.image = UIImage(named: occupancyLevel )
+                    busesMarkerInfo.busFromTo.text = routeName
+                    if(!ticketStatus.isEmpty && ticketStatus != "") {
+                        busesMarkerInfo.ticketUpdatingText.text = ticketStatus
+                    } else {
+                        busesMarkerInfo.ticketUpdatingText.isHidden = true
+                        busesMarkerInfo.ticketStatusImage.isHidden = true
+                    }
+                    
+                    return busesMarkerInfo
+                }
+                    
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
@@ -1444,10 +1447,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 infoWindow.infoIcon.image = UIImage(named: imageUrl)
                 return infoWindow
             }
-//        }
-        
-        return nil
-    }
+            
+            return nil
+        }
 
     // onClusterInfoWindowClick, onInfoWindowClick
     public func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
