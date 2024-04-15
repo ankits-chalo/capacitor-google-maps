@@ -7,18 +7,10 @@
 
 import UIKit
 
-class BusesMarkerInfoWindow: UIView {
-
-    
+class BusesTripNotRun: UIView {
     @IBOutlet weak var busesInfoCardView: UIView!
     @IBOutlet weak var busCardName: UILabel!
-    @IBOutlet weak var busTime: UILabel!
-    @IBOutlet weak var busFromTo: UILabel!
-    @IBOutlet weak var collectionSoFar: UILabel!
-    @IBOutlet weak var occupancyLevelImage: UIImageView!
-    @IBOutlet weak var currentOccupancy: UILabel!
-    @IBOutlet weak var ticketUpdatingText: UILabel!
-    @IBOutlet weak var ticketStatusImage: UIImageView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,7 +28,7 @@ class BusesMarkerInfoWindow: UIView {
 
     }
 
-    class func instanceFromNib() -> BusesMarkerInfoWindow {
-        return UINib(nibName: "BusesMarkerInfoWindow", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! BusesMarkerInfoWindow
+    class func instanceFromNib() -> BusesTripNotRun {
+        return UINib(nibName: "BusesTripNotRun", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! BusesTripNotRun
     }
 }
