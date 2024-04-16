@@ -336,7 +336,7 @@ public class Map {
                     self.mapViewController.GMapView.selectedMarker = newMarker
                 } else {
                     if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
-                        let busesMarker = BusesMarker.instanceFromNib()
+                        let busesMarker = BusesMarkers.instanceFromNib()
                         busesMarker.BusNumberMarkerText.text = marker.title
                         busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
                         newMarker.iconView = busesMarker
@@ -401,12 +401,12 @@ public class Map {
                     //                }
                     if((marker.iconUrl ) != nil){
                         if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
-                            if let busesMarker = oldMarker.iconView as? BusesMarker {
+                            if let busesMarker = oldMarker.iconView as? BusesMarkers {
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
                             } else if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
-                                // Create new BusesMarker if necessary
-                                let busesMarker = BusesMarker.instanceFromNib()
+                                // Create new BusesMarkers if necessary
+                                let busesMarker = BusesMarkers.instanceFromNib()
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: iconUrl)
                                 oldMarker.iconView = busesMarker
@@ -453,12 +453,12 @@ public class Map {
                     
                     if((marker.iconUrl ) != nil){
                         if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
-                            if let busesMarker = oldMarker.iconView as? BusesMarker {
+                            if let busesMarker = oldMarker.iconView as? BusesMarkers {
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
                             } else if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
-                                // Create new BusesMarker if necessary
-                                let busesMarker = BusesMarker.instanceFromNib()
+                                // Create new BusesMarkers if necessary
+                                let busesMarker = BusesMarkers.instanceFromNib()
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: iconUrl)
                                 oldMarker.iconView = busesMarker
