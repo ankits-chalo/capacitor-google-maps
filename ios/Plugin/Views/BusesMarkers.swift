@@ -32,9 +32,19 @@ class BusesMarkers: UIView {
             
             // Check if the iconUrl string contains "selected" and apply a thick white border
             if iconUrl.contains("selected") {
+                if iconUrl.contains("grey") {
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#B7B7B7")
+                    
+                } else{
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
+                }
                 BusMarkerCard.layer.borderWidth = 3.0 // Set the border width
                 BusMarkerCard.layer.borderColor = UIColor.white.cgColor // Set the border color
                 BusMarkerCard.layer.masksToBounds = true // Ensure the border is not clipped
+                BusMarkerCard.layer.shadowColor = UIColor.black.cgColor
+                BusMarkerCard.layer.shadowOpacity = 0.5
+                BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+                BusMarkerCard.layer.shadowRadius = 2.0
             }
             else {
                 if iconUrl.contains("grey") {
