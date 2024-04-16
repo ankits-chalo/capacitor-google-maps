@@ -22,7 +22,7 @@ class BusesMarker: UIView {
         BusMarkerCard.layer.shadowOpacity = 0.5
         BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
         BusMarkerCard.layer.shadowRadius = 2.0
-        BusMarkerCard.layer.masksToBounds = false
+        BusMarkerCard.layer.masksToBounds = true
 //        BusMarkerCard.frame.size.height = 40.0
 
     }
