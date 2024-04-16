@@ -335,7 +335,7 @@ public class Map {
                     newMarker.map = self.mapViewController.GMapView
                     self.mapViewController.GMapView.selectedMarker = newMarker
                 } else {
-                    if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                    if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
                         let busesMarker = BusesMarker.instanceFromNib()
                         busesMarker.BusNumberMarkerText.text = marker.title
                         busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
@@ -400,7 +400,7 @@ public class Map {
                     //                    oldMarker.title = marker.title
                     //                }
                     if((marker.iconUrl ) != nil){
-                        if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                        if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
                             if let busesMarker = oldMarker.iconView as? BusesMarker {
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
@@ -452,7 +452,7 @@ public class Map {
                     self.mapViewController.updateMarkerPosition(marker: oldMarker, newPosition: CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng))
                     
                     if((marker.iconUrl ) != nil){
-                        if ((marker.iconUrl?.contains("buses_custom_marker")) != nil) {
+                        if let iconUrl = marker.iconUrl, iconUrl.contains("buses_custom_marker") {
                             if let busesMarker = oldMarker.iconView as? BusesMarker {
                                 busesMarker.BusNumberMarkerText.text = marker.title
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
