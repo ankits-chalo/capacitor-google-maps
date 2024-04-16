@@ -18,10 +18,10 @@ class BusesMarkers: UIView {
         
         // Applying card-like background to infoCardView
         BusMarkerCard.layer.cornerRadius = 15
-        BusMarkerCard.layer.shadowColor = UIColor.black.cgColor
-        BusMarkerCard.layer.shadowOpacity = 0.5
-        BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        BusMarkerCard.layer.shadowRadius = 2.0
+//        BusMarkerCard.layer.shadowColor = UIColor.black.cgColor
+//        BusMarkerCard.layer.shadowOpacity = 0.5
+//        BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+//        BusMarkerCard.layer.shadowRadius = 2.0
         BusMarkerCard.layer.masksToBounds = false
 //        BusMarkerCard.frame.size.height = 40.0
 

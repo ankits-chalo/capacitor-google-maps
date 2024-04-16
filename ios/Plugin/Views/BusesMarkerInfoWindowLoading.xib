@@ -8,7 +8,6 @@
     </dependencies>
     <customFonts key="customFonts">
         <array key="notosans.ttf">
-            <string>NotoSans-Regular</string>
             <string>NotoSans-Regular_SemiBold</string>
         </array>
     </customFonts>
@@ -16,7 +15,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InfoWindowWithImage" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="center" id="iN0-l3-epB" customClass="BusesMarkerInfoWindowLoading" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="257" height="81"/>
+            <rect key="frame" x="0.0" y="0.0" width="257" height="85"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksn-16-wKH">
@@ -33,7 +32,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Loading details..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ujb-xb-cCE">
                             <rect key="frame" x="8" y="32" width="198" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="NotoSans-Regular" family="Noto Sans" pointSize="14"/>
+                            <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="14"/>
                             <color key="textColor" red="0.96078431369999995" green="0.48627450979999998" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -50,7 +49,7 @@
                 <outlet property="busCardName" destination="tIX-dk-bQy" id="Mjx-jl-v55"/>
                 <outlet property="busLoadingView" destination="Ksn-16-wKH" id="yxL-qH-J5Y"/>
             </connections>
-            <point key="canvasLocation" x="316.79389312977099" y="-113.02816901408451"/>
+            <point key="canvasLocation" x="316.79389312977099" y="-111.61971830985917"/>
         </view>
     </objects>
     <resources>
