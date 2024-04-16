@@ -41,7 +41,7 @@ class GMViewController: UIViewController {
 
     func initClusterManager() {
         var customColor = UIColor(hexString: "#FE7C00")
-        let iconGenerator = GMUDefaultClusterIconGenerator()
+        var iconGenerator = GMUDefaultClusterIconGenerator()
         if let customColor = UIColor(hexString: "#FE7C00") {
             iconGenerator = GMUDefaultClusterIconGenerator(buckets: [99999], backgroundColors: [customColor])
         }
