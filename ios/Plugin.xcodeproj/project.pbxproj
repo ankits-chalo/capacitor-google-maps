@@ -37,6 +37,8 @@
 		EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = EC11CB3F2BC92C6B00310392 /* mapStyle.json */; };
 		EC11CB4F2BC92C6B00310392 /* infoWindowNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB402BC92C6B00310392 /* infoWindowNew.swift */; };
 		EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */; };
+		EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */; };
+		EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */; };
 		EC578B7B2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC578B752BCD40B7000C9339 /* BusesMarkerInfoWindowLoading.swift */; };
 		EC578B7C2BCD40B8000C9339 /* BusesTripNotRun.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC578B762BCD40B8000C9339 /* BusesTripNotRun.swift */; };
 		EC578B7F2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC578B792BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib */; };
@@ -94,6 +96,8 @@
 		EC11CB3F2BC92C6B00310392 /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
 		EC11CB402BC92C6B00310392 /* infoWindowNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowNew.swift; sourceTree = "<group>"; };
 		EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindowWithImage.swift; sourceTree = "<group>"; };
+		EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkers.xib; sourceTree = "<group>"; };
+		EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkers.swift; sourceTree = "<group>"; };
 		EC578B752BCD40B7000C9339 /* BusesMarkerInfoWindowLoading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkerInfoWindowLoading.swift; sourceTree = "<group>"; };
 		EC578B762BCD40B8000C9339 /* BusesTripNotRun.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesTripNotRun.swift; sourceTree = "<group>"; };
 		EC578B792BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindowLoading.xib; sourceTree = "<group>"; };
@@ -206,6 +210,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */,
+				EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */,
 				EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */,
 				EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */,
 				EC578B752BCD40B7000C9339 /* BusesMarkerInfoWindowLoading.swift */,
@@ -331,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC578B872BCD4157000C9339 /* BusesMarkerInfoWindow.xib in Resources */,
+				EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */,
 				EC11CB432BC92C6B00310392 /* BusesMarker.xib in Resources */,
 				EC11CB452BC92C6B00310392 /* infoWindowBackground.xib in Resources */,
 				EC578B7F2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib in Resources */,
@@ -456,6 +463,7 @@
 				EC578B7C2BCD40B8000C9339 /* BusesTripNotRun.swift in Sources */,
 				ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */,
 				EC11CB4C2BC92C6B00310392 /* BusesAround.swift in Sources */,
+				EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */,
 				ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */,
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
