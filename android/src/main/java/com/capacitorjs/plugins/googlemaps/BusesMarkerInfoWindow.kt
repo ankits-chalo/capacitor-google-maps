@@ -36,6 +36,12 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val currPsgCount = it.infoData?.getLong("currPsgCount")
             val occupancyLevel = it.infoData?.getString("occupancyLevel")
             val ticketStatus = it.infoData?.getString("ticketStatus")
+            val collectionName = it.infoData?.getString("collectionName")
+            val occupancyName = it.infoData?.getString("occupancyName")
+            val viewDetailsName = it.infoData?.getString("viewDetailsName")
+            val tripNotRunName = it.infoData?.getString("tripNotRunName")
+            val loadingName = it.infoData?.getString("loadingName")
+
 
             val occupancyLevelImage = view.findViewById<ImageView>(R.id.occupancyLevelImage)
             val busName = view.findViewById<TextView>(R.id.busCardName)
@@ -46,11 +52,16 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val viewDetailsText = view.findViewById<TextView>(R.id.viewDetailsText)
             val loadingText = view.findViewById<TextView>(R.id.loadingText)
             val ticketStatusAlert = view.findViewById<TextView>(R.id.ticketStatusAlert)
+            val collectionText = view.findViewById<TextView>(R.id.collectionText)
+            val occupancyText = view.findViewById<TextView>(R.id.occupancyText)
             val tripNotRunningText = view.findViewById<TextView>(R.id.tripNotRunningText)
 
-
             busName.text = it.title
-
+            collectionText.text = collectionName
+            occupancyText.text = occupancyName
+            viewDetailsText.text = viewDetailsName
+            tripNotRunningText.text = tripNotRunName
+            loadingText.text = loadingName
 
             if(loading == true) {
                 collectionOccupancyLayout.visibility = View.GONE;
@@ -83,10 +94,6 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
                     ticketStatusAlert.text = ticketStatus
                 }
             }
-
-//            val snippetTextView = view.findViewById<TextView>(R.id.info_window_snippet)
-
-
 
 
 

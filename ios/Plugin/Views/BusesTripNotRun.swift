@@ -10,6 +10,7 @@ import UIKit
 class BusesTripNotRun: UIView {
     @IBOutlet weak var busesInfoCardView: UIView!
     @IBOutlet weak var busCardName: UILabel!
+    @IBOutlet weak var tripNotRunningText: UILabel!
     
     
     override func awakeFromNib() {

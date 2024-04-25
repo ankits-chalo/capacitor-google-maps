@@ -10,6 +10,7 @@ import UIKit
 class BusesMarkerInfoWindowLoading: UIView {
     @IBOutlet weak var busLoadingView: UIView!
     @IBOutlet weak var busCardName: UILabel!
+    @IBOutlet weak var loadingText: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

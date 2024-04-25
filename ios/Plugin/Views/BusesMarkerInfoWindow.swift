@@ -19,6 +19,10 @@ class BusesMarkerInfoWindow: UIView {
     @IBOutlet weak var currentOccupancy: UILabel!
     @IBOutlet weak var ticketUpdatingText: UILabel!
     @IBOutlet weak var ticketStatusImage: UIImageView!
+    @IBOutlet weak var collectionText: UILabel!
+    @IBOutlet weak var occupancyText: UILabel!
+    @IBOutlet weak var viewDetailsText: UILabel!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
