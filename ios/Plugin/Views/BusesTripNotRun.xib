@@ -54,6 +54,7 @@
             <connections>
                 <outlet property="busCardName" destination="2yg-5m-0zj" id="48y-QQ-Bfl"/>
                 <outlet property="busesInfoCardView" destination="sTT-UF-YiN" id="Jsf-rm-sYz"/>
+                <outlet property="tripNotRunningText" destination="Wtc-On-JiM" id="Sy9-DR-cfu"/>
             </connections>
             <point key="canvasLocation" x="342.74809160305341" y="-154.22535211267606"/>
         </view>

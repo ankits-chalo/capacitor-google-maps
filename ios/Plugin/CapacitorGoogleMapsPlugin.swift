@@ -1419,7 +1419,18 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let routeName = userData.infoData?["routeName"] as? String ?? "route"
                 let tripNotRunning = userData.infoData?["tripNotRunning"] as? Bool ?? false
                 let ticketStatus = userData.infoData?["ticketStatus"] as? String ?? ""
-                    
+                let collectionName = userData.infoData?["collectionName"] as? String ?? ""
+                let occupancyName = userData.infoData?["occupancyName"] as? String ?? ""
+                let viewDetailsName = userData.infoData?["viewDetailsName"] as? String ?? ""
+                let tripNotRunName = userData.infoData?["tripNotRunName"] as? String ?? ""
+                let loadingName = userData.infoData?["loadingName"] as? String ?? ""
+                
+                busesMarkerInfo.collectionText.text = collectionName
+                busesMarkerInfo.occupancyText.text = occupancyName
+                busesMarkerInfo.viewDetailsText.text = viewDetailsName
+                busesTripNotRun.tripNotRunningText.text = tripNotRunName
+                busesMarkerLoading.loadingText.text = loadingName
+
                 if let loading = userData.infoData?["loading"] as? Bool, loading {
                     return busesMarkerLoading
                 } else if (tripNotRunning == true) {

@@ -48,6 +48,7 @@
             <connections>
                 <outlet property="busCardName" destination="tIX-dk-bQy" id="Mjx-jl-v55"/>
                 <outlet property="busLoadingView" destination="Ksn-16-wKH" id="yxL-qH-J5Y"/>
+                <outlet property="loadingText" destination="Ujb-xb-cCE" id="Cc8-nA-MDB"/>
             </connections>
             <point key="canvasLocation" x="316.79389312977099" y="-111.61971830985917"/>
         </view>

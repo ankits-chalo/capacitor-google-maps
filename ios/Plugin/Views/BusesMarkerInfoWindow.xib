@@ -15,7 +15,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InfoWindowWithImage" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="center" id="iN0-l3-epB" customClass="BusesMarkerInfoWindow" customModule="Plugin" customModuleProvider="target">
+        <view contentMode="center" id="iN0-l3-epB" customClass="BusesMarkerInfoWindow" customModule="Plugin">
             <rect key="frame" x="0.0" y="0.0" width="262" height="195"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
@@ -114,10 +114,13 @@
                 <outlet property="busTime" destination="syQ-7k-0bT" id="Dcp-m8-P6v"/>
                 <outlet property="busesInfoCardView" destination="sTT-UF-YiN" id="Jsf-rm-sYz"/>
                 <outlet property="collectionSoFar" destination="gmq-O7-Cxr" id="MGT-WV-wgX"/>
+                <outlet property="collectionText" destination="pPk-S7-tQS" id="cI0-F2-bXp"/>
                 <outlet property="currentOccupancy" destination="E6i-Lo-1q8" id="hec-GD-GiM"/>
                 <outlet property="occupancyLevelImage" destination="dkU-jN-JX1" id="lyB-eD-Xxe"/>
+                <outlet property="occupancyText" destination="9kZ-bR-u9c" id="weG-ku-BXy"/>
                 <outlet property="ticketStatusImage" destination="Bha-PP-C91" id="hai-cl-zxl"/>
                 <outlet property="ticketUpdatingText" destination="Wtc-On-JiM" id="GGn-yz-BK0"/>
+                <outlet property="viewDetailsText" destination="ojK-OS-uIu" id="ZH7-FA-llp"/>
             </connections>
             <point key="canvasLocation" x="341.98473282442745" y="-117.25352112676057"/>
         </view>
