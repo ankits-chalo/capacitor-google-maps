@@ -16,52 +16,52 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusesMarkerInfoWindow" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="center" id="iN0-l3-epB" customClass="BusesMarkerInfoWindow" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="262" height="195"/>
+            <rect key="frame" x="0.0" y="0.0" width="289" height="195"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <view contentMode="scaleToFill" id="sTT-UF-YiN">
-                    <rect key="frame" x="7" y="5" width="249" height="175"/>
+                    <rect key="frame" x="7" y="5" width="274" height="175"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ArrowPolygon" translatesAutoresizingMaskIntoConstraints="NO" id="98x-Yn-aLW">
-                            <rect key="frame" x="112" y="170" width="24" height="24"/>
+                            <rect key="frame" x="125" y="170" width="24" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Started at 4:20 PM, Today" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="syQ-7k-0bT">
-                            <rect key="frame" x="8" y="7" width="233" height="17"/>
+                            <rect key="frame" x="8" y="7" width="258" height="17"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular" family="Noto Sans" pointSize="12"/>
                             <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MH07AB1234" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yg-5m-0zj">
-                            <rect key="frame" x="8" y="26" width="233" height="21"/>
+                            <rect key="frame" x="8" y="26" width="258" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="18"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Kuttiyadi-kozhikode Via Perambra" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ze-zL-1C9">
-                            <rect key="frame" x="8" y="46" width="233" height="21"/>
+                            <rect key="frame" x="8" y="46" width="258" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular" family="Noto Sans" pointSize="12"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iio-BV-mT2">
-                            <rect key="frame" x="8" y="72" width="233" height="1"/>
+                            <rect key="frame" x="8" y="72" width="258" height="1"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Collection so far" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pPk-S7-tQS">
-                            <rect key="frame" x="8" y="81" width="91" height="17"/>
+                            <rect key="frame" x="8" y="81" width="110" height="17"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular" family="Noto Sans" pointSize="12"/>
                             <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current occupancy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9kZ-bR-u9c">
-                            <rect key="frame" x="126" y="81" width="106" height="17"/>
+                            <rect key="frame" x="130" y="81" width="139" height="17"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular" family="Noto Sans" pointSize="12"/>
                             <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
@@ -75,14 +75,14 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="23" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E6i-Lo-1q8">
-                            <rect key="frame" x="151" y="100" width="76" height="19"/>
+                            <rect key="frame" x="159" y="100" width="76" height="19"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="14"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="seats_almost_full_icon" translatesAutoresizingMaskIntoConstraints="NO" id="dkU-jN-JX1">
-                            <rect key="frame" x="126" y="97" width="22" height="24"/>
+                            <rect key="frame" x="130" y="97" width="22" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ticket_status_alert" translatesAutoresizingMaskIntoConstraints="NO" id="Bha-PP-C91">
@@ -115,14 +115,14 @@
                 <outlet property="busesInfoCardView" destination="sTT-UF-YiN" id="U38-WJ-6z1"/>
                 <outlet property="collectionSoFar" destination="gmq-O7-Cxr" id="jy6-AN-KdC"/>
                 <outlet property="collectionText" destination="pPk-S7-tQS" id="37J-6k-4WL"/>
-                <outlet property="currentOccupancy" destination="pPk-S7-tQS" id="b1x-iI-Ba3"/>
+                <outlet property="currentOccupancy" destination="E6i-Lo-1q8" id="m5C-K3-vhW"/>
                 <outlet property="occupancyLevelImage" destination="dkU-jN-JX1" id="WM6-74-Yq7"/>
                 <outlet property="occupancyText" destination="9kZ-bR-u9c" id="g3u-Kf-MiK"/>
                 <outlet property="ticketStatusImage" destination="Bha-PP-C91" id="GrX-tT-QH4"/>
                 <outlet property="ticketUpdatingText" destination="Wtc-On-JiM" id="F8b-2h-2ZU"/>
                 <outlet property="viewDetailsText" destination="ojK-OS-uIu" id="TuK-KF-zAA"/>
             </connections>
-            <point key="canvasLocation" x="341.98473282442745" y="-117.25352112676057"/>
+            <point key="canvasLocation" x="362.59541984732823" y="-117.25352112676057"/>
         </view>
     </objects>
     <resources>
