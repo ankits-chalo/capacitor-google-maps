@@ -15,18 +15,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusesMarkerInfoWindow" customModule="Plugin" customModuleProvider="target">
             <connections>
-                <outlet property="busCardName" destination="2yg-5m-0zj" id="cYZ-WG-yav"/>
-                <outlet property="busFromTo" destination="8ze-zL-1C9" id="K46-5y-02k"/>
-                <outlet property="busTime" destination="syQ-7k-0bT" id="9uB-uL-fbi"/>
-                <outlet property="busesInfoCardView" destination="iN0-l3-epB" id="bdV-20-eKT"/>
-                <outlet property="collectionSoFar" destination="gmq-O7-Cxr" id="rZj-FC-8OV"/>
-                <outlet property="collectionText" destination="pPk-S7-tQS" id="xiJ-CI-YYZ"/>
-                <outlet property="currentOccupancy" destination="E6i-Lo-1q8" id="eBi-Wz-zdu"/>
-                <outlet property="occupancyLevelImage" destination="dkU-jN-JX1" id="sLh-GB-2pc"/>
-                <outlet property="occupancyText" destination="9kZ-bR-u9c" id="cmF-lI-vrZ"/>
                 <outlet property="ticketStatusImage" destination="Bha-PP-C91" id="vCQ-XG-xqr"/>
-                <outlet property="ticketUpdatingText" destination="Wtc-On-JiM" id="olQ-Hz-muL"/>
-                <outlet property="viewDetailsText" destination="ojK-OS-uIu" id="T9g-Oh-cvm"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -123,6 +112,20 @@
                 </view>
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="busCardName" destination="2yg-5m-0zj" id="xkt-VM-qeO"/>
+                <outlet property="busFromTo" destination="8ze-zL-1C9" id="4yV-j1-tuO"/>
+                <outlet property="busTime" destination="syQ-7k-0bT" id="sGj-4t-Wl2"/>
+                <outlet property="busesInfoCardView" destination="sTT-UF-YiN" id="U38-WJ-6z1"/>
+                <outlet property="collectionSoFar" destination="gmq-O7-Cxr" id="jy6-AN-KdC"/>
+                <outlet property="collectionText" destination="pPk-S7-tQS" id="37J-6k-4WL"/>
+                <outlet property="currentOccupancy" destination="pPk-S7-tQS" id="b1x-iI-Ba3"/>
+                <outlet property="occupancyLevelImage" destination="dkU-jN-JX1" id="WM6-74-Yq7"/>
+                <outlet property="occupancyText" destination="9kZ-bR-u9c" id="g3u-Kf-MiK"/>
+                <outlet property="ticketStatusImage" destination="Bha-PP-C91" id="EXp-gz-H4O"/>
+                <outlet property="ticketUpdatingText" destination="Wtc-On-JiM" id="F8b-2h-2ZU"/>
+                <outlet property="viewDetailsText" destination="ojK-OS-uIu" id="TuK-KF-zAA"/>
+            </connections>
             <point key="canvasLocation" x="341.98473282442745" y="-117.25352112676057"/>
         </view>
     </objects>
