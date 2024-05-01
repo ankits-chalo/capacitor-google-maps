@@ -113,7 +113,7 @@
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="busCardName" destination="2yg-5m-0zj" id="xkt-VM-qeO"/>
+                <outlet property="busCardName" destination="2yg-5m-0zj" id="nfm-06-aMu"/>
                 <outlet property="busFromTo" destination="8ze-zL-1C9" id="4yV-j1-tuO"/>
                 <outlet property="busTime" destination="syQ-7k-0bT" id="sGj-4t-Wl2"/>
                 <outlet property="busesInfoCardView" destination="sTT-UF-YiN" id="U38-WJ-6z1"/>
