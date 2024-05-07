@@ -550,10 +550,15 @@ class CapacitorGoogleMap(
                             }
 
                             if (!marker.infoIcon.isNullOrEmpty()) {
-                                if (marker.infoIcon.equals("buses_info_icon") && marker.infoData?.getBoolean("showInfoIcon") == true) {
-                                    val bridge = delegate.bridge
-                                    oldMarker?.googleMapMarker?.tag = marker
-                                    oldMarker?.googleMapMarker?.showInfoWindow()
+                                if (marker.infoIcon.equals("buses_info_icon")) {
+                                    if( marker.infoData?.getBoolean("showInfoIcon") == true) {
+                                        val bridge = delegate.bridge
+                                        oldMarker?.googleMapMarker?.tag = marker
+                                        oldMarker?.googleMapMarker?.showInfoWindow()
+                                    } else {
+                                        oldMarker?.googleMapMarker?.hideInfoWindow()
+                                    }
+
                                 }
                             }
 
