@@ -1418,12 +1418,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let occupancyLevel = userData.infoData?["occupancyLevel"] as? String ?? ""
                 let routeName = userData.infoData?["routeName"] as? String ?? "route"
                 let tripNotRunning = userData.infoData?["tripNotRunning"] as? Bool ?? false
+                let apiFail = userData.infoData?["apiFail"] as? Bool ?? false
                 let ticketStatus = userData.infoData?["ticketStatus"] as? String ?? ""
                 let collectionName = userData.infoData?["collectionName"] as? String ?? ""
                 let occupancyName = userData.infoData?["occupancyName"] as? String ?? ""
                 let viewDetailsName = userData.infoData?["viewDetailsName"] as? String ?? ""
                 let tripNotRunName = userData.infoData?["tripNotRunName"] as? String ?? ""
                 let loadingName = userData.infoData?["loadingName"] as? String ?? ""
+                let errorName = userData.infoData?["errorName"] as? String ?? ""
                 
                 busesMarkerInfo.collectionText.text = collectionName
                 busesMarkerInfo.occupancyText.text = occupancyName
@@ -1432,6 +1434,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 busesMarkerLoading.loadingText.text = loadingName
 
                 if let loading = userData.infoData?["loading"] as? Bool, loading {
+                    return busesMarkerLoading
+                } else if (apiFail == true) {
+                    busesMarkerLoading.loadingText.text = "Failed to load, try again later"
+                    busesMarkerLoading.loadingText.textColor = UIColor(hexString: "#c62828")
                     return busesMarkerLoading
                 } else if (tripNotRunning == true) {
                     return busesTripNotRun

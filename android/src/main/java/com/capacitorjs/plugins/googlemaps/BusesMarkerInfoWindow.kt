@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.googlemaps
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -71,6 +72,16 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
                 ticketStatusLayout.visibility = View.GONE;
                 lineView.visibility = View.GONE;
                 tripNotRunningText.visibility = View.GONE;
+            } else if( apiFail == true) {
+                collectionOccupancyLayout.visibility = View.GONE;
+                busTime.visibility = View.GONE;
+                busRouteName.visibility = View.GONE;
+                viewDetailsText.visibility = View.GONE;
+                ticketStatusLayout.visibility = View.GONE;
+                lineView.visibility = View.GONE;
+                tripNotRunningText.visibility = View.GONE;
+                loadingText.text = "Failed to load, try again later"
+                loadingText.setTextColor(Color.parseColor("#C62828"))
             } else if( tripNotRunning == true) {
                 loadingText.visibility = View.GONE;
                 collectionOccupancyLayout.visibility = View.GONE;
