@@ -19,7 +19,7 @@
         42dp
     </dimen>
     <dimen name="alert_marker">
-        42dp
+        28dp
     </dimen>
 
 </resources>

@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/info_window_card"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            android:padding="10dp"
+            android:background="@drawable/rounded_corners"
+            >
+
+            <TextView
+                android:id="@+id/alertTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:textColor="#808080"
+                android:fontFamily="@font/notosans"
+                android:paddingBottom="4dp"
+                android:text="Reported at" />
+
+            <TextView
+                android:id="@+id/alertSnippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Irinjalakuda - Kodungallur Rd, Kolothumpady, Irinjalakuda, Kerala 680121"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:fontFamily="@font/notosans"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/info_window_image"
+        android:layout_width="16dp"
+        android:layout_height="14dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="-3dp"
+        android:layout_gravity="center"
+        android:src="@drawable/arrow_polygon" />
+</LinearLayout>

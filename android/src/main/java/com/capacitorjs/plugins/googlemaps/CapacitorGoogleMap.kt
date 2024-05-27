@@ -4,15 +4,13 @@ import BusesMarker
 import BusesMarkerRenderer
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
-import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.*
+import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.util.Log
-import android.util.Property
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +26,10 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import java.io.IOException
 import java.io.InputStream
 import java.net.URL
+import java.util.Locale
 
 
 class CapacitorGoogleMap(
@@ -330,6 +330,32 @@ class CapacitorGoogleMap(
         }
     }
 
+    private fun fetchAddressForMarker(marker: Marker, context: Context) {
+        val position = marker.position
+        CoroutineScope(Dispatchers.IO).launch {
+            val address = getAddressFromLatLng(position, context)
+            withContext(Dispatchers.Main) {
+                marker.snippet = address
+                marker.showInfoWindow() // Refresh the info window
+            }
+        }
+    }
+
+    private fun getAddressFromLatLng(latLng: LatLng, context: Context): String {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        return try {
+            val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                addresses[0].getAddressLine(0)
+            } else {
+                "Address not found"
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            "Address not found"
+        }
+    }
+
     fun addMarker(marker: CapacitorGoogleMapMarker, callback: (result: Result<String>) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
@@ -371,6 +397,15 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
+                        }else if(marker.infoIcon!!.contains("bus_alert_info")) {
+                            val bridge = delegate.bridge
+                            googleMapMarker?.tag = marker
+                            googleMap?.setInfoWindowAdapter(AlertMarkerInfoWindow(bridge.context))
+                            googleMapMarker?.showInfoWindow()
+                            // Fetch the address and update the info window
+                            if (googleMapMarker != null && marker.infoIcon!!.contains("address")) {
+                                fetchAddressForMarker(googleMapMarker, bridge.context)
+                            }
                         } else {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -558,7 +593,6 @@ class CapacitorGoogleMap(
                                     } else {
                                         oldMarker?.googleMapMarker?.hideInfoWindow()
                                     }
-
                                 }
                             }
 
