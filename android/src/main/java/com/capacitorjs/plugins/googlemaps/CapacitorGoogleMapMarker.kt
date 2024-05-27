@@ -128,7 +128,9 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         markerOptions.position(coordinate)
         markerOptions.title(title)
         //Extra space is getting added if we add empty snippet
-//        markerOptions.snippet(snippet)
+        if(!snippet.isNullOrEmpty()){
+            markerOptions.snippet(snippet)
+        }
         markerOptions.alpha(opacity)
         markerOptions.flat(isFlat)
         markerOptions.draggable(draggable)
@@ -163,8 +165,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val size = context.resources.getDimension(R.dimen.alert_marker).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
-        }
-        else if(iconUrl?.isEmpty() == true) {
+        } else if(iconUrl?.isEmpty() == true) {
             // When we need to show only the infoWindow
 
             // Hiding the default marker by making the alpha to 0
@@ -175,6 +176,11 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             }
             if(snippet.isNotEmpty()) {
                 markerOptions.snippet(snippet)
+            }
+        } else if(!iconUrl.isNullOrEmpty()) {
+            if(resourceId != 0) {
+                val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmap))
             }
         }
         return markerOptions
