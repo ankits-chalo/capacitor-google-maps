@@ -1460,6 +1460,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     return busesMarkerInfo
                 }
                     
+            } else if(imageUrl.contains('bus_alert_info_address')) {
+                let alertMarkerInfo = AlertMarkerInfoWindow.instanceFromNib()
+                alertMarkerInfo.alertTitle.text = marker.title
+                alertMarkerInfo.alertSnippet.text = marker.snippet
+                return alertMarkerInfo
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title

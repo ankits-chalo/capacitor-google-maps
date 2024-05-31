@@ -35,6 +35,8 @@
 		EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */ = {isa = PBXBuildFile; fileRef = EC11CB3F2BC92C6B00310392 /* mapStyle.json */; };
 		EC11CB4F2BC92C6B00310392 /* infoWindowNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB402BC92C6B00310392 /* infoWindowNew.swift */; };
 		EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */; };
+		EC1FC3EE2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */; };
+		EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */; };
 		EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */; };
 		EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */; };
 		EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE8722BCE697B00158F2C /* notosans.ttf */; };
@@ -93,6 +95,8 @@
 		EC11CB3F2BC92C6B00310392 /* mapStyle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = mapStyle.json; sourceTree = "<group>"; };
 		EC11CB402BC92C6B00310392 /* infoWindowNew.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowNew.swift; sourceTree = "<group>"; };
 		EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindowWithImage.swift; sourceTree = "<group>"; };
+		EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertMarkerInfoWindow.swift; sourceTree = "<group>"; };
+		EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertMarkerInfoWindow.xib; sourceTree = "<group>"; };
 		EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkers.xib; sourceTree = "<group>"; };
 		EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkers.swift; sourceTree = "<group>"; };
 		EC3BE8722BCE697B00158F2C /* notosans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = notosans.ttf; sourceTree = "<group>"; };
@@ -209,6 +213,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */,
+				EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */,
 				EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */,
 				EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */,
 				EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */,
@@ -349,6 +355,7 @@
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
+				EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */,
 				EC11CB482BC92C6B00310392 /* InfoWindowWithImage.xib in Resources */,
 				EC11CB4D2BC92C6B00310392 /* infoWindowNew.xib in Resources */,
 				EC578B802BCD40B8000C9339 /* BusesTripNotRun.xib in Resources */,
@@ -476,6 +483,7 @@
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
+				EC1FC3EE2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift in Sources */,
 				EC11CB492BC92C6B00310392 /* infoWindow.swift in Sources */,
 				EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */,
 				EC578B7B2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.swift in Sources */,
