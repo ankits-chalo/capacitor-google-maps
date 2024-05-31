@@ -24,11 +24,7 @@ class AlertMarkerInfoWindow: UIView {
         alertCardView.layer.shadowRadius = 2.0
         alertCardView.layer.masksToBounds = false
         alertCardView.backgroundColor = UIColor.white
-        titleLabel.textColor = UIColor.black
-        snippetLabel.textColor = UIColor.black
 
-        // Setting arrow image to arrowImageView
-        arrowImageView.image = UIImage(named: "ArrowPolygon")
     }
 
     class func instanceFromNib() -> AlertMarkerInfoWindow {
