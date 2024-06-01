@@ -297,6 +297,21 @@ public class Map {
             }
         }
     }
+    
+    private func fetchAddressForMarker(_ marker: GMSMarker) {
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(marker.position) { (response, error) in
+            if let address = response?.firstResult(), let lines = address.lines {
+                marker.snippet = lines.joined(separator: "\n")
+                // Update the info window
+                if marker.map != nil {
+                    self.mapViewController.GMapView.selectedMarker = marker
+                }
+            } else {
+                marker.snippet = "Address not found"
+            }
+        }
+    }
 
     func addMarker(marker: Marker) throws -> Int {
         var markerHash = 0
@@ -320,11 +335,10 @@ public class Map {
                 if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView {
                     newMarker.userData = marker
                     newMarker.map = mapView
-                    
-//                    To show the info window
-//                    mapView.selectedMarker = newMarker
+                    if(infoIcon.contains("address")) {
+                        fetchAddressForMarker(newMarker)
+                    }
                 }
-                
                 newMarker.isFlat = marker.isFlat ?? false
                 newMarker.opacity = marker.opacity ?? 1
                 newMarker.isDraggable = marker.draggable ?? false
