@@ -148,7 +148,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val arrowWidth = context.resources.getDimension(R.dimen.arrow_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
-        } else if(iconUrl?.contains("bus_marker") == true) {
+        } else if(iconUrl?.contains("delayed_bus_marker") == true || iconUrl?.contains("active_bus_marker") == true) {
             val size = context.resources.getDimension(R.dimen.marker_size).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
@@ -161,7 +161,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val markerWidth = context.resources.getDimension(R.dimen.start_end_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
-        } else if(iconUrl?.contains("alert") == true) {
+        } else if(iconUrl?.contains("alert_bus") == true) {
             val size = context.resources.getDimension(R.dimen.alert_marker).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
@@ -186,7 +186,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         return markerOptions
     }
 
-    fun updateIcon(newIconName: String, title: String) {
+    fun updateIcon(newIconName: String, title: String, snippet: String ) {
         iconUrl = newIconName
         val resources: Resources = context.resources
         val resourceId: Int = resources.getIdentifier(iconUrl, "drawable", context.packageName)
@@ -203,6 +203,9 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         } else if(iconUrl?.contains("buses_custom_marker") == true) {
             val busesMarker = BusesMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, iconUrl!!))
+        } else if(iconUrl?.contains("alert_custom_marker") == true) {
+            val busesMarker = AlertBusMarker(context)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         }
 
     }

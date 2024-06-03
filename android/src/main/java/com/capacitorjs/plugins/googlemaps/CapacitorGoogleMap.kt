@@ -388,6 +388,14 @@ class CapacitorGoogleMap(
                         markerOptions.icon(busesMarker.getMarkerIcon(marker.title, marker.iconUrl!!))
                     }
 
+                    if(marker.iconUrl?.contains("alert_custom_marker") == true) {
+                        val bridge = delegate.bridge
+                        val busesMarker = AlertBusMarker(bridge.context)
+                        markerOptions.icon(busesMarker.getMarkerIcon(marker.title, marker.snippet, marker.iconUrl!!))
+//                        To remove info window set title as empty string
+                        markerOptions.title("")
+                    }
+
 
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
                     googleMapMarker?.tag = marker
@@ -581,7 +589,7 @@ class CapacitorGoogleMap(
                                 }
                             } else {
                                 // Setting the new icon if the icon is modified
-                                marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title) }
+                                marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
                             }
 
                             if (!marker.infoIcon.isNullOrEmpty()) {
@@ -694,7 +702,7 @@ class CapacitorGoogleMap(
                     }
                 } else {
                     // Setting the new icon if the icon is modified
-                    marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title) }
+                    marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
                 }
 
                 markerId = marker?.id.toString()
