@@ -354,6 +354,18 @@ public class Map {
                         busesMarker.BusNumberMarkerText.text = marker.title
                         busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
                         newMarker.iconView = busesMarker
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_custom_marker") {
+                        if(iconUrl.contains("inactive")) {
+                            let alertMarker = AlertBusMarkerHalt.instanceFromNib()
+                            alertMarker.BusNumberText.text = marker.title
+                            alertMarker.AlertSnippet.text = marker.snippet
+                            if(iconUrl.contains("ignition_off")) {
+                                alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
+                            }
+                            newMarker.iconView = alertMarker
+                        }
+                        newMarker.title = ""
+                        newMarker.snippet = ""
                     } else {
                         // If it is present in assets folder then the icon is picked from it
                         newMarker.icon = UIImage(named: marker.iconUrl ?? "")
@@ -425,7 +437,17 @@ public class Map {
                                 busesMarker.updateCardColorBasedOnIconUrl(iconUrl: iconUrl)
                                 oldMarker.iconView = busesMarker
                             }
-                        } else {
+                        } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_custom_marker") {
+                            if(iconUrl.contains("inactive")) {
+                                let alertMarker = AlertBusMarkerHalt.instanceFromNib()
+                                alertMarker.BusNumberText.text = marker.title
+                                alertMarker.AlertSnippet.text = marker.snippet
+                                if(iconUrl.contains("ignition_off")) {
+                                    alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
+                                }
+                                oldMarker.iconView = alertMarker
+                            }
+                        }  else {
                             // If it is present in assets folder then the icon is picked from it
                             oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
                         }
