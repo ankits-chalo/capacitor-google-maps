@@ -37,6 +37,8 @@
 		EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */; };
 		EC1FC3EE2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */; };
 		EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */; };
+		EC1FC3F42C0E353D006AA7E4 /* AlertBusMarkerHalt.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */; };
+		EC1FC3F72C0E353E006AA7E4 /* AlertBusMarkerHalt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */; };
 		EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */; };
 		EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */; };
 		EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE8722BCE697B00158F2C /* notosans.ttf */; };
@@ -97,6 +99,8 @@
 		EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoWindowWithImage.swift; sourceTree = "<group>"; };
 		EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertMarkerInfoWindow.swift; sourceTree = "<group>"; };
 		EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertMarkerInfoWindow.xib; sourceTree = "<group>"; };
+		EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertBusMarkerHalt.xib; sourceTree = "<group>"; };
+		EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBusMarkerHalt.swift; sourceTree = "<group>"; };
 		EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkers.xib; sourceTree = "<group>"; };
 		EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkers.swift; sourceTree = "<group>"; };
 		EC3BE8722BCE697B00158F2C /* notosans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = notosans.ttf; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */,
+				EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */,
 				EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */,
 				EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */,
 				EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */,
@@ -356,6 +362,7 @@
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
 				EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */,
+				EC1FC3F42C0E353D006AA7E4 /* AlertBusMarkerHalt.xib in Resources */,
 				EC11CB482BC92C6B00310392 /* InfoWindowWithImage.xib in Resources */,
 				EC11CB4D2BC92C6B00310392 /* infoWindowNew.xib in Resources */,
 				EC578B802BCD40B8000C9339 /* BusesTripNotRun.xib in Resources */,
@@ -477,6 +484,7 @@
 				EC578B7C2BCD40B8000C9339 /* BusesTripNotRun.swift in Sources */,
 				ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */,
 				EC11CB4C2BC92C6B00310392 /* BusesAround.swift in Sources */,
+				EC1FC3F72C0E353E006AA7E4 /* AlertBusMarkerHalt.swift in Sources */,
 				EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */,
 				ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */,
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
