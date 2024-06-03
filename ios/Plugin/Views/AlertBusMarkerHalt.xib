@@ -23,7 +23,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="KL14AB30778" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nln-p9-oRs">
-                            <rect key="frame" x="30" y="5" width="67" height="12"/>
+                            <rect key="frame" x="30" y="5" width="71" height="12"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="10"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -32,7 +32,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="10 mins Halt" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PhB-Xz-i1j">
                             <rect key="frame" x="30" y="15" width="67" height="12"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="7"/>
+                            <fontDescription key="fontDescription" name="NotoSans-Regular_SemiBold" family="Noto Sans" pointSize="8"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -41,7 +41,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="alert_ignition_on" translatesAutoresizingMaskIntoConstraints="NO" id="dYw-kq-ma1">
-                            <rect key="frame" x="101" y="7" width="18" height="18"/>
+                            <rect key="frame" x="102" y="7" width="18" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
@@ -55,7 +55,7 @@
                 <outlet property="BusNumberText" destination="nln-p9-oRs" id="x7v-te-Cd2"/>
                 <outlet property="IgnitionImage" destination="dYw-kq-ma1" id="zmB-xc-6Dk"/>
             </connections>
-            <point key="canvasLocation" x="267.17557251908397" y="-154.57746478873241"/>
+            <point key="canvasLocation" x="267.17557251908397" y="-155.28169014084509"/>
         </view>
     </objects>
     <resources>
