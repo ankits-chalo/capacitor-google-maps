@@ -16,7 +16,7 @@ class AlertBusMarkerHalt: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        AlertHaltCard.layer.cornerRadius = 15
+        AlertHaltCard.layer.cornerRadius = 20
         AlertHaltCard.layer.masksToBounds = false
     }
     
