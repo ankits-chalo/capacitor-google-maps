@@ -184,7 +184,7 @@ public class Map {
                             self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
                         } catch {
                             CAPLog.print("Invalid Google Maps styles")
-                        }           
+                        }
                     }
 
                     self.delegate.notifyListeners("onMapReady", data: [
@@ -355,7 +355,7 @@ public class Map {
                         busesMarker.updateCardColorBasedOnIconUrl(iconUrl: marker.iconUrl)
                         newMarker.iconView = busesMarker
                     } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_custom_marker") {
-                        if(iconUrl.contains("inactive")) {
+                        if(iconUrl.contains("halt")) {
                             let alertMarker = AlertBusMarkerHalt.instanceFromNib()
                             alertMarker.BusNumberText.text = marker.title
                             alertMarker.AlertSnippet.text = marker.snippet
@@ -443,7 +443,7 @@ public class Map {
                                 oldMarker.iconView = busesMarker
                             }
                         } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_custom_marker") {
-                            if(iconUrl.contains("inactive")) {
+                            if(iconUrl.contains("halt")) {
                                 let alertMarker = AlertBusMarkerHalt.instanceFromNib()
                                 alertMarker.BusNumberText.text = marker.title
                                 alertMarker.AlertSnippet.text = marker.snippet
@@ -492,7 +492,7 @@ public class Map {
                         NSLog("Error in angle. \(error)")
                     }
                     CATransaction.commit()
-                } else {  
+                } else {
                     oldMarker.userData = marker
                     
                     self.mapViewController.updateMarkerPosition(marker: oldMarker, newPosition: CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng))
@@ -753,7 +753,7 @@ public class Map {
         }
 
         return circleHashes
-    }  
+    }
 
     // func addPolylines(lines: [Polyline]) throws -> [Int] {
     //     var polylineHashes: [Int] = []
