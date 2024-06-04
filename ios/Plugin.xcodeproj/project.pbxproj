@@ -39,6 +39,8 @@
 		EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */; };
 		EC1FC3F42C0E353D006AA7E4 /* AlertBusMarkerHalt.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */; };
 		EC1FC3F72C0E353E006AA7E4 /* AlertBusMarkerHalt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */; };
+		EC1FC3FA2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC1FC3F82C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib */; };
+		EC1FC3FB2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC1FC3F92C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift */; };
 		EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */; };
 		EC3BE8702BCE59CB00158F2C /* BusesMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */; };
 		EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC3BE8722BCE697B00158F2C /* notosans.ttf */; };
@@ -101,6 +103,8 @@
 		EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertMarkerInfoWindow.xib; sourceTree = "<group>"; };
 		EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertBusMarkerHalt.xib; sourceTree = "<group>"; };
 		EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBusMarkerHalt.swift; sourceTree = "<group>"; };
+		EC1FC3F82C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertBusMarkerInactive.xib; sourceTree = "<group>"; };
+		EC1FC3F92C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertBusMarkerInactive.swift; sourceTree = "<group>"; };
 		EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkers.xib; sourceTree = "<group>"; };
 		EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkers.swift; sourceTree = "<group>"; };
 		EC3BE8722BCE697B00158F2C /* notosans.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = notosans.ttf; sourceTree = "<group>"; };
@@ -217,6 +221,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC1FC3F92C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift */,
+				EC1FC3F82C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib */,
 				EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */,
 				EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */,
 				EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */,
@@ -361,6 +367,7 @@
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
+				EC1FC3FA2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib in Resources */,
 				EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */,
 				EC1FC3F42C0E353D006AA7E4 /* AlertBusMarkerHalt.xib in Resources */,
 				EC11CB482BC92C6B00310392 /* InfoWindowWithImage.xib in Resources */,
@@ -478,6 +485,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1FC3FB2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift in Sources */,
 				EC11CB4F2BC92C6B00310392 /* infoWindowNew.swift in Sources */,
 				EC578B7C2BCD40B8000C9339 /* BusesTripNotRun.swift in Sources */,
 				ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */,

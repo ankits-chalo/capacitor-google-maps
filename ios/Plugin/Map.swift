@@ -363,6 +363,11 @@ public class Map {
                                 alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
                             }
                             newMarker.iconView = alertMarker
+                        } else {
+                            let alertMarker = AlertBusMarkerInactive.instanceFromNib()
+                            alertMarker.BusNumberText.text = marker.title
+                            alertMarker.AlertSnippet.text = marker.snippet
+                            newMarker.iconView = alertMarker
                         }
                         newMarker.title = ""
                         newMarker.snippet = ""
@@ -445,6 +450,11 @@ public class Map {
                                 if(iconUrl.contains("ignition_off")) {
                                     alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
                                 }
+                                oldMarker.iconView = alertMarker
+                            } else {
+                                let alertMarker = AlertBusMarkerInactive.instanceFromNib()
+                                alertMarker.BusNumberText.text = marker.title
+                                alertMarker.AlertSnippet.text = marker.snippet
                                 oldMarker.iconView = alertMarker
                             }
                         }  else {
