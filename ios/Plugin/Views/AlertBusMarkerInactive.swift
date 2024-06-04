@@ -13,7 +13,7 @@ class AlertBusMarkerInactive: UIView {
     @IBOutlet weak var BusNumberText: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        AlertInactiveCard.layer.cornerRadius = 15
+        AlertInactiveCard.layer.cornerRadius = 20
         AlertInactiveCard.layer.masksToBounds = false
     }
     
