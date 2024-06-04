@@ -371,6 +371,13 @@ public class Map {
                         }
                         newMarker.title = ""
                         newMarker.snippet = ""
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_stop_custom_marker") {
+                        let alertMarker = AlertStopMarker.instanceFromNib()
+                        alertMarker.alertTitle.text = marker.title
+                        alertMarker.alertSnippet.text = marker.snippet
+                        newMarker.iconView = alertMarker
+                        newMarker.title = ""
+                        newMarker.snippet = ""
                     } else {
                         // If it is present in assets folder then the icon is picked from it
                         newMarker.icon = UIImage(named: marker.iconUrl ?? "")
