@@ -118,6 +118,7 @@ public class Map {
     var mapViewController: GMViewController
     var targetViewController: UIView?
     var markers = [Int: GMSMarker]()
+    var markersDetails = [Int: Marker]()
     var polygons = [Int: GMSPolygon]()
     var circles = [Int: GMSCircle]()
     var polylines = [Int: GMSPolyline]()
@@ -132,6 +133,7 @@ public class Map {
     // swiftlint:disable weak_delegate
     private var delegate: CapacitorGoogleMapsPlugin
     var markerIdOnWeb = [String : Int]()
+    private var markerIdNotOnCluster = [String]()
 
     init(id: String, config: GoogleMapConfig, delegate: CapacitorGoogleMapsPlugin) {
         self.id = id
@@ -398,11 +400,15 @@ public class Map {
                 
                 if self.mapViewController.clusteringEnabled {
                     self.mapViewController.addMarkersToCluster(markers: [newMarker])
+                    if !(marker.isClustered ?? true) {
+                        self.markerIdNotOnCluster.append(String(newMarker.hash.hashValue))
+                    }
                 } else {
                     newMarker.map = self.mapViewController.GMapView
                 }
                 
                 self.markers[newMarker.hash.hashValue] = newMarker
+                self.markersDetails[newMarker.hash.hashValue] = marker
                 self.markerIdOnWeb[marker.id!] = newMarker.hash.hashValue
                 markerHash = newMarker.hash.hashValue
             }
@@ -414,7 +420,28 @@ public class Map {
     func setMarkerPosition(marker: Marker) throws  -> String  {
         if let oldMarker = self.markers[Int(marker.id!)!] {
             DispatchQueue.main.sync {
-                if !self.mapViewController.clusteringEnabled {
+
+//                if self.markerIdNotOnCluster.contains(String(marker.id!)) && (marker.isClustered ?? false) {
+//                    // If previously the marker was not added to cluster but in new request
+//                    // this marker needs to be added to the cluster
+
+////                    oldMarker.map = nil
+//                    self.mapViewController.addMarkersToCluster(markers: [oldMarker])
+//                    // to remove marker ID from markerIdNotOnCluster
+//                    if let index = self.markerIdNotOnCluster.firstIndex(of: marker.id!) {
+//                        self.markerIdNotOnCluster.remove(at: index)
+//                    }
+//                } else
+                if !self.markerIdNotOnCluster.contains(String(marker.id!)) && !(marker.isClustered ?? true) {
+                    // If previously the marker was added to cluster but in new request
+                    // this marker wants to the be remove from cluster
+
+                    self.mapViewController.removeMarkersFromCluster(markers: [oldMarker])
+                    oldMarker.map = self.mapViewController.GMapView
+                    self.markerIdNotOnCluster.append(String(marker.id!))
+                }
+
+                if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(2.0)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
@@ -869,9 +896,13 @@ public class Map {
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {
                     var existingMarkers: [GMSMarker] = []
-                    for (_, marker) in self.markers {
-                        marker.map = nil
-                        existingMarkers.append(marker)
+                    for (key, marker) in self.markers {
+                        if let markerDetail = self.markersDetails[key], !(markerDetail.isClustered ?? true) {
+                            self.markerIdNotOnCluster.append(String(key))
+                        } else {
+                            marker.map = nil
+                            existingMarkers.append(marker)
+                        }
                     }
 
                     self.mapViewController.addMarkersToCluster(markers: existingMarkers)

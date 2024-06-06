@@ -11,6 +11,7 @@ public struct Marker {
     let iconSize: CGSize?
     let iconAnchor: CGPoint?
     let draggable: Bool?
+    let isClustered: Bool?
     let color: UIColor?
     let zIndex: Int32?
     let rotation: Double?
@@ -66,6 +67,7 @@ public struct Marker {
         self.isFlat = fromJSObject["isFlat"] as? Bool
         self.iconUrl = fromJSObject["iconUrl"] as? String
         self.draggable = fromJSObject["draggable"] as? Bool
+        self.isClustered = fromJSObject["isClustered"] as? Bool ?? true
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
         self.color = tintColor
@@ -75,7 +77,7 @@ public struct Marker {
         self.infoIcon = fromJSObject["infoIcon"] as? String
         self.id = fromJSObject["id"] as? String
         self.secondaryImageUrl = fromJSObject["secondaryImage"] as? String
-        self.skipTitle = fromJSObject["skipTitle"] as? Bool 
+        self.skipTitle = fromJSObject["skipTitle"] as? Bool
 
     }
 }

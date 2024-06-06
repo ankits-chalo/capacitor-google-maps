@@ -61,6 +61,7 @@ class CapacitorGoogleMap(
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
     private var markerIdOnWeb = ArrayList<String>()
+    private var markerIdNotOnCluster = ArrayList<String>()
     private var animator: Animator? = null
     private var polylineCords: MutableList<LatLng> = mutableListOf()
 
@@ -442,6 +443,9 @@ class CapacitorGoogleMap(
                                 googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
                             }
                         }
+                        if(!marker.isClustered) {
+                            markerIdNotOnCluster.add(googleMapMarker!!.id)
+                        }
                         googleMapMarker?.remove()
                         clusterManager?.addItem(marker)
                         clusterManager?.cluster()
@@ -565,7 +569,26 @@ class CapacitorGoogleMap(
                 CoroutineScope(Dispatchers.Main).launch {
                     if (markers.contains(marker.id)) {
                         val oldMarker = markers[marker.id]
-                        if (clusterManager == null) {
+                        if(markerIdNotOnCluster.contains(marker.id) && marker.isClustered) {
+                            // If previously the marker was not added to cluster but in new request
+                            // this marker needs to be added to the cluster
+
+                            oldMarker?.googleMapMarker?.remove()
+                            clusterManager?.addItem(oldMarker)
+                            clusterManager?.cluster()
+                            markerIdNotOnCluster.remove(marker.id)
+
+                        } else if(!markerIdNotOnCluster.contains(marker.id) && !marker.isClustered) {
+                            // If previously the marker was added to cluster but in new request
+                            // this marker wants to the be remove from cluster
+
+                            clusterManager?.removeItem(oldMarker)
+                            clusterManager?.cluster()
+                            val googleMapMarker = googleMap?.addMarker(oldMarker!!.getMarkerOptionsUpdated())
+                            oldMarker?.googleMapMarker = googleMapMarker
+                            marker.id?.let { markerIdNotOnCluster.add(it) }
+                        }
+                        if (clusterManager == null || !marker.isClustered) {
                             // Below line animate the marker
                             animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
                             // Set the camera position of map to the centre of the marker
@@ -788,13 +811,21 @@ class CapacitorGoogleMap(
                 // add existing markers to the cluster
                 if (markers.isNotEmpty()) {
                     clusterManager?.clearItems() // Clear existing items in the cluster manager
-                    for ((_, marker) in markers) {
+
+                    val filteredMarkers = markers.values.filter { it.isClustered }
+
+                    // Collect all the keys whose markers.values.isClustered is false
+                    markerIdNotOnCluster = markers.filter { !it.value.isClustered }.keys.toCollection(ArrayList())
+
+                    for (marker in filteredMarkers) {
                         marker.googleMapMarker?.remove()
                         // marker.googleMapMarker = null
                     }
-                    clusterManager?.addItems(markers.values)
+
+                    clusterManager?.addItems(filteredMarkers)
                     clusterManager?.cluster()
                 }
+
 
                 callback(null)
             }

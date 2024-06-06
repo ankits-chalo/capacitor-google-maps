@@ -25,6 +25,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
     var iconSize: Size? = null
     var iconAnchor: CapacitorGoogleMapsPoint? = null
     var draggable: Boolean = false
+    var isClustered: Boolean = true
     var googleMapMarker: Marker? = null
     var colorHue: Float? = null
     var markerOptions: MarkerOptions? = null
@@ -75,7 +76,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         }
 
         draggable = fromJSONObject.optBoolean("draggable", false)
-
+        isClustered = fromJSONObject.optBoolean("isClustered", true)
 
         id = fromJSONObject.optString("id")
         zIndex = fromJSONObject.optDouble("zIndex", 1.0 ).toFloat()
