@@ -97,8 +97,10 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
                 busCollectionSoFar.text = totalCollctn
                 busCurrentOccupancy.text = currPsgCount.toString()
                 val resources: Resources = context.resources
-                val resourceId: Int = resources.getIdentifier(occupancyLevel, "drawable", context.packageName)
-                occupancyLevelImage.setImageDrawable(context.getDrawable(resourceId))
+                if(!occupancyLevel.isNullOrEmpty()) {
+                    val resourceId: Int = resources.getIdentifier(occupancyLevel, "drawable", context.packageName)
+                    occupancyLevelImage.setImageDrawable(context.getDrawable(resourceId))
+                }
                 if(ticketStatus.isNullOrEmpty()) {
                     ticketStatusLayout.visibility = View.GONE;
                 } else {

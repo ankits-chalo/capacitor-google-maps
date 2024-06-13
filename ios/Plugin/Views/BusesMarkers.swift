@@ -12,6 +12,7 @@ class BusesMarkers: UIView {
     
     @IBOutlet weak var BusMarkerCard: UIView!
     @IBOutlet weak var BusNumberMarkerText: UILabel!
+    @IBOutlet weak var BusMarkerImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,9 +35,10 @@ class BusesMarkers: UIView {
             if iconUrl.contains("selected") {
                 if iconUrl.contains("grey") {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#B7B7B7")
-                    
+                    BusMarkerImage.image = UIImage(named: "not_live_status")
                 } else{
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
+                    BusMarkerImage.image = UIImage(named: "live_status")
                 }
                 BusMarkerCard.layer.borderWidth = 3.0 // Set the border width
                 BusMarkerCard.layer.borderColor = UIColor.white.cgColor // Set the border color
@@ -49,9 +51,10 @@ class BusesMarkers: UIView {
             else {
                 if iconUrl.contains("grey") {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#B7B7B7")
-                    
+                    BusMarkerImage.image = UIImage(named: "not_live_status")
                 } else{
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
+                    BusMarkerImage.image = UIImage(named: "live_status")
                 }
                 // Remove the border or set it to default
                 BusMarkerCard.layer.borderWidth = 0
