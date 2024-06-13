@@ -367,7 +367,7 @@ public class Map {
                             alertMarker.AlertSnippet.text = marker.snippet
                             if(iconUrl.contains("ignition_off")) {
                                 alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
-                            } else if(iconUrl.contains("ignition_off")) {
+                            } else if(iconUrl.contains("ignition_on")) {
                                 alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_on" )
                             } else {
                                 alertMarker.IgnitionImage.image = nil
@@ -497,6 +497,10 @@ public class Map {
                                 alertMarker.AlertSnippet.text = marker.snippet
                                 if(iconUrl.contains("ignition_off")) {
                                     alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
+                                } else if(iconUrl.contains("ignition_on")) {
+                                    alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_on" )
+                                } else {
+                                    alertMarker.IgnitionImage.image = nil
                                 }
                                 oldMarker.iconView = alertMarker
                             } else {
