@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.capacitorjs.plugins.googlemaps.BusesMarkerInfoWindow
@@ -42,7 +43,7 @@ class BusesMarkerRenderer(
 
         marker.tag = item
 
-        if (item.infoData?.getBoolean("showInfoIcon") == true) { 
+        if (item.infoData?.getBoolean("showInfoIcon") == true) {
             marker.showInfoWindow()
         } else {
             marker.hideInfoWindow()
@@ -64,12 +65,14 @@ class BusesMarker(private val context: Context) {
     private val customMarkerView = LayoutInflater.from(context).inflate(R.layout.bus_number_marker, null)
     private val textView: TextView = customMarkerView.findViewById(R.id.busNumberMarkerText)
     private val cardView: CardView = customMarkerView.findViewById(R.id.busNumberMarkerCardView)
+    private val imageView: ImageView = customMarkerView.findViewById(R.id.busNumberMarkerImage)
 
     fun getMarkerIcon(text: String, iconUrl: String): BitmapDescriptor {
         textView.text = text
         if (!iconUrl.isNullOrEmpty()) {
             if (iconUrl.contains("grey", ignoreCase = true)) {
                 cardView.setCardBackgroundColor(Color.parseColor("#B7B7B7"))
+                imageView.setImageResource(R.drawable.not_live_status)
             }
             if (iconUrl.contains("selected", ignoreCase = true)) {
                 // Apply a thick white border
