@@ -397,11 +397,16 @@ class CapacitorGoogleMap(
                         markerOptions.title("")
                     }
 
+                    if(marker.infoIcon.equals("not_show_info_window")) {
+//                        To remove info window set title as empty string
+                        markerOptions.title("")
+                    }
+
 
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
                     googleMapMarker?.tag = marker
 
-                    if (!marker.infoIcon.isNullOrEmpty()) {
+                    if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
                         if(marker.infoIcon.equals("buses_info_icon")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -615,7 +620,7 @@ class CapacitorGoogleMap(
                                 marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
                             }
 
-                            if (!marker.infoIcon.isNullOrEmpty()) {
+                            if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
                                 if (marker.infoIcon.equals("buses_info_icon")) {
                                     if( marker.infoData?.getBoolean("showInfoIcon") == true) {
                                         val bridge = delegate.bridge

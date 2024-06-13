@@ -334,12 +334,16 @@ public class Map {
                 if !(marker.snippet ?? "").isEmpty {
                     newMarker.snippet = marker.snippet
                 }
-                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView {
+                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window") {
                     newMarker.userData = marker
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
                         fetchAddressForMarker(newMarker)
                     }
+                }
+                if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
+                    newMarker.title = ""
+                    newMarker.snippet = ""
                 }
                 newMarker.isFlat = marker.isFlat ?? false
                 newMarker.opacity = marker.opacity ?? 1
@@ -363,6 +367,10 @@ public class Map {
                             alertMarker.AlertSnippet.text = marker.snippet
                             if(iconUrl.contains("ignition_off")) {
                                 alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_off" )
+                            } else if(iconUrl.contains("ignition_off")) {
+                                alertMarker.IgnitionImage.image = UIImage(named: "alert_ignition_on" )
+                            } else {
+                                alertMarker.IgnitionImage.image = nil
                             }
                             newMarker.iconView = alertMarker
                         } else {
@@ -421,6 +429,8 @@ public class Map {
         if let oldMarker = self.markers[Int(marker.id!)!] {
             DispatchQueue.main.sync {
 
+                
+//                TODO
 //                if self.markerIdNotOnCluster.contains(String(marker.id!)) && (marker.isClustered ?? false) {
 //                    // If previously the marker was not added to cluster but in new request
 //                    // this marker needs to be added to the cluster
@@ -441,11 +451,15 @@ public class Map {
                     self.markerIdNotOnCluster.append(String(marker.id!))
                 }
 
-                if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) {
+                if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) || self.markerIdNotOnCluster.contains(String(marker.id!)) {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(2.0)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    oldMarker.title = marker.title
+                    if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
+                        oldMarker.title = marker.title
+                        oldMarker.snippet = marker.snippet
+                    }
+                    
                     
                     let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 15)
                     
@@ -504,7 +518,7 @@ public class Map {
                         self.mapViewController.GMapView.selectedMarker = oldMarker
                     }
                     
-                    if let infoIcon = marker.infoIcon, let infoData = marker.infoData, let mapView = self.mapViewController.GMapView{
+                    if let infoIcon = marker.infoIcon, let infoData = marker.infoData, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
                         oldMarker.userData = marker
                         oldMarker.map = mapView
                         let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
@@ -551,7 +565,7 @@ public class Map {
                     }
                     
                     // If the marker is the selected marker, refresh the info window
-                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil
+                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil && !(marker.infoIcon?.contains("not_show_info_window") ?? false)
                     if showInfoIcon {
 //                            self.mapViewController.GMapView.selectedMarker = nil
                         oldMarker.map = self.mapViewController.GMapView
