@@ -340,6 +340,9 @@ public class Map {
                     if(infoIcon.contains("address")) {
                         fetchAddressForMarker(newMarker)
                     }
+                    if(infoIcon.contains("bus_alert_info")) {
+                        mapView.selectedMarker = newMarker
+                    }
                 }
                 if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
                     newMarker.title = ""
@@ -455,7 +458,7 @@ public class Map {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(2.0)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
+                    if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window") {
                         oldMarker.title = marker.title
                         oldMarker.snippet = marker.snippet
                     }
@@ -522,13 +525,18 @@ public class Map {
                         self.mapViewController.GMapView.selectedMarker = oldMarker
                     }
                     
-                    if let infoIcon = marker.infoIcon, let infoData = marker.infoData, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
+                    if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
                         oldMarker.userData = marker
                         oldMarker.map = mapView
-                        let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
-                        //                    To show the info window
-                        if(showInfoIcon) {
-                            mapView.selectedMarker = nil
+                        if let infoData = marker.infoData {
+                            let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
+                            //                    To show the info window
+                            if(showInfoIcon) {
+                                mapView.selectedMarker = nil
+                                mapView.selectedMarker = oldMarker
+                            }
+                        }
+                        if(infoIcon.contains("bus_alert_info")) {
                             mapView.selectedMarker = oldMarker
                         }
                     }
