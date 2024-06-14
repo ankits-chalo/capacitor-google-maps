@@ -30,8 +30,8 @@ class AlertMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val alertTitle = view.findViewById<TextView>(R.id.alertTitle)
             val alertSnippet = view.findViewById<TextView>(R.id.alertSnippet)
 
-            alertTitle.text = marker.title
-            alertSnippet.text = marker.snippet
+            alertTitle.text = it.title
+            alertSnippet.text = it.snippet
             // Set loading text initially
             if(!marker.snippet.isNullOrEmpty() && it.infoIcon?.contains("address") == true){
                 alertSnippet.text = marker.snippet ?: "Loading..."

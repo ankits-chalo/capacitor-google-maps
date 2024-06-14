@@ -51,13 +51,13 @@ class CapacitorGoogleMap(
         OnCircleClickListener,
         OnPolylineClickListener,
         OnPolygonClickListener
-        {
+{
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
     private val markers = HashMap<String, CapacitorGoogleMapMarker>()
     private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
     private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
-    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()        
+    private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
     private var markerIdOnWeb = ArrayList<String>()
@@ -566,111 +566,119 @@ class CapacitorGoogleMap(
         valueAnimator.start()
     }
 
-        fun setMarkerPosition(marker: CapacitorGoogleMapMarker, callback: (result: Result<String>) -> Unit) {
-            try {
-                googleMap ?: throw GoogleMapNotAvailable()
+    fun setMarkerPosition(marker: CapacitorGoogleMapMarker, callback: (result: Result<String>) -> Unit) {
+        try {
+            googleMap ?: throw GoogleMapNotAvailable()
 
-                var markerId: String
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (markers.contains(marker.id)) {
-                        val oldMarker = markers[marker.id]
-                        if(markerIdNotOnCluster.contains(marker.id) && marker.isClustered) {
-                            // If previously the marker was not added to cluster but in new request
-                            // this marker needs to be added to the cluster
+            var markerId: String
+            CoroutineScope(Dispatchers.Main).launch {
+                if (markers.contains(marker.id)) {
+                    val oldMarker = markers[marker.id]
+                    if(markerIdNotOnCluster.contains(marker.id) && marker.isClustered) {
+                        // If previously the marker was not added to cluster but in new request
+                        // this marker needs to be added to the cluster
 
-                            oldMarker?.googleMapMarker?.remove()
-                            clusterManager?.addItem(oldMarker)
-                            clusterManager?.cluster()
-                            markerIdNotOnCluster.remove(marker.id)
+                        oldMarker?.googleMapMarker?.remove()
+                        clusterManager?.addItem(oldMarker)
+                        clusterManager?.cluster()
+                        markerIdNotOnCluster.remove(marker.id)
 
-                        } else if(!markerIdNotOnCluster.contains(marker.id) && !marker.isClustered) {
-                            // If previously the marker was added to cluster but in new request
-                            // this marker wants to the be remove from cluster
+                    } else if(!markerIdNotOnCluster.contains(marker.id) && !marker.isClustered) {
+                        // If previously the marker was added to cluster but in new request
+                        // this marker wants to the be remove from cluster
 
-                            clusterManager?.removeItem(oldMarker)
-                            clusterManager?.cluster()
-                            val googleMapMarker = googleMap?.addMarker(oldMarker!!.getMarkerOptionsUpdated())
-                            oldMarker?.googleMapMarker = googleMapMarker
-                            marker.id?.let { markerIdNotOnCluster.add(it) }
-                        }
-                        if (clusterManager == null || !marker.isClustered) {
-                            // Below line animate the marker
-                            animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
-                            // Set the camera position of map to the centre of the marker
-    //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
+                        clusterManager?.removeItem(oldMarker)
+                        clusterManager?.cluster()
+                        val googleMapMarker = googleMap?.addMarker(oldMarker!!.getMarkerOptionsUpdated())
+                        oldMarker?.googleMapMarker = googleMapMarker
+                        marker.id?.let { markerIdNotOnCluster.add(it) }
+                    }
+                    if (clusterManager == null || !marker.isClustered) {
+                        // Below line animate the marker
+                        animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                        // Set the camera position of map to the centre of the marker
+                        // googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
-                            if (marker.rotation == 1) {
-                                oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
-                            } else {
-                                oldMarker?.googleMapMarker?.rotation = 0.0f
-                            }
-
-                            // In case marker is only for showing info window
-                            if (marker.iconUrl?.isEmpty() == true) {
-                                oldMarker?.googleMapMarker?.showInfoWindow()
-                                oldMarker?.googleMapMarker?.alpha = 0.0f
-                                if (marker.title.isNotEmpty()) {
-                                    oldMarker?.googleMapMarker?.title = marker.title
-                                }
-                                if (marker.snippet.isNotEmpty()) {
-                                    oldMarker?.googleMapMarker?.snippet = marker.snippet
-                                }
-                            } else {
-                                // Setting the new icon if the icon is modified
-                                marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
-                            }
-
-                            if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
-                                if (marker.infoIcon.equals("buses_info_icon")) {
-                                    if( marker.infoData?.getBoolean("showInfoIcon") == true) {
-                                        val bridge = delegate.bridge
-                                        oldMarker?.googleMapMarker?.tag = marker
-                                        oldMarker?.googleMapMarker?.showInfoWindow()
-                                    } else {
-                                        oldMarker?.googleMapMarker?.hideInfoWindow()
-                                    }
-                                }
-                            }
-
-
+                        if (marker.rotation == 1) {
+                            oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
                         } else {
-                            oldMarker?.let {
+                            oldMarker?.googleMapMarker?.rotation = 0.0f
+                        }
 
-                                val renderer = clusterManager?.renderer as? BusesMarkerRenderer
-                                val isClustered = renderer?.getClusterItem(oldMarker.googleMapMarker) != null
-                                if (!isClustered
-                                        && (oldMarker.position.latitude != marker.coordinate.latitude
-                                                || oldMarker.position.longitude != marker.coordinate.longitude)) {
-//                                  Only animate if the marker is not currently clustered
-                                    animateMarkerInsideCluster(it, marker.coordinate)
+                        // In case marker is only for showing info window
+                        if (marker.iconUrl?.isEmpty() == true) {
+                            oldMarker?.googleMapMarker?.showInfoWindow()
+                            oldMarker?.googleMapMarker?.alpha = 0.0f
+                            if (marker.title.isNotEmpty()) {
+                                oldMarker?.googleMapMarker?.title = marker.title
+                            }
+                            if (marker.snippet.isNotEmpty()) {
+                                oldMarker?.googleMapMarker?.snippet = marker.snippet
+                            }
+                        } else {
+                            // Setting the new icon if the icon is modified
+                            marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
+                        }
+
+                        if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
+                            if (marker.infoIcon.equals("buses_info_icon")) {
+                                if (marker.infoData?.getBoolean("showInfoIcon") == true) {
+                                    val bridge = delegate.bridge
+                                    oldMarker?.googleMapMarker?.tag = marker
+                                    oldMarker?.googleMapMarker?.showInfoWindow()
+                                } else {
+                                    oldMarker?.googleMapMarker?.hideInfoWindow()
                                 }
-                                it.iconUrl = marker.iconUrl
-                                it.coordinate = marker.coordinate
-                                it.infoData = marker.infoData
-                                it.title = marker.title
+                            } else if (marker.infoIcon!!.contains("bus_alert_info")) {
+                                val bridge = delegate.bridge
+                                oldMarker?.googleMapMarker?.tag = marker
+                                oldMarker?.googleMapMarker?.showInfoWindow()
+                                // Fetch the address and update the info window
+                                if (oldMarker?.googleMapMarker != null && marker.infoIcon!!.contains("address")) {
+                                    fetchAddressForMarker(oldMarker?.googleMapMarker!!, bridge.context)
+                                }
+                            }
+                        }
+
+
+                    } else {
+                        oldMarker?.let {
+
+                            val renderer = clusterManager?.renderer as? BusesMarkerRenderer
+                            val isClustered = renderer?.getClusterItem(oldMarker.googleMapMarker) != null
+                            if (!isClustered
+                                    && (oldMarker.position.latitude != marker.coordinate.latitude
+                                            || oldMarker.position.longitude != marker.coordinate.longitude)) {
+//                                  Only animate if the marker is not currently clustered
+                                animateMarkerInsideCluster(it, marker.coordinate)
+                            }
+                            it.iconUrl = marker.iconUrl
+                            it.coordinate = marker.coordinate
+                            it.infoData = marker.infoData
+                            it.title = marker.title
 
 
 //                              Remove and re-add the marker to the ClusterManager.
-                                clusterManager?.removeItem(it)
-                                clusterManager?.addItem(it)
-                                clusterManager?.cluster()
+                            clusterManager?.removeItem(it)
+                            clusterManager?.addItem(it)
+                            clusterManager?.cluster()
 
 
-                            }
                         }
-
-                        markerId = marker?.id.toString()
-                        callback(Result.success(markerId))
-
-                    } else {
-                        throw Exception("Marker for setMarkerPosition is not Found.")
                     }
-                }
-            } catch (e: GoogleMapsError) {
-                callback(Result.failure(e))
-            }
 
+                    markerId = marker?.id.toString()
+                    callback(Result.success(markerId))
+
+                } else {
+                    throw Exception("Marker for setMarkerPosition is not Found.")
+                }
+            }
+        } catch (e: GoogleMapsError) {
+            callback(Result.failure(e))
         }
+
+    }
 
     fun fitBound(cords: List<LatLng>, padding: Int,  callback: (error: GoogleMapsError?) -> Unit) {
         try {
@@ -1206,7 +1214,7 @@ class CapacitorGoogleMap(
 
         return polygonOptions
     }
-    
+
     private fun buildPolyline(line: CapacitorGoogleMapPolyline): PolylineOptions {
         val polylineOptions = PolylineOptions()
         polylineOptions.width(line.strokeWidth * this.config.devicePixelRatio)
