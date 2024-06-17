@@ -409,10 +409,15 @@ public class Map {
                     newMarker.zIndex = marker.zIndex ?? 1
                 }
                 
-                if self.mapViewController.clusteringEnabled {
-                    self.mapViewController.addMarkersToCluster(markers: [newMarker])
-                    if !(marker.isClustered ?? true) {
+                if self.mapViewController.clusteringEnabled && (marker.isClustered ?? true)  {
+                    if (marker.isClustered ?? true) {
+                        // Add marker to cluster
+                        self.mapViewController.addMarkersToCluster(markers: [newMarker])
+                    } else {
+                        // Do not add the marker to cluster even if clusteringEnabled is true
                         self.markerIdNotOnCluster.append(String(newMarker.hash.hashValue))
+                        // And add marker directly to map
+                        newMarker.map = self.mapViewController.GMapView
                     }
                 } else {
                     newMarker.map = self.mapViewController.GMapView
@@ -957,9 +962,14 @@ public class Map {
                     if self.mapViewController.clusteringEnabled {
                         self.mapViewController.removeMarkersFromCluster(markers: [marker])
                     }
+                    
+                    // Find and remove the corresponding entry in markerIdOnWeb
+                    if let keyToRemove = self.markerIdOnWeb.first(where: { $0.value == id })?.key {
+                        self.markerIdOnWeb.removeValue(forKey: keyToRemove)
+                    }
 
-                marker.map = nil
-                self.markers.removeValue(forKey: id)
+                    marker.map = nil
+                    self.markers.removeValue(forKey: id)
             }
         } else {
             throw GoogleMapErrors.markerNotFound

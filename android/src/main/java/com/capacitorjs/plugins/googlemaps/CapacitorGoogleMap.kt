@@ -400,6 +400,7 @@ class CapacitorGoogleMap(
                     if(marker.infoIcon.equals("not_show_info_window")) {
 //                        To remove info window set title as empty string
                         markerOptions.title("")
+                        markerOptions.snippet("")
                     }
 
 
@@ -439,17 +440,17 @@ class CapacitorGoogleMap(
                         }
                     }
 
-                    if (clusterManager == null) {
+                    if (clusterManager == null || !marker.isClustered) {
                         marker.googleMapMarker = googleMapMarker
+                        if(!marker.isClustered) {
+                            markerIdNotOnCluster.add(googleMapMarker!!.id)
+                        }
                     } else {
-                        if (!marker.infoIcon.isNullOrEmpty()) {
+                        if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
                             if(marker.infoIcon.equals("buses_info_icon")) {
                                 val bridge = delegate.bridge
                                 googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
                             }
-                        }
-                        if(!marker.isClustered) {
-                            markerIdNotOnCluster.add(googleMapMarker!!.id)
                         }
                         googleMapMarker?.remove()
                         clusterManager?.addItem(marker)
@@ -597,7 +598,7 @@ class CapacitorGoogleMap(
                         // Below line animate the marker
                         animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
                         // Set the camera position of map to the centre of the marker
-                        // googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
+                        //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
                         if (marker.rotation == 1) {
                             oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
@@ -787,10 +788,10 @@ class CapacitorGoogleMap(
 
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
         clusterManager?.renderer = CapacitorClusterManagerRenderer(
-            delegate.bridge.context,
-            googleMap,
-            clusterManager,
-            minClusterSize
+                delegate.bridge.context,
+                googleMap,
+                clusterManager,
+                minClusterSize
         )
     }
 
@@ -899,6 +900,10 @@ class CapacitorGoogleMap(
             googleMap ?: throw GoogleMapNotAvailable()
 
             val marker = markers[id]
+            if(markerIdOnWeb.contains(markers[id]?.id)) {
+                val markerIdToRemove = markers[id]?.id
+                markerIdOnWeb.remove(markerIdToRemove)
+            }
             marker ?: throw MarkerNotFoundError()
 
             CoroutineScope(Dispatchers.Main).launch {
