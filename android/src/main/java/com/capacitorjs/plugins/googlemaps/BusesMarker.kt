@@ -35,7 +35,9 @@ class BusesMarkerRenderer(
         val busesMarker = BusesMarker(context)
 //        Log.d("BusesMarkerRenderer", "onBeforeClusterItemRendered ${item.iconUrl} ${item.title}")
         markerOptions.icon(item.iconUrl?.let { busesMarker.getMarkerIcon(item.title, it) })
-        map?.setInfoWindowAdapter(BusesMarkerInfoWindow(context))
+        if(!item.infoIcon.equals("not_show_info_window")) {
+            map?.setInfoWindowAdapter(BusesMarkerInfoWindow(context))
+        }
     }
 
     override fun onClusterItemUpdated(item: CapacitorGoogleMapMarker, marker: Marker) {

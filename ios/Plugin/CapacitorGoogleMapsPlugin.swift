@@ -1465,6 +1465,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
                 return alertMarkerInfo
+            } else if(imageUrl.contains("not_show_info_window")) {
+                return nil
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
