@@ -15,10 +15,10 @@ class AlertBusMarkerInactive: UIView {
         super.awakeFromNib()
         AlertInactiveCard.layer.cornerRadius = 15
         AlertInactiveCard.layer.masksToBounds = false
-        BusMarkerCard.layer.shadowColor = UIColor.black.cgColor
-        BusMarkerCard.layer.shadowOpacity = 0.5
-        BusMarkerCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        BusMarkerCard.layer.shadowRadius = 2.0
+        AlertInactiveCard.layer.shadowColor = UIColor.black.cgColor
+        AlertInactiveCard.layer.shadowOpacity = 0.5
+        AlertInactiveCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        AlertInactiveCard.layer.shadowRadius = 2.0
     }
     
 
