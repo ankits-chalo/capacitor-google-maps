@@ -72,6 +72,7 @@ class BusesMarker(private val context: Context) {
     fun getMarkerIcon(text: String, iconUrl: String): BitmapDescriptor {
         textView.text = text
         if (!iconUrl.isNullOrEmpty()) {
+            imageView.setImageResource(R.drawable.live_status)
             if (iconUrl.contains("grey", ignoreCase = true)) {
                 cardView.setCardBackgroundColor(Color.parseColor("#B7B7B7"))
                 imageView.setImageResource(R.drawable.not_live_status)
