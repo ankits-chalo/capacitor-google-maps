@@ -33,7 +33,7 @@ class BusesMarkers: UIView {
             // Check if the iconUrl string contains "selected" and apply a thick white border
             if iconUrl.contains("selected") {
                 if iconUrl.contains("grey") {
-                    BusMarkerCard.backgroundColor = UIColor(hexString: "#B7B7B7")
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#676767")
                     BusMarkerImage.image = UIImage(named: "not_live_status")
                 } else{
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
@@ -49,7 +49,7 @@ class BusesMarkers: UIView {
             }
             else {
                 if iconUrl.contains("grey") {
-                    BusMarkerCard.backgroundColor = UIColor(hexString: "#B7B7B7")
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#676767")
                     BusMarkerImage.image = UIImage(named: "not_live_status")
                 } else{
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
