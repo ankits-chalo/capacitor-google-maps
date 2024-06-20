@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -29,6 +30,8 @@ class AlertMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val view = LayoutInflater.from(context).inflate(R.layout.bus_alert_info_window, null)
             val alertTitle = view.findViewById<TextView>(R.id.alertTitle)
             val alertSnippet = view.findViewById<TextView>(R.id.alertSnippet)
+            val alertIconImage = view.findViewById<ImageView>(R.id.alertIconImage)
+            alertIconImage.visibility = View.GONE
 
             alertTitle.text = it.title
             alertSnippet.text = it.snippet

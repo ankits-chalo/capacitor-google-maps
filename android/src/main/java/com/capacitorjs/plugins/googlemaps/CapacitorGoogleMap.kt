@@ -397,6 +397,15 @@ class CapacitorGoogleMap(
                         markerOptions.title("")
                     }
 
+                    if(marker.iconUrl?.contains("alert_stop_custom_marker") == true) {
+                        val bridge = delegate.bridge
+                        val busesMarker = AlertStopCustomMarker(bridge.context)
+                        markerOptions.icon(busesMarker.getMarkerIcon(marker.title, marker.snippet, marker.iconUrl!!))
+//                        To remove info window set title as empty string
+                        markerOptions.title("")
+                    }
+
+
                     if(marker.infoIcon.equals("not_show_info_window")) {
 //                        To remove info window set title as empty string
                         markerOptions.title("")
