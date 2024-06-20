@@ -162,12 +162,6 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val markerWidth = context.resources.getDimension(R.dimen.start_end_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
-        } else if(iconUrl?.contains("alert_bus") == true) {
-            val size = context.resources.getDimension(R.dimen.alert_marker).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            if(bitmap != null) {
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
-            }
         } else if(iconUrl?.isEmpty() == true) {
             // When we need to show only the infoWindow
 
