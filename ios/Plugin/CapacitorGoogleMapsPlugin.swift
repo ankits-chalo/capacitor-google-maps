@@ -1458,6 +1458,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 }
                     
             } else if(imageUrl.contains("bus_alert_info")) {
+                if userData.iconUrl?.contains("alert_bus_bunching") ?? false {
+                    let alertMarkerInfo = AlertSingleLineInfoWindow.instanceFromNib()
+                    alertMarkerInfo.alertTitle.text = marker.title
+                    alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
+                    return alertMarkerInfo
+                }
                 let alertMarkerInfo = AlertMarkerInfoWindow.instanceFromNib()
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
