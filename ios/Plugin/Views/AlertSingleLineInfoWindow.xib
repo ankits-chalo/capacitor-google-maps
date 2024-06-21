@@ -17,7 +17,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlertSingleLineInfoWindow" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="center" id="iN0-l3-epB" customClass="AlertSingleLineInfoWindow" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="161" height="72"/>
+            <rect key="frame" x="0.0" y="0.0" width="161" height="71"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="sTT-UF-YiN">
@@ -52,7 +52,7 @@
                 <outlet property="alertSnippet" destination="jY1-fv-M5N" id="ITO-8k-JZh"/>
                 <outlet property="alertTitle" destination="Azn-ZB-IY3" id="0vw-se-u48"/>
             </connections>
-            <point key="canvasLocation" x="300" y="-136.61971830985917"/>
+            <point key="canvasLocation" x="300" y="-136.97183098591549"/>
         </view>
     </objects>
     <resources>
