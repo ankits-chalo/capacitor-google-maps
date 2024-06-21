@@ -55,6 +55,8 @@
 		ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */; };
 		ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B02BC917E500158D06 /* CustomMarker.swift */; };
 		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
+		ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */; };
+		ECD18C8E2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +123,8 @@
 		ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAroundYou.swift; sourceTree = "<group>"; };
 		ECAD59B02BC917E500158D06 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMarker.swift; sourceTree = "<group>"; };
 		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSingleLineInfoWindow.swift; sourceTree = "<group>"; };
+		ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSingleLineInfoWindow.xib; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -225,6 +229,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */,
+				ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */,
 				EC1FC3FC2C0EEA7D006AA7E4 /* AlertStopMarker.swift */,
 				EC1FC3FD2C0EEA7D006AA7E4 /* AlertStopMarker.xib */,
 				EC1FC3F92C0EB2A2006AA7E4 /* AlertBusMarkerInactive.swift */,
@@ -369,6 +375,7 @@
 				EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */,
 				EC11CB452BC92C6B00310392 /* infoWindowBackground.xib in Resources */,
 				EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */,
+				ECD18C8E2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib in Resources */,
 				EC578B7F2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib in Resources */,
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC1FC3FF2C0EEA7D006AA7E4 /* AlertStopMarker.xib in Resources */,
@@ -512,6 +519,7 @@
 				EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */,
 				EC578B7B2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.swift in Sources */,
 				EC11CB462BC92C6B00310392 /* infoWindowBackground.swift in Sources */,
+				ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */,
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
