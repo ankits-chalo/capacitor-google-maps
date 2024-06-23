@@ -73,7 +73,7 @@ class BusesMarker(private val context: Context) {
         textView.text = text
         if (!iconUrl.isNullOrEmpty()) {
             if (iconUrl.contains("grey", ignoreCase = true)) {
-                cardView.setCardBackgroundColor(Color.parseColor("#676767"))
+                cardView.setCardBackgroundColor(Color.parseColor("#808080"))
                 imageView.setImageResource(R.drawable.not_live_status)
             }
             if (iconUrl.contains("selected", ignoreCase = true)) {
@@ -82,7 +82,7 @@ class BusesMarker(private val context: Context) {
                 val strokeColor = Color.WHITE
                 var fillColor = Color.parseColor("#2196f3")
                 if(iconUrl.contains("grey", ignoreCase = true)) {
-                    fillColor = Color.parseColor("#676767")
+                    fillColor = Color.parseColor("#808080")
                 }
                 val cornerRadius = 75f
 

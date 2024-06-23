@@ -38,7 +38,7 @@ class BusesMarker: UIView {
             }
             else {
                 if iconUrl.contains("grey") {
-                    BusMarkerCard.backgroundColor = UIColor(hexString: "#676767")
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#808080")
                     
                 } else{
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")

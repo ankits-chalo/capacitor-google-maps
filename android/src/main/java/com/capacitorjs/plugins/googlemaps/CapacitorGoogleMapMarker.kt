@@ -203,6 +203,9 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         } else if(iconUrl?.contains("alert_custom_marker") == true) {
             val busesMarker = AlertBusMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
+        }  else if(iconUrl?.contains("alert_stop_custom_marker") == true) {
+            val busesMarker = AlertStopCustomMarker(context)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         }
 
     }
