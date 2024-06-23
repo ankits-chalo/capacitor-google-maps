@@ -13,7 +13,7 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
+            android:elevation="1.86dp"
             android:padding="10dp"
             android:background="@drawable/rounded_corners"
             >

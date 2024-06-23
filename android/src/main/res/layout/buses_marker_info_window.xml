@@ -15,6 +15,7 @@
             android:orientation="vertical"
             android:minWidth="280dp"
             android:padding="10dp"
+            android:elevation="1.86dp"
             android:background="@drawable/rounded_corners"
             >
 
