@@ -517,7 +517,14 @@ public class Map {
                                 alertMarker.AlertSnippet.text = marker.snippet
                                 oldMarker.iconView = alertMarker
                             }
-                        }  else {
+                        } else if let iconUrl = marker.iconUrl, iconUrl.contains("alert_stop_custom_marker") {
+                            let alertMarker = AlertStopMarker.instanceFromNib()
+                            alertMarker.alertTitle.text = marker.title
+                            alertMarker.alertSnippet.text = marker.snippet
+                            oldMarker.iconView = alertMarker
+                            oldMarker.title = ""
+                            oldMarker.snippet = ""
+                        } else {
                             // If it is present in assets folder then the icon is picked from it
                             oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
                         }
