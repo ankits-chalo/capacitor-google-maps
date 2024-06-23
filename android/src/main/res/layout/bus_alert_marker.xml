@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/busAlertMarkerImage"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@drawable/alert_halt_yellow" />
 
         <LinearLayout
@@ -37,24 +37,16 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/busNumberText"
-                    android:textSize="12sp"
+                    android:layout_height="16dp"
                     android:fontFamily="@font/notosans"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:textColor="#ffffff"
                     android:textStyle="bold"
                     android:text="MH07AB1234" />
-
-                <ImageView
-                    android:id="@+id/ignitionImage"
-                    android:layout_width="12dp"
-                    android:layout_marginStart="3dp"
-                    android:layout_height="12dp"
-                    android:src="@drawable/alert_ignition_on" />
             </LinearLayout>
             <TextView
                 android:id="@+id/alertSnippet"
-                android:textSize="8sp"
+                android:textSize="9sp"
                 android:fontFamily="@font/notosans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,6 +55,12 @@
                 android:text="10 mins Halt" />
 
         </LinearLayout>
+        <ImageView
+            android:id="@+id/ignitionImage"
+            android:layout_width="16dp"
+            android:layout_marginStart="3dp"
+            android:layout_height="16dp"
+            android:src="@drawable/alert_ignition_on" />
 
 
     </LinearLayout>
