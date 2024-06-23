@@ -36,7 +36,7 @@ class AlertBusMarker(private val context: Context) {
                 busAlertMarkerImage.setImageDrawable(context.getDrawable(resourceId))
             }
             if(iconUrl.contains("inactive", ignoreCase = true)) {
-                val resourceId: Int = resources.getIdentifier("alert_bus_inactive", "drawable", context.packageName)
+                val resourceId: Int = resources.getIdentifier("alert_bus_inactive_red", "drawable", context.packageName)
                 busAlertMarkerImage.setImageDrawable(context.getDrawable(resourceId))
             }
 
