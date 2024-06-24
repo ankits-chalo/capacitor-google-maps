@@ -18,8 +18,10 @@
     <dimen name="start_end_marker_width">
         42dp
     </dimen>
-    <dimen name="alert_marker">
-        28dp
+    <dimen name="alert_marker_height">
+        47dp
     </dimen>
-
+    <dimen name="alert_marker_width">
+        38dp
+    </dimen>
 </resources>
