@@ -33,6 +33,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
     var infoData: JSONObject? = null
     var rotation: Int = 0
     var id: String? = null
+    private var customAnchor: CapacitorGoogleMapsPoint = CapacitorGoogleMapsPoint(0.5F, 0.5F)
 
     init {
         if (!fromJSONObject.has("coordinate")) {
@@ -60,6 +61,10 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         if (fromJSONObject.has("iconAnchor")) {
             val inputAnchorPoint = CapacitorGoogleMapsPoint(fromJSONObject.getJSONObject("iconAnchor"))
             iconAnchor = this.buildIconAnchorPoint(inputAnchorPoint)
+        }
+
+        if (fromJSONObject.has("anchor")) {
+            customAnchor = CapacitorGoogleMapsPoint(fromJSONObject.getJSONObject("anchor"))
         }
 
         if (fromJSONObject.has("tintColor")) {
@@ -135,7 +140,8 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         markerOptions.alpha(opacity)
         markerOptions.flat(isFlat)
         markerOptions.draggable(draggable)
-        markerOptions.anchor(0.5F, 0.5F)
+        // Default value of anchor is 0.5, 0.5 and for placing the icon on bottom is 0.5, 1
+        markerOptions.anchor(customAnchor.x, customAnchor.y)
 
         if (zIndex > 0) {
             markerOptions.zIndex(zIndex)
