@@ -42,7 +42,7 @@
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="alert_bus_inactive" id="aIT-1B-Bc4">
-                    <rect key="frame" x="97" y="103" width="36" height="36"/>
+                    <rect key="frame" x="96" y="98" width="38" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ArrowPolygon" id="XD4-b4-prX">
@@ -56,7 +56,7 @@
                 <outlet property="alertSnippet" destination="jY1-fv-M5N" id="3FS-Dn-0KF"/>
                 <outlet property="alertTitle" destination="Azn-ZB-IY3" id="yZx-B3-Tz5"/>
             </connections>
-            <point key="canvasLocation" x="352.67175572519085" y="-113.02816901408451"/>
+            <point key="canvasLocation" x="352.67175572519085" y="-113.38028169014085"/>
         </view>
     </objects>
     <resources>
