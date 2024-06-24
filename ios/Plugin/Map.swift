@@ -327,7 +327,10 @@ public class Map {
 
                 newMarker = GMSMarker();
                 newMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                newMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                // Default value of anchor is 0.5, 0.5 and for placing the icon on bottom is 0.5, 1
+                if let customAnchor = marker.customAnchor {
+                    newMarker.groundAnchor = customAnchor
+                }
                 if !(marker.title ?? "").isEmpty {
                     newMarker.title = marker.title
                 }
@@ -765,7 +768,10 @@ public class Map {
                          if(marker.skipTitle != true){
                              newMarker.title = marker.title
                          }
-                         newMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
+                         if let customAnchor = marker.customAnchor{
+                             newMarker.groundAnchor = customAnchor
+                         }
+//                         newMarker.groundAnchor = CGPoint(x: 0.5, y: 0.5)
                      }
                  newMarker.snippet = marker.snippet
                  newMarker.isFlat = marker.isFlat ?? false

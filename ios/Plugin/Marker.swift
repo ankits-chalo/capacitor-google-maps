@@ -20,6 +20,7 @@ public struct Marker {
     let skipTitle : Bool?
     let infoData: JSObject?
     let infoIcon: String?
+    let customAnchor: CGPoint?
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -48,6 +49,15 @@ public struct Marker {
                 }
             }
         }
+        
+        var customAnchor: CGPoint? = CGPoint(x: 0.5, y: 0.5)
+        if let anchorObject = fromJSObject["anchor"] as? JSObject {
+            if let x = anchorObject["x"] as? Double, let y = anchorObject["y"] as? Double {
+                let u = x
+                let v = y
+                customAnchor = CGPoint(x: u, y: v)
+            }
+        }
 
         var tintColor: UIColor?
         if let rgbObject = fromJSObject["tintColor"] as? JSObject {
@@ -70,6 +80,7 @@ public struct Marker {
         self.isClustered = fromJSObject["isClustered"] as? Bool ?? true
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
+        self.customAnchor = customAnchor
         self.color = tintColor
         self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
         self.rotation = fromJSObject["rotation"] as? Double
