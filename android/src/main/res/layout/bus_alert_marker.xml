@@ -6,13 +6,14 @@
     app:cardBackgroundColor="#e19602"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
+    app:cardElevation="6dp"
+    android:layout_margin="6dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="6dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
         android:gravity="center_vertical"
@@ -20,8 +21,8 @@
 
         <ImageView
             android:id="@+id/busAlertMarkerImage"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/alert_halt_yellow" />
 
         <LinearLayout
@@ -37,8 +38,10 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/busNumberText"
-                    android:layout_height="16dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/notosans"
+                    android:textSize="12sp"
+                    android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:textColor="#ffffff"
                     android:textStyle="bold"
@@ -46,7 +49,8 @@
             </LinearLayout>
             <TextView
                 android:id="@+id/alertSnippet"
-                android:textSize="9sp"
+                android:textSize="7sp"
+                android:includeFontPadding="false"
                 android:fontFamily="@font/notosans"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
