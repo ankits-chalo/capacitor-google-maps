@@ -75,6 +75,9 @@ class BusesMarker(private val context: Context) {
             if (iconUrl.contains("grey", ignoreCase = true)) {
                 cardView.setCardBackgroundColor(Color.parseColor("#808080"))
                 imageView.setImageResource(R.drawable.not_live_status)
+            } else if(iconUrl.contains("red", ignoreCase = true)) {
+                cardView.setCardBackgroundColor(Color.parseColor("#c62828"))
+                imageView.setImageResource(R.drawable.alert_bus_inactive_red)
             }
             if (iconUrl.contains("selected", ignoreCase = true)) {
                 // Apply a thick white border
@@ -83,6 +86,8 @@ class BusesMarker(private val context: Context) {
                 var fillColor = Color.parseColor("#2196f3")
                 if(iconUrl.contains("grey", ignoreCase = true)) {
                     fillColor = Color.parseColor("#808080")
+                } else if(iconUrl.contains("red", ignoreCase = true)) {
+                    fillColor = Color.parseColor("#c62828")
                 }
                 val cornerRadius = 75f
 

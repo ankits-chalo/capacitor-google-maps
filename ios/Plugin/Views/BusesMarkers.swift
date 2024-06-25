@@ -35,7 +35,10 @@ class BusesMarkers: UIView {
                 if iconUrl.contains("grey") {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#808080")
                     BusMarkerImage.image = UIImage(named: "not_live_status")
-                } else{
+                } else if iconUrl.contains("red") {
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#c62828")
+                    BusMarkerImage.image = UIImage(named: "alert_bus_inactive_red")
+                } else {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
                     BusMarkerImage.image = UIImage(named: "live_status")
                 }
@@ -51,7 +54,10 @@ class BusesMarkers: UIView {
                 if iconUrl.contains("grey") {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#808080")
                     BusMarkerImage.image = UIImage(named: "not_live_status")
-                } else{
+                } else if iconUrl.contains("red") {
+                    BusMarkerCard.backgroundColor = UIColor(hexString: "#c62828")
+                    BusMarkerImage.image = UIImage(named: "alert_bus_inactive_red")
+                } else {
                     BusMarkerCard.backgroundColor = UIColor(hexString: "#2196f3")
                     BusMarkerImage.image = UIImage(named: "live_status")
                 }
