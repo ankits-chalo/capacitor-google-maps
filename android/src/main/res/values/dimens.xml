@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="marker_size">
-        42dp
+        40dp
     </dimen>
     <dimen name="arrow_marker_height">
-        54dp
+        52dp
     </dimen>
     <dimen name="arrow_marker_width">
-        62dp
+        52dp
     </dimen>
     <dimen name="stop_marker">
         12dp
