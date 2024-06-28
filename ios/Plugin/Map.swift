@@ -396,7 +396,10 @@ public class Map {
                         newMarker.snippet = ""
                     } else {
                         // If it is present in assets folder then the icon is picked from it
-                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+//                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                        if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                            newMarker.icon = getResizedIcon(image,marker)
+                        }
                     }
                 }
                 do {
@@ -529,7 +532,10 @@ public class Map {
                             oldMarker.snippet = ""
                         } else {
                             // If it is present in assets folder then the icon is picked from it
-                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+//                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                            if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                                oldMarker.icon = getResizedIcon(image,marker)
+                            }
                         }
                         
                     } else {
@@ -586,7 +592,10 @@ public class Map {
                             }
                         } else {
                             // If it is present in assets folder then the icon is picked from it
-                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+//                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                            if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                                oldMarker.icon = getResizedIcon(image,marker)
+                            }
                         }
                         
                     }
@@ -646,8 +655,8 @@ public class Map {
                  else{
                      oldMarker.title = marker.title
                  }
-                 if((marker.iconUrl ) != nil){
-                     oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
+                 if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                     oldMarker.icon = getResizedIcon(image,marker)
                  }
                  do {
                      // Set the map style by passing the URL of the local file.
