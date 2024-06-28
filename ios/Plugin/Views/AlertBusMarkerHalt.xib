@@ -15,11 +15,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AlertBusMarkerHalt" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="center" id="iN0-l3-epB" userLabel="Alert Bus Marker Halt" customClass="AlertBusMarkerHalt" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="138" height="32"/>
+            <rect key="frame" x="0.0" y="0.0" width="146" height="37"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fSt-uD-EpO">
-                    <rect key="frame" x="0.0" y="0.0" width="138" height="32"/>
+                    <rect key="frame" x="4" y="2" width="138" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="KL14AB3077" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nln-p9-oRs">
@@ -55,7 +55,7 @@
                 <outlet property="BusNumberText" destination="nln-p9-oRs" id="x7v-te-Cd2"/>
                 <outlet property="IgnitionImage" destination="dYw-kq-ma1" id="zmB-xc-6Dk"/>
             </connections>
-            <point key="canvasLocation" x="273.28244274809157" y="-155.63380281690141"/>
+            <point key="canvasLocation" x="277.86259541984731" y="-153.87323943661971"/>
         </view>
     </objects>
     <resources>
