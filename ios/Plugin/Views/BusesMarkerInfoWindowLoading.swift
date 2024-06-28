@@ -17,10 +17,10 @@ class BusesMarkerInfoWindowLoading: UIView {
         
         // Applying card-like background to infoCardView
         busLoadingView.layer.cornerRadius = 4
-        busLoadingView.layer.shadowColor = UIColor.black.cgColor
-        busLoadingView.layer.shadowOpacity = 0.5
-        busLoadingView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        busLoadingView.layer.shadowRadius = 2.0
+        busLoadingView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+        busLoadingView.layer.shadowOpacity = 1
+        busLoadingView.layer.shadowOffset = CGSize(width: 0, height: 0.62)
+        busLoadingView.layer.shadowRadius = 1.86
         busLoadingView.layer.masksToBounds = false
         busLoadingView.backgroundColor = UIColor.white
 //        titleLabel.textColor = UIColor.black

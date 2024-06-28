@@ -29,10 +29,10 @@ class BusesMarkerInfoWindow: UIView {
         
         // Applying card-like background to infoCardView
         busesInfoCardView.layer.cornerRadius = 4
-        busesInfoCardView.layer.shadowColor = UIColor.black.cgColor
-        busesInfoCardView.layer.shadowOpacity = 0.5
-        busesInfoCardView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        busesInfoCardView.layer.shadowRadius = 2.0
+        busesInfoCardView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+        busesInfoCardView.layer.shadowOpacity = 1
+        busesInfoCardView.layer.shadowOffset = CGSize(width: 0, height: 0.62)
+        busesInfoCardView.layer.shadowRadius = 1.86
         busesInfoCardView.layer.masksToBounds = false
         busesInfoCardView.backgroundColor = UIColor.white
 //        titleLabel.textColor = UIColor.black
