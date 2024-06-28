@@ -13,11 +13,11 @@ class AlertBusMarkerInactive: UIView {
     @IBOutlet weak var BusNumberText: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        AlertInactiveCard.layer.cornerRadius = 16
-        AlertInactiveCard.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
-        AlertInactiveCard.layer.shadowOpacity = 1
-        AlertInactiveCard.layer.shadowOffset = CGSize(width: 0, height: 0.62)
-        AlertInactiveCard.layer.shadowRadius = 2
+        AlertInactiveCard.layer.cornerRadius = 17
+        AlertInactiveCard.layer.shadowColor = UIColor.black.cgColor
+        AlertInactiveCard.layer.shadowOpacity = 0.5
+        AlertInactiveCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        AlertInactiveCard.layer.shadowRadius = 2.0
         AlertInactiveCard.layer.masksToBounds = false
     }
     
