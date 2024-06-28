@@ -91,6 +91,7 @@ class BusesMarker(private val context: Context) {
                 val borderSize = 10f
                 val strokeColor = Color.WHITE
                 var fillColor = Color.parseColor("#2196f3")
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_white_25)
                 if(iconUrl.contains("grey", ignoreCase = true)) {
                     fillColor = Color.parseColor("#808080")
                 } else if(iconUrl.contains("red", ignoreCase = true)) {
