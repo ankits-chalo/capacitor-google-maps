@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:cardCornerRadius="8dp"
-        app:cardElevation="1.86dp">
+        >
 
         <LinearLayout
             android:id="@+id/info_window_card"
@@ -17,6 +17,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
+            android:background="@drawable/bg_shadow"
+            android:elevation="20dp"
             >
 
             <TextView
@@ -48,7 +50,7 @@
         android:scaleType="centerCrop"
         android:layout_marginTop="-3dp"
         android:layout_gravity="center"
-        android:elevation="12dp"
+        android:elevation="20dp"
         android:src="@drawable/arrow_polygon" />
     <ImageView
         android:id="@+id/alertIconImage"

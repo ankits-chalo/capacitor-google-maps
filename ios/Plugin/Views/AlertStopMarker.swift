@@ -18,10 +18,10 @@ class AlertStopMarker: UIView {
         
         // Applying card-like background to alertCardView
         alertCardView.layer.cornerRadius = 4
-        alertCardView.layer.shadowColor = UIColor.black.cgColor
-        alertCardView.layer.shadowOpacity = 0.5
-        alertCardView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        alertCardView.layer.shadowRadius = 2.0
+        alertCardView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
+        alertCardView.layer.shadowOpacity = 1
+        alertCardView.layer.shadowOffset = CGSize(width: 0, height: 0.62)
+        alertCardView.layer.shadowRadius = 1.86
         alertCardView.layer.masksToBounds = false
         alertCardView.backgroundColor = UIColor.white
 
