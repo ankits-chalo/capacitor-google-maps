@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.capacitorjs.plugins.googlemaps.BusesMarkerInfoWindow
@@ -68,6 +69,7 @@ class BusesMarker(private val context: Context) {
     private val textView: TextView = customMarkerView.findViewById(R.id.busNumberMarkerText)
     private val cardView: CardView = customMarkerView.findViewById(R.id.busNumberMarkerCardView)
     private val imageView: ImageView = customMarkerView.findViewById(R.id.busNumberMarkerImage)
+    private val busAlertParent: LinearLayout = customMarkerView.findViewById(R.id.busAlertParent)
 
     fun getMarkerIcon(text: String, iconUrl: String): BitmapDescriptor {
         textView.text = text
@@ -75,9 +77,14 @@ class BusesMarker(private val context: Context) {
             if (iconUrl.contains("grey", ignoreCase = true)) {
                 cardView.setCardBackgroundColor(Color.parseColor("#808080"))
                 imageView.setImageResource(R.drawable.not_live_status)
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_grey_25)
             } else if(iconUrl.contains("red", ignoreCase = true)) {
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_red_25)
                 cardView.setCardBackgroundColor(Color.parseColor("#c62828"))
                 imageView.setImageResource(R.drawable.alert_bus_inactive_red)
+            } else {
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_blue_25)
+                cardView.setCardBackgroundColor(Color.parseColor("#2196f3"))
             }
             if (iconUrl.contains("selected", ignoreCase = true)) {
                 // Apply a thick white border

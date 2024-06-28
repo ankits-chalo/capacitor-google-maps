@@ -215,7 +215,7 @@
         android:layout_width="16dp"
         android:layout_height="14dp"
         android:scaleType="centerCrop"
-        android:layout_marginTop="-3dp"
+        android:layout_marginTop="-5dp"
         android:layout_gravity="center"
         android:elevation="10dp"
         android:src="@drawable/arrow_polygon" />
