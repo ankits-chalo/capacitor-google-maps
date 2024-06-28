@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -19,15 +20,21 @@ class AlertBusMarker(private val context: Context) {
     private val textView: TextView = customMarkerView.findViewById(R.id.busNumberText)
     private val snippetTextView: TextView = customMarkerView.findViewById(R.id.alertSnippet)
     private val cardView: CardView = customMarkerView.findViewById(R.id.busAlertCardView)
+    private val busAlertParent: LinearLayout = customMarkerView.findViewById(R.id.busAlertParent)
     private val busAlertMarkerImage: ImageView = customMarkerView.findViewById(R.id.busAlertMarkerImage)
     private val ignitionImage: ImageView = customMarkerView.findViewById(R.id.ignitionImage)
 
     fun getMarkerIcon(text: String, snippet: String, iconUrl: String): BitmapDescriptor {
         textView.text = text
         snippetTextView.text = snippet
+
         if (!iconUrl.isNullOrEmpty()) {
             if (iconUrl.contains("red", ignoreCase = true)) {
                 cardView.setCardBackgroundColor(Color.parseColor("#c62828"))
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_red_25)
+            } else {
+                busAlertParent.setBackgroundResource(R.drawable.bg_shadow_orange_25)
+
             }
 
             val resources: Resources = context.resources
