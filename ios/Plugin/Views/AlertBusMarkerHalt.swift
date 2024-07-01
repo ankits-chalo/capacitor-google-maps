@@ -16,7 +16,7 @@ class AlertBusMarkerHalt: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        AlertHaltCard.layer.cornerRadius = 17
+        AlertHaltCard.layer.cornerRadius = 15
         AlertHaltCard.layer.shadowColor = UIColor.black.cgColor
         AlertHaltCard.layer.shadowOpacity = 0.5
         AlertHaltCard.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
