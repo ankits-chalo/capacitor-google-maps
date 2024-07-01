@@ -16,7 +16,6 @@
             android:id="@+id/info_window_card"
             android:layout_width="180dp"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_shadow"
             android:elevation="20dp"
             android:orientation="vertical"
             android:padding="10dp">
