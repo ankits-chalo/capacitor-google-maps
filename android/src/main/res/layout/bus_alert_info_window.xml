@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#FFFFFF"
         app:cardCornerRadius="8dp"
         >
 
@@ -17,7 +18,6 @@
             android:layout_width="180dp"
             android:layout_height="match_parent"
             android:elevation="20dp"
-            android:background="#FFFFFF"
             android:orientation="vertical"
             android:padding="10dp">
 
