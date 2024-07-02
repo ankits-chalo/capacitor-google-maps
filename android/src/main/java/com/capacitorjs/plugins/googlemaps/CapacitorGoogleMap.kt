@@ -414,6 +414,8 @@ class CapacitorGoogleMap(
 
 
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
+                    // Disable the 2 button that shows on bottom right after the click on marker
+                    googleMap?.uiSettings?.isMapToolbarEnabled = false;
                     googleMapMarker?.tag = marker
 
                     if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
@@ -818,7 +820,7 @@ class CapacitorGoogleMap(
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
                 clusterManager!!.renderer = BusesMarkerRenderer(bridge.context, googleMap!!, clusterManager!!)
-                // Only for buses page marker info window. If new cluster marker info window is made then update 
+                // Only for buses page marker info window. If new cluster marker info window is made then update
                 // the below line with condition
                 googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
 
