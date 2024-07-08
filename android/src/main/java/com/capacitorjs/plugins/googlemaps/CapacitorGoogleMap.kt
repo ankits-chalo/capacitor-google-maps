@@ -26,6 +26,7 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -414,8 +415,7 @@ class CapacitorGoogleMap(
 
 
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
-                    // Disable the 2 button that shows on bottom right after the click on marker
-                    googleMap?.uiSettings?.isMapToolbarEnabled = false;
+
                     googleMapMarker?.tag = marker
 
                     if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
@@ -827,7 +827,7 @@ class CapacitorGoogleMap(
 
 
                 googleMap?.setOnCameraIdleListener(clusterManager)
-                googleMap?.setOnMarkerClickListener(clusterManager)
+//                googleMap?.setOnMarkerClickListener(clusterManager)
                 googleMap?.setOnInfoWindowClickListener(clusterManager)
 
 
@@ -1347,6 +1347,8 @@ class CapacitorGoogleMap(
         runBlocking {
             googleMap = map
 
+            // Disable the 2 button that shows on bottom right after the click on marker
+            googleMap?.uiSettings?.isMapToolbarEnabled = false;
             val data = JSObject()
             data.put("mapId", this@CapacitorGoogleMap.id)
             delegate.notify("onMapReady", data)
@@ -1413,6 +1415,8 @@ class CapacitorGoogleMap(
 //              If false is returned then the above changes to zoom in inside the cluster will not work
                 true
             }
+
+            googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
         }
     }
 
@@ -1453,15 +1457,35 @@ class CapacitorGoogleMap(
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        // Disable the 2 button that shows on bottom right after the click on marker
-        googleMap?.uiSettings?.isMapToolbarEnabled = false;
         val data = JSObject()
+        val infoData = (marker?.tag as? CapacitorGoogleMapMarker)?.infoData
+        var title = marker.title
+        if(marker.title.isNullOrEmpty() && infoData is JSONObject && infoData.has("title")){
+            // Also validate if infoData has title as there may be chances
+            // That title is removed in markerOption to hide info window
+            title = infoData.getString("title")
+        }
+
+        // Is this Marker is added inside the cluster
+        val isClusterItemMarker = clusterManager?.markerCollection?.markers?.contains(marker) ?: false
+
+        if (title.isNullOrEmpty() && (clusterManager != null || isClusterItemMarker)) {
+            // For the cluster marker when clicked should zoom into the
+            // So when below method is called clusterManager?.setOnClusterClickListener is called
+            // and marker gets zoomed in
+            return clusterManager?.onMarkerClick(marker) ?: false
+        }
+
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("markerId", marker.id)
         data.put("latitude", marker.position.latitude)
         data.put("longitude", marker.position.longitude)
-        data.put("title", marker.title)
+        data.put("title", title)
         data.put("snippet", marker.snippet)
+        if(marker.snippet.isNullOrEmpty() && infoData is JSONObject && infoData.has("snippet")){
+            val snippet = infoData.getString("snippet")
+            data.put("snippet", snippet)
+        }
         delegate.notify("onMarkerClick", data)
         return false
     }
