@@ -1353,14 +1353,21 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "items": items
             ])
         } else {
+            let userInfo = marker.userData as! Marker
+            var title = marker.title
+            if((title?.isEmpty) != nil) {
+                title = userInfo.title
+            }
+            
             self.notifyListeners("onMarkerClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": String(marker.hash.hashValue),
                 "latitude": marker.position.latitude,
                 "longitude": marker.position.longitude,
-                "title": marker.title ?? "",
+                "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
+            
         }
         return false
     }

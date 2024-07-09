@@ -337,8 +337,8 @@ public class Map {
                 if !(marker.snippet ?? "").isEmpty {
                     newMarker.snippet = marker.snippet
                 }
+                newMarker.userData = marker
                 if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window") {
-                    newMarker.userData = marker
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
                         fetchAddressForMarker(newMarker)
@@ -545,9 +545,8 @@ public class Map {
                         oldMarker.map = self.mapViewController.GMapView
                         self.mapViewController.GMapView.selectedMarker = oldMarker
                     }
-                    
+                    oldMarker.userData = marker
                     if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
-                        oldMarker.userData = marker
                         oldMarker.map = mapView
                         if let infoData = marker.infoData {
                             let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
@@ -575,7 +574,6 @@ public class Map {
                     CATransaction.commit()
                 } else {
                     oldMarker.userData = marker
-                    
                     self.mapViewController.updateMarkerPosition(marker: oldMarker, newPosition: CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng))
                     
                     if((marker.iconUrl ) != nil){
