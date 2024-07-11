@@ -409,8 +409,8 @@ class CapacitorGoogleMap(
 
                     if(marker.infoIcon.equals("not_show_info_window")) {
 //                        To remove info window set title as empty string
-                        markerOptions.title("")
-                        markerOptions.snippet("")
+//                        markerOptions.title("")
+//                        markerOptions.snippet("")
                     }
 
 
