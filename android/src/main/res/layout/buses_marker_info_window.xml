@@ -21,6 +21,7 @@
             android:minWidth="280dp"
             android:orientation="vertical"
             android:padding="10dp"
+            android:background="#FFFFFF"
             android:elevation="20dp"
             >
 
