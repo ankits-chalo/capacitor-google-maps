@@ -9,7 +9,6 @@
     </dependencies>
     <customFonts key="customFonts">
         <array key="notosans.ttf">
-            <string>NotoSans-Regular</string>
             <string>NotoSans-Regular_SemiBold</string>
         </array>
     </customFonts>
@@ -42,13 +41,13 @@
                             <rect key="frame" x="12" y="13" width="24" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:XD4-b4-prX:image" id="XD4-b4-prX">
+                            <rect key="frame" x="60" y="45" width="24" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:XD4-b4-prX:image" id="XD4-b4-prX">
-                    <rect key="frame" x="64" y="50" width="24" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
