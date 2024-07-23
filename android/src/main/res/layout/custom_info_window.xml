@@ -4,8 +4,8 @@
     android:orientation="horizontal"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:gravity="center_vertical">
 
     <ImageView
@@ -13,30 +13,30 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/info_icon_route_deviation" />
+        android:src="@drawable/info_icon_gps_missing" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="10dp">
+        android:paddingLeft="8dp">
 
         <TextView
             android:id="@+id/info_window_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Route Deviation"
+            android:text="Gps missing"
             android:textColor="#000000"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:paddingBottom="4dp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/info_window_snippet"
             android:layout_width="wrap_content"
-            android:textSize="11sp"
-            android:textColor="#000000"
-            android:text="from 09:30 AM to 09:35 AM"
+            android:textSize="10sp"
+            android:textColor="#808080"
+            android:text="Since 20 mins"
             android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>
