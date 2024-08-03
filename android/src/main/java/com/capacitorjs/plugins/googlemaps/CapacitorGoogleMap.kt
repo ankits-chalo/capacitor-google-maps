@@ -607,7 +607,10 @@ class CapacitorGoogleMap(
                     }
                     if (clusterManager == null || !marker.isClustered) {
                         // Below line animate the marker
-                        animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                        if (oldMarker!!.position.latitude != marker!!.coordinate.latitude
+                                        || oldMarker!!.position.longitude != marker!!.coordinate.longitude) {
+                            animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                        }
                         // Set the camera position of map to the centre of the marker
                         //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
