@@ -9,7 +9,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:cardCornerRadius="8dp"
         android:background="#FFFFFF"
         android:orientation="horizontal"
         >
@@ -21,7 +20,7 @@
             android:minWidth="280dp"
             android:orientation="vertical"
             android:padding="10dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/bg_white_8"
             android:elevation="20dp"
             >
 
@@ -120,8 +119,8 @@
                         android:textSize="11dp" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -133,13 +132,32 @@
 
                         <TextView
                             android:id="@+id/currentOccupancy"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/notosans"
                             android:textColor="#000000"
                             android:textSize="14dp"
+                            android:layout_marginEnd="10dp"
                             android:textStyle="bold"
                             tools:text="23" />
+
+                        <ImageView
+                            android:id="@+id/luggageImage"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/luggage_image" />
+
+                        <TextView
+                            android:id="@+id/luggageCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/notosans"
+                            android:textColor="#000000"
+                            android:textSize="14dp"
+                            android:layout_marginEnd="8dp"
+                            android:textStyle="bold"
+                            tools:text="223" />
                     </LinearLayout>
 
 

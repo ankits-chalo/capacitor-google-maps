@@ -1436,6 +1436,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let tripNotRunName = userData.infoData?["tripNotRunName"] as? String ?? ""
                 let loadingName = userData.infoData?["loadingName"] as? String ?? ""
                 let errorName = userData.infoData?["errorName"] as? String ?? ""
+                let luggageTicketCount = userData.infoData?["luggageTicketCount"] as? Int ?? 0
                 
                 busesMarkerInfo.collectionText.text = collectionName
                 busesMarkerInfo.occupancyText.text = occupancyName
@@ -1456,6 +1457,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     busesMarkerInfo.busTime.text = tripStartTime
                     busesMarkerInfo.currentOccupancy.text = String(currentPassengerCount)
                     busesMarkerInfo.occupancyLevelImage.image = UIImage(named: occupancyLevel )
+                    busesMarkerInfo.luggageCount.text = String(luggageTicketCount)
                     busesMarkerInfo.busFromTo.text = routeName
                     if(!ticketStatus.isEmpty && ticketStatus != "") {
                         busesMarkerInfo.ticketUpdatingText.text = ticketStatus

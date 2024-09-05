@@ -22,6 +22,8 @@ class BusesMarkerInfoWindow: UIView {
     @IBOutlet weak var collectionText: UILabel!
     @IBOutlet weak var occupancyText: UILabel!
     @IBOutlet weak var viewDetailsText: UILabel!
+    @IBOutlet weak var luggageCount: UILabel!
+    @IBOutlet weak var luggageImage: UIImageView!
     
     
     override func awakeFromNib() {
