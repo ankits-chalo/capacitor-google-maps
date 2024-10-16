@@ -24,6 +24,8 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m */; };
 		50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift */; };
+		EC0028352CC00A7800400425 /* LastUpdatedInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0028332CC00A7800400425 /* LastUpdatedInfoWindow.swift */; };
+		EC0028362CC00A7800400425 /* LastUpdatedInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC0028342CC00A7800400425 /* LastUpdatedInfoWindow.xib */; };
 		EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC11CB352BC92C6B00310392 /* infoWindow.xib */; };
 		EC11CB452BC92C6B00310392 /* infoWindowBackground.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC11CB362BC92C6B00310392 /* infoWindowBackground.xib */; };
 		EC11CB462BC92C6B00310392 /* infoWindowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC11CB372BC92C6B00310392 /* infoWindowBackground.swift */; };
@@ -92,6 +94,8 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EC0028332CC00A7800400425 /* LastUpdatedInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LastUpdatedInfoWindow.swift; sourceTree = "<group>"; };
+		EC0028342CC00A7800400425 /* LastUpdatedInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LastUpdatedInfoWindow.xib; sourceTree = "<group>"; };
 		EC11CB352BC92C6B00310392 /* infoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindow.xib; sourceTree = "<group>"; };
 		EC11CB362BC92C6B00310392 /* infoWindowBackground.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = infoWindowBackground.xib; sourceTree = "<group>"; };
 		EC11CB372BC92C6B00310392 /* infoWindowBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = infoWindowBackground.swift; sourceTree = "<group>"; };
@@ -229,6 +233,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC0028332CC00A7800400425 /* LastUpdatedInfoWindow.swift */,
+				EC0028342CC00A7800400425 /* LastUpdatedInfoWindow.xib */,
 				ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */,
 				ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */,
 				EC1FC3FC2C0EEA7D006AA7E4 /* AlertStopMarker.swift */,
@@ -379,6 +385,7 @@
 				EC578B7F2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib in Resources */,
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC1FC3FF2C0EEA7D006AA7E4 /* AlertStopMarker.xib in Resources */,
+				EC0028362CC00A7800400425 /* LastUpdatedInfoWindow.xib in Resources */,
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
 				EC1FC3FA2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib in Resources */,
@@ -519,6 +526,7 @@
 				EC11CB502BC92C6B00310392 /* InfoWindowWithImage.swift in Sources */,
 				EC578B7B2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.swift in Sources */,
 				EC11CB462BC92C6B00310392 /* infoWindowBackground.swift in Sources */,
+				EC0028352CC00A7800400425 /* LastUpdatedInfoWindow.swift in Sources */,
 				ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */,
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,

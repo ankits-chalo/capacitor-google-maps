@@ -1480,6 +1480,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
                 return alertMarkerInfo
+            } else if(imageUrl.contains("last_updated_info")) {
+                let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
+                lastUpdateInfo.infoTitle.text = marker.title
+                lastUpdateInfo.infoSnippet.text = marker.snippet
+                return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
             } else {
