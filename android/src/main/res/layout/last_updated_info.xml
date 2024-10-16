@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        app:cardCornerRadius="8dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/info_window_card"
+            android:layout_width="95dp"
+            android:layout_height="match_parent"
+            android:elevation="20dp"
+            android:background="@drawable/bg_white_8"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/infoTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans"
+                android:paddingBottom="4dp"
+                android:text="Last updated at"
+                android:textColor="#808080"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/infoSnippet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans"
+                android:text="05:39:48 PM"
+                android:textColor="#000000"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <ImageView
+        android:id="@+id/info_window_image"
+        android:layout_width="16dp"
+        android:layout_height="14dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="-5dp"
+        android:layout_gravity="center"
+        android:elevation="20dp"
+        android:src="@drawable/arrow_polygon" />
+</LinearLayout>
