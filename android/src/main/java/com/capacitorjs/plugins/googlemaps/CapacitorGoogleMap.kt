@@ -710,6 +710,8 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 // Initialize the LatLngBounds.Builder
                 val builder = LatLngBounds.Builder()
+                val width = mapView.width
+                val height = mapView.height
 
                 // Loop through the list of coordinates
                 for (cord in cords) {
@@ -718,10 +720,10 @@ class CapacitorGoogleMap(
 
                 // Build the bounds
                 val bounds = builder.build()
-
-                // Create a camera update with the bounds and the specified padding
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
-
+                if(width > 0 && height > 0) {
+                    // Create a camera update with the bounds and the specified padding
+                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
+                }
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
