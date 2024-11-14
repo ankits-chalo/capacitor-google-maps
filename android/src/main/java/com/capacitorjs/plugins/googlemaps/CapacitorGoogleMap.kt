@@ -548,10 +548,13 @@ class CapacitorGoogleMap(
         animator.interpolator = LinearInterpolator()
         animator.addUpdateListener { valueAnimator ->
             val v = valueAnimator.animatedFraction
-            val interpolatedLat = (1 - v) * startPosition.latitude + v * finalPosition.latitude
-            val interpolatedLng = (1 - v) * startPosition.longitude + v * finalPosition.longitude
-            val currentPosition = LatLng(interpolatedLat, interpolatedLng)
-            marker.position = currentPosition
+            val latitude =
+                startPosition.latitude + (finalPosition.latitude - startPosition.latitude) * v
+            val longitude =
+                startPosition.longitude + (finalPosition.longitude - startPosition.longitude) * v
+
+            val newPosition = LatLng(latitude, longitude)
+            marker.position = newPosition
         }
         animator.start()
     }
@@ -559,14 +562,18 @@ class CapacitorGoogleMap(
     private fun animateMarkerInsideCluster(clusterItem: CapacitorGoogleMapMarker, newPosition: LatLng) {
         val oldPosition = clusterItem.coordinate
         val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator.duration = 800 // duration of the animation in milliseconds
+        valueAnimator.duration = 2000 // duration of the animation in milliseconds
 
         val marker = (clusterManager?.renderer as? BusesMarkerRenderer)?.getMarker(clusterItem)
         valueAnimator.addUpdateListener { animator ->
-            val v = animator.animatedFraction
-            val lng = v * newPosition.longitude + (1 - v) * oldPosition.longitude
-            val lat = v * newPosition.latitude + (1 - v) * oldPosition.latitude
-            val newLocation = LatLng(lat, lng)
+            val v = valueAnimator.animatedFraction
+
+            val latitude =
+                oldPosition.latitude + (newPosition.latitude - oldPosition.latitude) * v
+            val longitude =
+                oldPosition.longitude + (newPosition.longitude - oldPosition.longitude) * v
+
+            val newLocation = LatLng(latitude, longitude)
 
             // Update the position of the cluster item
             clusterItem.coordinate = newLocation
