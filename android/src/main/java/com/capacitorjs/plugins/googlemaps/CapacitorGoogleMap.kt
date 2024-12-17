@@ -26,6 +26,7 @@ import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -33,24 +34,24 @@ import java.util.Locale
 
 
 class CapacitorGoogleMap(
-        val id: String,
-        val config: GoogleMapConfig,
-        val delegate: CapacitorGoogleMapsPlugin
+    val id: String,
+    val config: GoogleMapConfig,
+    val delegate: CapacitorGoogleMapsPlugin
 ) :
-        OnCameraIdleListener,
-        OnCameraMoveStartedListener,
-        OnCameraMoveListener,
-        OnMyLocationButtonClickListener,
-        OnMyLocationClickListener,
-        OnMapReadyCallback,
-        OnMapClickListener,
-        OnMarkerClickListener,
-        OnMarkerDragListener,
-        OnInfoWindowClickListener,
-        OnInfoWindowCloseListener,
-        OnCircleClickListener,
-        OnPolylineClickListener,
-        OnPolygonClickListener
+    OnCameraIdleListener,
+    OnCameraMoveStartedListener,
+    OnCameraMoveListener,
+    OnMyLocationButtonClickListener,
+    OnMyLocationClickListener,
+    OnMapReadyCallback,
+    OnMapClickListener,
+    OnMarkerClickListener,
+    OnMarkerDragListener,
+    OnInfoWindowClickListener,
+    OnInfoWindowCloseListener,
+    OnCircleClickListener,
+    OnPolylineClickListener,
+    OnPolygonClickListener
 {
     private var mapView: MapView
     private var googleMap: GoogleMap? = null
@@ -79,15 +80,15 @@ class CapacitorGoogleMap(
     private fun initMap() {
         runBlocking {
             val job =
-                    CoroutineScope(Dispatchers.Main).launch {
-                        mapView.onCreate(null)
-                        mapView.onStart()
-                        mapView.getMapAsync(this@CapacitorGoogleMap)
-                        mapView.setWillNotDraw(false)
-                        isReadyChannel.receive()
+                CoroutineScope(Dispatchers.Main).launch {
+                    mapView.onCreate(null)
+                    mapView.onStart()
+                    mapView.getMapAsync(this@CapacitorGoogleMap)
+                    mapView.setWillNotDraw(false)
+                    isReadyChannel.receive()
 
-                        render()
-                    }
+                    render()
+                }
 
             job.join()
         }
@@ -102,10 +103,10 @@ class CapacitorGoogleMap(
                 mapViewParent.minimumWidth = bridge.webView.width
 
                 val layoutParams =
-                        FrameLayout.LayoutParams(
-                                getScaledPixels(bridge, config.width),
-                                getScaledPixels(bridge, config.height),
-                        )
+                    FrameLayout.LayoutParams(
+                        getScaledPixels(bridge, config.width),
+                        getScaledPixels(bridge, config.height),
+                    )
                 layoutParams.leftMargin = getScaledPixels(bridge, config.x)
                 layoutParams.topMargin = getScaledPixels(bridge, config.y)
 
@@ -162,9 +163,9 @@ class CapacitorGoogleMap(
     fun bringToFront() {
         CoroutineScope(Dispatchers.Main).launch {
             val mapViewParent =
-                    ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
-                            this@CapacitorGoogleMap.id
-                    )
+                ((delegate.bridge.webView.parent) as ViewGroup).findViewWithTag<ViewGroup>(
+                    this@CapacitorGoogleMap.id
+                )
             mapViewParent.bringToFront()
         }
     }
@@ -172,26 +173,26 @@ class CapacitorGoogleMap(
     fun destroy() {
         runBlocking {
             val job =
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val bridge = delegate.bridge
+                CoroutineScope(Dispatchers.Main).launch {
+                    val bridge = delegate.bridge
 
-                        val viewToRemove: View? =
-                                ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
-                        if (null != viewToRemove) {
-                            ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
-                        }
-                        mapView.onDestroy()
-                        googleMap = null
-                        clusterManager = null
+                    val viewToRemove: View? =
+                        ((bridge.webView.parent) as ViewGroup).findViewWithTag(id)
+                    if (null != viewToRemove) {
+                        ((bridge.webView.parent) as ViewGroup).removeView(viewToRemove)
                     }
+                    mapView.onDestroy()
+                    googleMap = null
+                    clusterManager = null
+                }
 
             job.join()
         }
     }
 
     fun addMarkers(
-            newMarkers: List<CapacitorGoogleMapMarker>,
-            callback: (ids: Result<List<String>>) -> Unit
+        newMarkers: List<CapacitorGoogleMapMarker>,
+        callback: (ids: Result<List<String>>) -> Unit
     ) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
@@ -408,14 +409,13 @@ class CapacitorGoogleMap(
 
                     if(marker.infoIcon.equals("not_show_info_window")) {
 //                        To remove info window set title as empty string
-                        markerOptions.title("")
-                        markerOptions.snippet("")
+//                        markerOptions.title("")
+//                        markerOptions.snippet("")
                     }
 
 
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
-                    // Disable the 2 button that shows on bottom right after the click on marker
-                    googleMap?.uiSettings?.isMapToolbarEnabled = false;
+
                     googleMapMarker?.tag = marker
 
                     if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
@@ -432,6 +432,10 @@ class CapacitorGoogleMap(
                             if (googleMapMarker != null && marker.infoIcon!!.contains("address")) {
                                 fetchAddressForMarker(googleMapMarker, bridge.context)
                             }
+                        } else if(marker.infoIcon!!.contains("last_updated_info")) {
+                            val bridge = delegate.bridge
+                            googleMapMarker?.tag = marker
+                            googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
                         } else {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -544,10 +548,13 @@ class CapacitorGoogleMap(
         animator.interpolator = LinearInterpolator()
         animator.addUpdateListener { valueAnimator ->
             val v = valueAnimator.animatedFraction
-            val interpolatedLat = (1 - v) * startPosition.latitude + v * finalPosition.latitude
-            val interpolatedLng = (1 - v) * startPosition.longitude + v * finalPosition.longitude
-            val currentPosition = LatLng(interpolatedLat, interpolatedLng)
-            marker.position = currentPosition
+            val latitude =
+                startPosition.latitude + (finalPosition.latitude - startPosition.latitude) * v
+            val longitude =
+                startPosition.longitude + (finalPosition.longitude - startPosition.longitude) * v
+
+            val newPosition = LatLng(latitude, longitude)
+            marker.position = newPosition
         }
         animator.start()
     }
@@ -555,14 +562,18 @@ class CapacitorGoogleMap(
     private fun animateMarkerInsideCluster(clusterItem: CapacitorGoogleMapMarker, newPosition: LatLng) {
         val oldPosition = clusterItem.coordinate
         val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator.duration = 800 // duration of the animation in milliseconds
+        valueAnimator.duration = 2000 // duration of the animation in milliseconds
 
         val marker = (clusterManager?.renderer as? BusesMarkerRenderer)?.getMarker(clusterItem)
         valueAnimator.addUpdateListener { animator ->
-            val v = animator.animatedFraction
-            val lng = v * newPosition.longitude + (1 - v) * oldPosition.longitude
-            val lat = v * newPosition.latitude + (1 - v) * oldPosition.latitude
-            val newLocation = LatLng(lat, lng)
+            val v = valueAnimator.animatedFraction
+
+            val latitude =
+                oldPosition.latitude + (newPosition.latitude - oldPosition.latitude) * v
+            val longitude =
+                oldPosition.longitude + (newPosition.longitude - oldPosition.longitude) * v
+
+            val newLocation = LatLng(latitude, longitude)
 
             // Update the position of the cluster item
             clusterItem.coordinate = newLocation
@@ -607,7 +618,10 @@ class CapacitorGoogleMap(
                     }
                     if (clusterManager == null || !marker.isClustered) {
                         // Below line animate the marker
-                        animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                        if (oldMarker!!.position.latitude != marker!!.coordinate.latitude
+                            || oldMarker!!.position.longitude != marker!!.coordinate.longitude) {
+                            animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                        }
                         // Set the camera position of map to the centre of the marker
                         //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
@@ -649,6 +663,9 @@ class CapacitorGoogleMap(
                                 if (oldMarker?.googleMapMarker != null && marker.infoIcon!!.contains("address")) {
                                     fetchAddressForMarker(oldMarker?.googleMapMarker!!, bridge.context)
                                 }
+                            } else if(marker.infoIcon!!.contains("last_updated_info")) {
+                                oldMarker?.googleMapMarker?.tag = marker
+                                oldMarker?.googleMapMarker?.showInfoWindow()
                             }
                         }
 
@@ -659,8 +676,8 @@ class CapacitorGoogleMap(
                             val renderer = clusterManager?.renderer as? BusesMarkerRenderer
                             val isClustered = renderer?.getClusterItem(oldMarker.googleMapMarker) != null
                             if (!isClustered
-                                    && (oldMarker.position.latitude != marker.coordinate.latitude
-                                            || oldMarker.position.longitude != marker.coordinate.longitude)) {
+                                && (oldMarker.position.latitude != marker.coordinate.latitude
+                                        || oldMarker.position.longitude != marker.coordinate.longitude)) {
 //                                  Only animate if the marker is not currently clustered
                                 animateMarkerInsideCluster(it, marker.coordinate)
                             }
@@ -700,6 +717,8 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 // Initialize the LatLngBounds.Builder
                 val builder = LatLngBounds.Builder()
+                val width = mapView.width
+                val height = mapView.height
 
                 // Loop through the list of coordinates
                 for (cord in cords) {
@@ -708,10 +727,10 @@ class CapacitorGoogleMap(
 
                 // Build the bounds
                 val bounds = builder.build()
-
-                // Create a camera update with the bounds and the specified padding
-                googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
-
+                if(width > 0 && height > 0) {
+                    // Create a camera update with the bounds and the specified padding
+                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
+                }
                 callback(null)
             }
         } catch (e: GoogleMapsError) {
@@ -799,10 +818,10 @@ class CapacitorGoogleMap(
 
     private fun setClusterManagerRenderer(minClusterSize: Int?) {
         clusterManager?.renderer = CapacitorClusterManagerRenderer(
-                delegate.bridge.context,
-                googleMap,
-                clusterManager,
-                minClusterSize
+            delegate.bridge.context,
+            googleMap,
+            clusterManager,
+            minClusterSize
         )
     }
 
@@ -827,7 +846,7 @@ class CapacitorGoogleMap(
 
 
                 googleMap?.setOnCameraIdleListener(clusterManager)
-                googleMap?.setOnMarkerClickListener(clusterManager)
+//                googleMap?.setOnMarkerClickListener(clusterManager)
                 googleMap?.setOnInfoWindowClickListener(clusterManager)
 
 
@@ -1034,12 +1053,12 @@ class CapacitorGoogleMap(
                 }
 
                 val updatedPosition =
-                        CameraPosition.Builder()
-                                .target(updatedTarget)
-                                .zoom(zoom.toFloat())
-                                .bearing(bearing.toFloat())
-                                .tilt(angle.toFloat())
-                                .build()
+                    CameraPosition.Builder()
+                        .target(updatedTarget)
+                        .zoom(zoom.toFloat())
+                        .bearing(bearing.toFloat())
+                        .tilt(angle.toFloat())
+                        .build()
 
                 if (animate) {
                     googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(updatedPosition))
@@ -1079,20 +1098,20 @@ class CapacitorGoogleMap(
             googleMap ?: throw GoogleMapNotAvailable()
             CoroutineScope(Dispatchers.Main).launch {
                 val mapTypeInt: Int =
-                        when (mapType) {
-                            "Normal" -> MAP_TYPE_NORMAL
-                            "Hybrid" -> MAP_TYPE_HYBRID
-                            "Satellite" -> MAP_TYPE_SATELLITE
-                            "Terrain" -> MAP_TYPE_TERRAIN
-                            "None" -> MAP_TYPE_NONE
-                            else -> {
-                                Log.w(
-                                        "CapacitorGoogleMaps",
-                                        "unknown mapView type '$mapType'  Defaulting to normal."
-                                )
-                                MAP_TYPE_NORMAL
-                            }
+                    when (mapType) {
+                        "Normal" -> MAP_TYPE_NORMAL
+                        "Hybrid" -> MAP_TYPE_HYBRID
+                        "Satellite" -> MAP_TYPE_SATELLITE
+                        "Terrain" -> MAP_TYPE_TERRAIN
+                        "None" -> MAP_TYPE_NONE
+                        else -> {
+                            Log.w(
+                                "CapacitorGoogleMaps",
+                                "unknown mapView type '$mapType'  Defaulting to normal."
+                            )
+                            MAP_TYPE_NORMAL
                         }
+                    }
 
                 googleMap?.mapType = mapTypeInt
                 callback(null)
@@ -1153,10 +1172,10 @@ class CapacitorGoogleMap(
 
     fun getMapBounds(): Rect {
         return Rect(
-                getScaledPixels(delegate.bridge, config.x),
-                getScaledPixels(delegate.bridge, config.y),
-                getScaledPixels(delegate.bridge, config.x + config.width),
-                getScaledPixels(delegate.bridge, config.y + config.height)
+            getScaledPixels(delegate.bridge, config.x),
+            getScaledPixels(delegate.bridge, config.y),
+            getScaledPixels(delegate.bridge, config.x + config.width),
+            getScaledPixels(delegate.bridge, config.y + config.height)
         )
     }
 
@@ -1185,10 +1204,10 @@ class CapacitorGoogleMap(
 
     private fun getScaledRect(bridge: Bridge, rectF: RectF): RectF {
         return RectF(
-                getScaledPixelsF(bridge, rectF.left),
-                getScaledPixelsF(bridge, rectF.top),
-                getScaledPixelsF(bridge, rectF.right),
-                getScaledPixelsF(bridge, rectF.bottom)
+            getScaledPixelsF(bridge, rectF.left),
+            getScaledPixelsF(bridge, rectF.top),
+            getScaledPixelsF(bridge, rectF.right),
+            getScaledPixelsF(bridge, rectF.bottom)
         )
     }
 
@@ -1290,8 +1309,8 @@ class CapacitorGoogleMap(
                     }
 
                     Log.w(
-                            "CapacitorGoogleMaps",
-                            "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon."
+                        "CapacitorGoogleMaps",
+                        "Could not load image '${marker.iconUrl}': ${detailedMessage}. Using default marker icon."
                     )
                 }
             }
@@ -1307,18 +1326,18 @@ class CapacitorGoogleMap(
     }
 
     private fun getResizedIcon(
-            _bitmap: Bitmap,
-            marker: CapacitorGoogleMapMarker
+        _bitmap: Bitmap,
+        marker: CapacitorGoogleMapMarker
     ): BitmapDescriptor {
         var bitmap = _bitmap
         if (marker.iconSize != null) {
             bitmap =
-                    Bitmap.createScaledBitmap(
-                            bitmap,
-                            (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(),
-                            (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(),
-                            false
-                    )
+                Bitmap.createScaledBitmap(
+                    bitmap,
+                    (marker.iconSize!!.width * this.config.devicePixelRatio).toInt(),
+                    (marker.iconSize!!.height * this.config.devicePixelRatio).toInt(),
+                    false
+                )
         }
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
@@ -1347,6 +1366,8 @@ class CapacitorGoogleMap(
         runBlocking {
             googleMap = map
 
+            // Disable the 2 button that shows on bottom right after the click on marker
+            googleMap?.uiSettings?.isMapToolbarEnabled = false;
             val data = JSObject()
             data.put("mapId", this@CapacitorGoogleMap.id)
             delegate.notify("onMapReady", data)
@@ -1361,7 +1382,7 @@ class CapacitorGoogleMap(
         CoroutineScope(Dispatchers.Main).launch {
             this@CapacitorGoogleMap.googleMap?.setOnCameraIdleListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveStartedListener(
-                    this@CapacitorGoogleMap
+                this@CapacitorGoogleMap
             )
             this@CapacitorGoogleMap.googleMap?.setOnCameraMoveListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
@@ -1370,7 +1391,7 @@ class CapacitorGoogleMap(
             this@CapacitorGoogleMap.googleMap?.setOnMarkerDragListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMapClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationButtonClickListener(
-                    this@CapacitorGoogleMap
+                this@CapacitorGoogleMap
             )
             this@CapacitorGoogleMap.googleMap?.setOnMyLocationClickListener(this@CapacitorGoogleMap)
             this@CapacitorGoogleMap.googleMap?.setOnInfoWindowClickListener(this@CapacitorGoogleMap)
@@ -1413,6 +1434,8 @@ class CapacitorGoogleMap(
 //              If false is returned then the above changes to zoom in inside the cluster will not work
                 true
             }
+
+            googleMap?.setOnMarkerClickListener(this@CapacitorGoogleMap)
         }
     }
 
@@ -1453,15 +1476,35 @@ class CapacitorGoogleMap(
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        // Disable the 2 button that shows on bottom right after the click on marker
-        googleMap?.uiSettings?.isMapToolbarEnabled = false;
         val data = JSObject()
+        val infoData = (marker?.tag as? CapacitorGoogleMapMarker)?.infoData
+        var title = marker.title
+        if(marker.title.isNullOrEmpty() && infoData is JSONObject && infoData.has("title")){
+            // Also validate if infoData has title as there may be chances
+            // That title is removed in markerOption to hide info window
+            title = infoData.getString("title")
+        }
+
+        // Is this Marker is added inside the cluster
+        val isClusterItemMarker = clusterManager?.markerCollection?.markers?.contains(marker) ?: false
+
+        if (title.isNullOrEmpty() && (clusterManager != null || isClusterItemMarker)) {
+            // For the cluster marker when clicked should zoom into the
+            // So when below method is called clusterManager?.setOnClusterClickListener is called
+            // and marker gets zoomed in
+            return clusterManager?.onMarkerClick(marker) ?: false
+        }
+
         data.put("mapId", this@CapacitorGoogleMap.id)
         data.put("markerId", marker.id)
         data.put("latitude", marker.position.latitude)
         data.put("longitude", marker.position.longitude)
-        data.put("title", marker.title)
+        data.put("title", title)
         data.put("snippet", marker.snippet)
+        if(marker.snippet.isNullOrEmpty() && infoData is JSONObject && infoData.has("snippet")){
+            val snippet = infoData.getString("snippet")
+            data.put("snippet", snippet)
+        }
         delegate.notify("onMarkerClick", data)
         return false
     }

@@ -1350,14 +1350,21 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "items": items
             ])
         } else {
+            let userInfo = marker.userData as! Marker
+            var title = marker.title
+            if((title?.isEmpty) != nil) {
+                title = userInfo.title
+            }
+            
             self.notifyListeners("onMarkerClick", data: [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": String(marker.hash.hashValue),
                 "latitude": marker.position.latitude,
                 "longitude": marker.position.longitude,
-                "title": marker.title ?? "",
+                "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
+            
         }
         return false
     }
@@ -1426,6 +1433,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let tripNotRunName = userData.infoData?["tripNotRunName"] as? String ?? ""
                 let loadingName = userData.infoData?["loadingName"] as? String ?? ""
                 let errorName = userData.infoData?["errorName"] as? String ?? ""
+                let luggageTicketCount = userData.infoData?["luggageTicketCount"] as? Int ?? 0
                 
                 busesMarkerInfo.collectionText.text = collectionName
                 busesMarkerInfo.occupancyText.text = occupancyName
@@ -1446,6 +1454,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     busesMarkerInfo.busTime.text = tripStartTime
                     busesMarkerInfo.currentOccupancy.text = String(currentPassengerCount)
                     busesMarkerInfo.occupancyLevelImage.image = UIImage(named: occupancyLevel )
+                    busesMarkerInfo.luggageCount.text = String(luggageTicketCount)
                     busesMarkerInfo.busFromTo.text = routeName
                     if(!ticketStatus.isEmpty && ticketStatus != "") {
                         busesMarkerInfo.ticketUpdatingText.text = ticketStatus
@@ -1468,6 +1477,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
                 return alertMarkerInfo
+            } else if(imageUrl.contains("last_updated_info")) {
+                let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
+                lastUpdateInfo.infoTitle.text = marker.title
+                lastUpdateInfo.infoSnippet.text = marker.snippet
+                return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
             } else {

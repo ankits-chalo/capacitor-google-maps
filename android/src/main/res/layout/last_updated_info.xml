@@ -15,29 +15,29 @@
 
         <LinearLayout
             android:id="@+id/info_window_card"
-            android:layout_width="180dp"
+            android:layout_width="95dp"
             android:layout_height="match_parent"
             android:elevation="20dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/bg_white_5"
             android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/alertTitle"
+                android:id="@+id/infoTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans"
                 android:paddingBottom="4dp"
-                android:text="Reported at"
+                android:text="Last updated at"
                 android:textColor="#808080"
                 android:textSize="10dp" />
 
             <TextView
-                android:id="@+id/alertSnippet"
+                android:id="@+id/infoSnippet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/notosans"
-                android:text="Irinjalakuda - Kodungallur Rd, Kolothumpady, Irinjalakuda, Kerala 680121"
+                android:text="05:39:48 PM"
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
@@ -53,12 +53,4 @@
         android:layout_gravity="center"
         android:elevation="20dp"
         android:src="@drawable/arrow_polygon" />
-    <ImageView
-        android:id="@+id/alertIconImage"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="-3dp"
-        android:layout_gravity="center"
-        android:src="@drawable/alert_bus_inactive" />
 </LinearLayout>

@@ -35,6 +35,7 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val totalCollctn = it.infoData?.getString("totalCollctn")
             val tripStartTime = it.infoData?.getString("tripStartTime")
             val currPsgCount = it.infoData?.getLong("currPsgCount")
+            val luggageTicketCount = it.infoData?.getLong("luggageTicketCount")
             val occupancyLevel = it.infoData?.getString("occupancyLevel")
             val ticketStatus = it.infoData?.getString("ticketStatus")
             val collectionName = it.infoData?.getString("collectionName")
@@ -56,6 +57,7 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
             val collectionText = view.findViewById<TextView>(R.id.collectionText)
             val occupancyText = view.findViewById<TextView>(R.id.occupancyText)
             val tripNotRunningText = view.findViewById<TextView>(R.id.tripNotRunningText)
+            val luggageCount = view.findViewById<TextView>(R.id.luggageCount)
 
             busName.text = it.title
             collectionText.text = collectionName
@@ -95,6 +97,7 @@ class BusesMarkerInfoWindow(private val context: Context) : GoogleMap.InfoWindow
                 busRouteName.text = routeName
                 busTime.text = tripStartTime
                 busCollectionSoFar.text = totalCollctn
+                luggageCount.text = luggageTicketCount.toString()
                 busCurrentOccupancy.text = currPsgCount.toString()
                 val resources: Resources = context.resources
                 if(!occupancyLevel.isNullOrEmpty()) {
