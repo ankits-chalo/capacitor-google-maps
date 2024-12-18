@@ -1486,18 +1486,16 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return nil
             } else if(imageUrl.contains("replay_info_icon")) {
                 let historyReplayInfo = HistoryReplayInfoWindow.instanceFromNib()
-                historyReplayInfo.infoTitle.text = marker.title
-                historyReplayInfo.infoSnippet.text = marker.snippet
                 
                 let latTitle = userData.infoData?["latTitle"] as? String ?? "Lat : "
-                let longTitle = userData.infoData?["latTitle"] as? String ?? "Long : "
-                let speedTitle = userData.infoData?["latTitle"] as? String ?? "Speed : "
-                let timeTitle = userData.infoData?["latTitle"] as? String ?? "Time : "
+                let longTitle = userData.infoData?["longTitle"] as? String ?? "Long : "
+                let speedTitle = userData.infoData?["speedTitle"] as? String ?? "Speed : "
+                let timeTitle = userData.infoData?["timeTitle"] as? String ?? "Time : "
                 
-                historyReplayInfo.latTitle = latTitle
-                historyReplayInfo.longTitle = longTitle
-                historyReplayInfo.speedTitle = speedTitle
-                historyReplayInfo.timeTitle = timeTitle
+                historyReplayInfo.latTitle.text = latTitle
+                historyReplayInfo.longTitle.text = longTitle
+                historyReplayInfo.speedTitle.text = speedTitle
+                historyReplayInfo.timeTitle.text = timeTitle
                 
                 return historyReplayInfo
             } else {
