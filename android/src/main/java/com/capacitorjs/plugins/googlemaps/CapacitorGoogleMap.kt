@@ -436,6 +436,10 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
+                        }else if(marker.infoIcon!!.contains("replay_info_icon")) {
+                            val bridge = delegate.bridge
+                            googleMapMarker?.tag = marker
+                            googleMap?.setInfoWindowAdapter(HistoryReplayInfoWindowAdapter(bridge.context))
                         } else {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -666,6 +670,14 @@ class CapacitorGoogleMap(
                             } else if(marker.infoIcon!!.contains("last_updated_info")) {
                                 oldMarker?.googleMapMarker?.tag = marker
                                 oldMarker?.googleMapMarker?.showInfoWindow()
+                            } else if(marker.infoIcon!!.contains("replay_info_icon")) {
+                                if (marker.infoData?.getBoolean("showInfoIcon") == true) {
+                                    val bridge = delegate.bridge
+                                    oldMarker?.googleMapMarker?.tag = marker
+                                    oldMarker?.googleMapMarker?.showInfoWindow()
+                                } else {
+                                    oldMarker?.googleMapMarker?.hideInfoWindow()
+                                }
                             }
                         }
 

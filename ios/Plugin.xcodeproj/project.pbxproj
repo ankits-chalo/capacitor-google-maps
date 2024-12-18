@@ -54,6 +54,8 @@
 		EC578B802BCD40B8000C9339 /* BusesTripNotRun.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC578B7A2BCD40B8000C9339 /* BusesTripNotRun.xib */; };
 		EC578B872BCD4157000C9339 /* BusesMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */; };
 		EC578B882BCD4157000C9339 /* BusesMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */; };
+		EC9AB75C2D12C643007314B3 /* HistoryReplayInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC9AB75B2D12C643007314B3 /* HistoryReplayInfoWindow.swift */; };
+		EC9AB75E2D12C65E007314B3 /* HistoryReplayInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC9AB75D2D12C65E007314B3 /* HistoryReplayInfoWindow.xib */; };
 		ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */; };
 		ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B02BC917E500158D06 /* CustomMarker.swift */; };
 		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
@@ -124,6 +126,8 @@
 		EC578B7A2BCD40B8000C9339 /* BusesTripNotRun.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesTripNotRun.xib; sourceTree = "<group>"; };
 		EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindow.xib; sourceTree = "<group>"; };
 		EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkerInfoWindow.swift; sourceTree = "<group>"; };
+		EC9AB75B2D12C643007314B3 /* HistoryReplayInfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryReplayInfoWindow.swift; sourceTree = "<group>"; };
+		EC9AB75D2D12C65E007314B3 /* HistoryReplayInfoWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HistoryReplayInfoWindow.xib; sourceTree = "<group>"; };
 		ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAroundYou.swift; sourceTree = "<group>"; };
 		ECAD59B02BC917E500158D06 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMarker.swift; sourceTree = "<group>"; };
 		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
@@ -233,6 +237,8 @@
 		EC11CB322BC92C5100310392 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				EC9AB75D2D12C65E007314B3 /* HistoryReplayInfoWindow.xib */,
+				EC9AB75B2D12C643007314B3 /* HistoryReplayInfoWindow.swift */,
 				EC0028332CC00A7800400425 /* LastUpdatedInfoWindow.swift */,
 				EC0028342CC00A7800400425 /* LastUpdatedInfoWindow.xib */,
 				ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */,
@@ -378,6 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC578B872BCD4157000C9339 /* BusesMarkerInfoWindow.xib in Resources */,
+				EC9AB75E2D12C65E007314B3 /* HistoryReplayInfoWindow.xib in Resources */,
 				EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */,
 				EC11CB452BC92C6B00310392 /* infoWindowBackground.xib in Resources */,
 				EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */,
@@ -533,6 +540,7 @@
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
+				EC9AB75C2D12C643007314B3 /* HistoryReplayInfoWindow.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				EC578B882BCD4157000C9339 /* BusesMarkerInfoWindow.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* CapacitorGoogleMapsPlugin.m in Sources */,
