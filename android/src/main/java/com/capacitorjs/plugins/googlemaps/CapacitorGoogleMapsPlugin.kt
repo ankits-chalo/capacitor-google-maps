@@ -452,7 +452,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                 if (!cord.has("lat") || !cord.has("lng")) {
                     throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property");
                 }
-                cords.add(LatLng(cord.get("lat") as Double, cord.get("lng") as Double));
+                cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
             }
 
             val map = maps[id]
@@ -577,7 +577,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                     if(!cord.has("lat") || !cord.has("lng")){
                         throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property");
                     }
-                    cords.add(LatLng(cord.get("lat") as Double, cord.get("lng") as Double));
+                    cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
                 }
 
                 var objStokeColor: String = if(!polylineObject.has("polylineStrokeColor")) {
