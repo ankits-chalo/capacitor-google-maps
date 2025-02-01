@@ -541,13 +541,13 @@ class CapacitorGoogleMap(
         }
     }
 
-    private fun animateMarker(marker: Marker?, finalPosition: LatLng) {
+    private fun animateMarker(marker: Marker?, finalPosition: LatLng, duration: Long = 2000) {
         // Return early if the marker is null
         if (marker == null) return
 
         val startPosition = marker.position // The initial position of the marker
         val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 2000 // 2 seconds
+        animator.duration = duration // 2 seconds by default
 
         animator.interpolator = LinearInterpolator()
         animator.addUpdateListener { valueAnimator ->
@@ -624,7 +624,9 @@ class CapacitorGoogleMap(
                         // Below line animate the marker
                         if (oldMarker!!.position.latitude != marker!!.coordinate.latitude
                             || oldMarker!!.position.longitude != marker!!.coordinate.longitude) {
-                            animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
+                            marker.infoData?.getLong("animationDuration")?.takeIf { it >= 0 }?.let { duration ->
+                                animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate, duration)
+                            } ?: animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
                         }
                         // Set the camera position of map to the centre of the marker
                         //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
