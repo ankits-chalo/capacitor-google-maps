@@ -54,6 +54,8 @@
 		EC578B802BCD40B8000C9339 /* BusesTripNotRun.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC578B7A2BCD40B8000C9339 /* BusesTripNotRun.xib */; };
 		EC578B872BCD4157000C9339 /* BusesMarkerInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */; };
 		EC578B882BCD4157000C9339 /* BusesMarkerInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */; };
+		EC5846922D58C2FB00E290B1 /* AbhayIconInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5846902D58C2FB00E290B1 /* AbhayIconInfoWindow.swift */; };
+		EC5846932D58C2FB00E290B1 /* AbhayIconInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EC5846912D58C2FB00E290B1 /* AbhayIconInfoWindow.xib */; };
 		ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */; };
 		ECAD59B32BC917E500158D06 /* CustomMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B02BC917E500158D06 /* CustomMarker.swift */; };
 		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
@@ -124,6 +126,8 @@
 		EC578B7A2BCD40B8000C9339 /* BusesTripNotRun.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesTripNotRun.xib; sourceTree = "<group>"; };
 		EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusesMarkerInfoWindow.xib; sourceTree = "<group>"; };
 		EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesMarkerInfoWindow.swift; sourceTree = "<group>"; };
+		EC5846902D58C2FB00E290B1 /* AbhayIconInfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbhayIconInfoWindow.swift; sourceTree = "<group>"; };
+		EC5846912D58C2FB00E290B1 /* AbhayIconInfoWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AbhayIconInfoWindow.xib; sourceTree = "<group>"; };
 		ECAD59AF2BC917E500158D06 /* BusesAroundYou.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusesAroundYou.swift; sourceTree = "<group>"; };
 		ECAD59B02BC917E500158D06 /* CustomMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMarker.swift; sourceTree = "<group>"; };
 		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
@@ -247,6 +251,8 @@
 				EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */,
 				EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */,
 				EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */,
+				EC5846902D58C2FB00E290B1 /* AbhayIconInfoWindow.swift */,
+				EC5846912D58C2FB00E290B1 /* AbhayIconInfoWindow.xib */,
 				EC578B862BCD4157000C9339 /* BusesMarkerInfoWindow.swift */,
 				EC578B852BCD4157000C9339 /* BusesMarkerInfoWindow.xib */,
 				EC578B752BCD40B7000C9339 /* BusesMarkerInfoWindowLoading.swift */,
@@ -389,6 +395,7 @@
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
 				EC1FC3FA2C0EB2A2006AA7E4 /* AlertBusMarkerInactive.xib in Resources */,
+				EC5846932D58C2FB00E290B1 /* AbhayIconInfoWindow.xib in Resources */,
 				EC1FC3EF2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib in Resources */,
 				EC1FC3F42C0E353D006AA7E4 /* AlertBusMarkerHalt.xib in Resources */,
 				EC11CB482BC92C6B00310392 /* InfoWindowWithImage.xib in Resources */,
@@ -520,6 +527,7 @@
 				0244BF2C29DB68DF00A06018 /* Polyline.swift in Sources */,
 				02404C8D279F408800CEF8C8 /* GoogleMapErrors.swift in Sources */,
 				50E1A94820377CB70090CE1A /* CapacitorGoogleMapsPlugin.swift in Sources */,
+				EC5846922D58C2FB00E290B1 /* AbhayIconInfoWindow.swift in Sources */,
 				0238AED727C931A40012930B /* GoogleMapCameraConfig.swift in Sources */,
 				0238AED927C945840012930B /* GoogleMapPadding.swift in Sources */,
 				02404C8F279F43E900CEF8C8 /* GoogleMapConfig.swift in Sources */,
