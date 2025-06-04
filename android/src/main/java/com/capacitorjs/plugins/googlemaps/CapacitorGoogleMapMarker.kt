@@ -220,6 +220,10 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         }
+        else if(iconUrl?.contains("panic_alert_marker") == true) {
+            val busesMarker = AlertStopCustomMarker(context)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
+        }
 
     }
 }
