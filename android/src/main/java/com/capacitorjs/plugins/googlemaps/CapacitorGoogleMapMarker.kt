@@ -155,7 +155,11 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val arrowWidth = context.resources.getDimension(R.dimen.arrow_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
-        } else if(iconUrl?.contains("delayed_bus_marker") == true || iconUrl?.contains("active_bus_marker") == true || iconUrl?.contains("halt_bus_marker") == true || iconUrl?.contains("not_on_trip_bus_marker") == true) {
+        }   else if(iconUrl?.contains("panic_alert_marker") == true) {
+            val size = context.resources.getDimension(R.dimen.marker_size).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        }   else if(iconUrl?.contains("delayed_bus_marker") == true || iconUrl?.contains("active_bus_marker") == true || iconUrl?.contains("halt_bus_marker") == true || iconUrl?.contains("not_on_trip_bus_marker") == true) {
             val size = context.resources.getDimension(R.dimen.marker_size).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
@@ -217,10 +221,6 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val busesMarker = AlertBusMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         }  else if(iconUrl?.contains("alert_stop_custom_marker") == true) {
-            val busesMarker = AlertStopCustomMarker(context)
-            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
-        }
-        else if(iconUrl?.contains("panic_alert_marker") == true) {
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         }
