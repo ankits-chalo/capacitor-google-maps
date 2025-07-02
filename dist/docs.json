@@ -423,6 +423,22 @@
         "slug": "setpadding"
       },
       {
+        "name": "getMapBounds",
+        "signature": "() => Promise<LatLngBounds>",
+        "parameters": [],
+        "returns": "Promise<LatLngBounds>",
+        "tags": [
+          {
+            "name": "returns"
+          }
+        ],
+        "docs": "Get the map's current viewport latitude and longitude bounds.",
+        "complexTypes": [
+          "LatLngBounds"
+        ],
+        "slug": "getmapbounds"
+      },
+      {
         "name": "fitBounds",
         "signature": "(bounds: LatLngBounds, padding?: number | undefined) => Promise<void>",
         "parameters": [
@@ -1762,6 +1778,25 @@
         {
           "text": "number[]",
           "complexTypes": []
+        }
+      ]
+    },
+    {
+      "name": "Marker",
+      "slug": "marker",
+      "docs": "Supports markers of either either \"legacy\" or \"advanced\" types.",
+      "types": [
+        {
+          "text": "google.maps.Marker",
+          "complexTypes": [
+            "google"
+          ]
+        },
+        {
+          "text": "google.maps.marker.AdvancedMarkerElement",
+          "complexTypes": [
+            "google"
+          ]
         }
       ]
     }
