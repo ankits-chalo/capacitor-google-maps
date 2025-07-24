@@ -104,7 +104,10 @@ class GoogleMap {
     constructor(id) {
         this.element = null;
         this.resizeObserver = null;
-        this.handleScrollEvent = () => this.updateMapBounds();
+        this.handleScrollEvent = () => {
+            console.log("GoogleMaps: handleScrollEvent Called 1");
+            return this.updateMapBounds();
+        };
         this.id = id;
     }
     /**
@@ -198,6 +201,7 @@ class GoogleMap {
         }
         // small delay to allow for iOS WKWebView to setup corresponding element sub-scroll views ???
         await new Promise((resolve, reject) => {
+            console.log("GoogleMaps: Create Called 1");
             setTimeout(async () => {
                 try {
                     await CapacitorGoogleMaps.create(options);
@@ -525,13 +529,23 @@ class GoogleMap {
         });
     }
     initScrolling() {
-        const ionContents = document.getElementsByTagName("ion-content");
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < ionContents.length; i++) {
-            ionContents[i].scrollEvents = true;
+        console.log("GoogleMaps: initScrolling Called 1");
+        // Find your specific scrollable container
+        const scrollableContainer = document.getElementById("scrollable_container_live_trips");
+        if (scrollableContainer) {
+            console.log("GoogleMaps: Found scrollable_container_live_trips");
+            scrollableContainer.addEventListener("scroll", this.handleScrollEvent);
         }
-        window.addEventListener("ionScroll", this.handleScrollEvent);
-        window.addEventListener("scroll", this.handleScrollEvent);
+        else {
+            console.warn("GoogleMaps: scrollable_container_live_trips not found, falling back to default listeners");
+            // Fallback to ion-content if your container isn't found
+            const ionContents = document.getElementsByTagName("ion-content");
+            for (let i = 0; i < ionContents.length; i++) {
+                ionContents[i].scrollEvents = true;
+            }
+            window.addEventListener("ionScroll", this.handleScrollEvent);
+            window.addEventListener("scroll", this.handleScrollEvent);
+        }
         window.addEventListener("resize", this.handleScrollEvent);
         if (screen.orientation) {
             screen.orientation.addEventListener("change", () => {
@@ -545,6 +559,12 @@ class GoogleMap {
         }
     }
     disableScrolling() {
+        // Remove listener from your specific scrollable container
+        const scrollableContainer = document.getElementById("scrollable_container_live_trips");
+        if (scrollableContainer) {
+            scrollableContainer.removeEventListener("scroll", this.handleScrollEvent);
+        }
+        // Remove fallback listeners
         window.removeEventListener("ionScroll", this.handleScrollEvent);
         window.removeEventListener("scroll", this.handleScrollEvent);
         window.removeEventListener("resize", this.handleScrollEvent);
@@ -560,6 +580,7 @@ class GoogleMap {
         }
     }
     updateMapBounds() {
+        console.log("GoogleMaps: updateMapBounds Called 1");
         if (this.element) {
             const mapRect = this.element.getBoundingClientRect();
             CapacitorGoogleMaps.onScroll({
