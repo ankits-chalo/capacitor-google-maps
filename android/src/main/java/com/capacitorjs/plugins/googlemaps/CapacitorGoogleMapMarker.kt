@@ -159,7 +159,11 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val size = context.resources.getDimension(R.dimen.marker_size).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
-        }   else if(iconUrl?.contains("delayed_bus_marker") == true || iconUrl?.contains("active_bus_marker") == true || iconUrl?.contains("halt_bus_marker") == true || iconUrl?.contains("not_on_trip_bus_marker") == true) {
+        }  else if(iconUrl?.contains("overspeed_marker") == true) {
+            val size = context.resources.getDimension(R.dimen.marker_size).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+        }  else if(iconUrl?.contains("delayed_bus_marker") == true || iconUrl?.contains("active_bus_marker") == true || iconUrl?.contains("halt_bus_marker") == true || iconUrl?.contains("not_on_trip_bus_marker") == true) {
             val size = context.resources.getDimension(R.dimen.marker_size).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
