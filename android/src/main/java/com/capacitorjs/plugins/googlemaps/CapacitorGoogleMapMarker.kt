@@ -156,9 +156,10 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
         }   else if(iconUrl?.contains("panic_marker") == true) {
-            val size = context.resources.getDimension(R.dimen.marker_size).toInt()
+            val arrowHeight = context.resources.getDimension(R.dimen.alert_marker_height).toInt()
+            val arrowWidth = context.resources.getDimension(R.dimen.alert_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, size, size, false)))
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, arrowWidth, arrowHeight, false)))
         }  else if(iconUrl?.contains("overspeed_marker") == true) {
             val arrowHeight = context.resources.getDimension(R.dimen.alert_marker_height).toInt()
             val arrowWidth = context.resources.getDimension(R.dimen.alert_marker_width).toInt()
