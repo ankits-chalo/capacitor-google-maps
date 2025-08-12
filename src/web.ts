@@ -715,4 +715,10 @@ export class CapacitorGoogleMapsWeb
   fitBound(): Promise<any> {
     throw new Error("Method not implemented.");
   }
+  setMarkerPosition(): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  fitBound(): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
 }
