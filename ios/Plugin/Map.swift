@@ -466,8 +466,20 @@ public class Map {
                 }
 
                 if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) || self.markerIdNotOnCluster.contains(String(marker.id!)) {
+                    
+                    var duration = 2.0
+                    
+                    if let infoData = marker.infoData {
+                        // Taking duration value form infoData
+                        let animationDuration = (infoData["animationDuration"] as? Double) ??
+                                                   (Double(infoData["animationDuration"] as? String ?? "")) ??
+                                                   2000
+
+                           duration = animationDuration > 0 ? animationDuration / 1000 : 0
+                    }
+                    
                     CATransaction.begin()
-                    CATransaction.setAnimationDuration(2.0)
+                    CATransaction.setAnimationDuration(duration)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
                     if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window") {
                         oldMarker.title = marker.title

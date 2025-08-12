@@ -1484,6 +1484,20 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
+            } else if(imageUrl.contains("replay_info_icon")) {
+                let historyReplayInfo = HistoryReplayInfoWindow.instanceFromNib()
+                
+                let latTitle = userData.infoData?["latTitle"] as? String ?? "Lat : "
+                let longTitle = userData.infoData?["longTitle"] as? String ?? "Long : "
+                let speedTitle = userData.infoData?["speedTitle"] as? String ?? "Speed : "
+                let timeTitle = userData.infoData?["timeTitle"] as? String ?? "Time : "
+                
+                historyReplayInfo.latTitle.text = latTitle
+                historyReplayInfo.longTitle.text = longTitle
+                historyReplayInfo.speedTitle.text = speedTitle
+                historyReplayInfo.timeTitle.text = timeTitle
+                
+                return historyReplayInfo
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
