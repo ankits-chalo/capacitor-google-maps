@@ -448,13 +448,13 @@ export class GoogleMap {
     initScrolling() {
         console.log("GoogleMaps: initScrolling Called 1");
         // Find your specific scrollable container
-        const scrollableContainer = document.getElementById("scrollable_container_live_trips");
+        const scrollableContainer = document.getElementById("scrollable_map_container");
         if (scrollableContainer) {
-            console.log("GoogleMaps: Found scrollable_container_live_trips");
+            console.log("GoogleMaps: Found scrollable_map_container");
             scrollableContainer.addEventListener("scroll", this.handleScrollEvent);
         }
         else {
-            console.warn("GoogleMaps: scrollable_container_live_trips not found, falling back to default listeners");
+            console.warn("GoogleMaps: scrollable_map_container not found, falling back to default listeners");
             // Fallback to ion-content if your container isn't found
             const ionContents = document.getElementsByTagName("ion-content");
             for (let i = 0; i < ionContents.length; i++) {
