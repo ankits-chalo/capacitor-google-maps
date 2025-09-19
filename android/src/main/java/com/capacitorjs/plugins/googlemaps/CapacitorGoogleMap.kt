@@ -10,6 +10,9 @@ import android.content.Context
 import android.graphics.*
 import android.location.Geocoder
 import android.location.Location
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -188,6 +191,28 @@ class CapacitorGoogleMap(
 
             job.join()
         }
+    }
+
+    private fun rotateMarkerSmoothly(marker: Marker, toRotation: Float, duration: Long = 500) {
+        val startRotation = marker.rotation
+        val handler = Handler(Looper.getMainLooper())
+        val startTime = SystemClock.uptimeMillis()
+
+        val interpolator = LinearInterpolator()
+
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = SystemClock.uptimeMillis() - startTime
+                val t = (elapsed.toFloat() / duration).coerceAtMost(1f)
+                val rotation = startRotation + (toRotation - startRotation) * interpolator.getInterpolation(t)
+
+                marker.rotation = rotation
+
+                if (t < 1f) {
+                    handler.postDelayed(this, 16) // roughly 60fps
+                }
+            }
+        })
     }
 
     fun addMarkers(
@@ -380,9 +405,22 @@ class CapacitorGoogleMap(
                     marker.getMarkerId()?.let { markerIdOnWeb.add(it) }
 
                     val markerOptions = marker.getMarkerOptionsUpdated()
+                    val googleMapMarker = googleMap?.addMarker(markerOptions)
                     if(marker.rotation == 1) {
-                        markerOptions.rotation(getAngle(marker.coordinate))
+                        Log.d("MapDebug addMarker", "angleDiff = ${marker.angleDiff}")
+//                        if(marker.angleDiff>0){
+//                            markerOptions.rotation(marker.angleDiff)
+//                        }
+//                        else{
+//                            markerOptions.rotation(getAngle(marker.coordinate))
+//                        }
+                        val targetAngle = if (marker.angleDiff > 0) marker.angleDiff else getAngle(marker.coordinate)
+
+                        googleMapMarker?.let { m ->
+                            rotateMarkerSmoothly(m, targetAngle)
+                        }
                     }
+
 
                     if(marker.iconUrl?.contains("buses_custom_marker") == true) {
                         val bridge = delegate.bridge
@@ -414,9 +452,17 @@ class CapacitorGoogleMap(
                     }
 
 
-                    val googleMapMarker = googleMap?.addMarker(markerOptions)
+
+//                    val googleMapMarker = googleMap?.addMarker(markerOptions)
 
                     googleMapMarker?.tag = marker
+
+                    if (!marker.infoIcon.isNullOrEmpty() && marker.infoIcon.equals("show_info_window_on_zoom")) {
+                        val bridge = delegate.bridge
+                        googleMapMarker?.tag = marker
+                        googleMap?.setInfoWindowAdapter(AlertMarkerInfoWindow(bridge.context))
+                        googleMapMarker?.showInfoWindow()
+                    }
 
                     if (!marker.infoIcon.isNullOrEmpty() && !marker.infoIcon.equals("not_show_info_window")) {
                         if(marker.infoIcon.equals("buses_info_icon")) {
@@ -632,7 +678,15 @@ class CapacitorGoogleMap(
                         //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
                         if (marker.rotation == 1) {
-                            oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
+                            Log.d("MapDebug setmarkerPosition", "angleDiff = ${marker.angleDiff}")
+//                            if(marker.angleDiff>0){
+//                                oldMarker?.googleMapMarker?.rotation = marker.angleDiff
+//                            }
+//                            else{
+//                                oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
+//                            }
+                            val targetAngle = if (marker.angleDiff > 0) marker.angleDiff else getAngle(marker.coordinate)
+                            oldMarker.googleMapMarker?.let { rotateMarkerSmoothly(it, targetAngle) }
                         } else {
                             oldMarker?.googleMapMarker?.rotation = 0.0f
                         }
@@ -767,7 +821,12 @@ class CapacitorGoogleMap(
 
 
                 if(marker.rotation == 1){
-                    oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
+                    if(marker.angleDiff>0){
+                        oldMarker?.googleMapMarker?.rotation = marker.angleDiff
+                    }
+                    else {
+                        oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
+                    }
                 }else{
                     oldMarker?.googleMapMarker?.rotation =  0.0f
                 }
@@ -1669,3 +1728,4 @@ fun getLatLngBoundsJSObject(bounds: LatLngBounds): JSObject {
 
     return data
 }
+

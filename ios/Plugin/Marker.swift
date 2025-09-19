@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 
 public struct Marker {
+    let angleDiff: Double?
     let coordinate: LatLng
     let opacity: Float?
     let title: String?
@@ -84,6 +85,7 @@ public struct Marker {
         self.color = tintColor
         self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
         self.rotation = fromJSObject["rotation"] as? Double
+        self.angleDiff = fromJSObject["angleDiff"] as? Double
         self.infoData = fromJSObject["infoData"] as? JSObject
         self.infoIcon = fromJSObject["infoIcon"] as? String
         self.id = fromJSObject["id"] as? String

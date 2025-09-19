@@ -404,7 +404,13 @@ public class Map {
                 }
                 do {
                     if((marker.rotation) == 1){
-                        newMarker.rotation =  try getAngle(marker: marker)
+                        if((marker.angleDiff ?? 0) > 0){
+                            newMarker.rotation = marker.angleDiff ?? 0
+                        }
+                        else{
+                            newMarker.rotation =  try getAngle(marker: marker)
+                        }
+                        
                     }else{
                         newMarker.rotation =  0
                     }
@@ -576,7 +582,13 @@ public class Map {
                     do {
                         // Set the map style by passing the URL of the local file.
                         if((marker.rotation) == 1){
-                            oldMarker.rotation =  try self.getAngle(marker: marker)
+                            if(marker.angleDiff ?? 0 > 0){
+                                oldMarker.rotation = marker.angleDiff ?? 0
+                            }
+                            else{
+                                oldMarker.rotation =  try self.getAngle(marker: marker)
+                            }
+                            
                         }else{
                             oldMarker.rotation =  0
                         }
@@ -671,7 +683,13 @@ public class Map {
                  do {
                      // Set the map style by passing the URL of the local file.
                      if((marker.rotation) == 1){
+                         if(marker.angleDiff ?? 0 > 0){
+                             oldMarker.rotation =  marker.angleDiff ?? 0
+                         }
+                         else{
                              oldMarker.rotation =  try self.getAngle(marker: marker)
+                         }
+                             
                      }else{
                          oldMarker.rotation =  0
                      }
