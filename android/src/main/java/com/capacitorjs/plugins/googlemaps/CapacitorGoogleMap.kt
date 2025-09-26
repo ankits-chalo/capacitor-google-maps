@@ -410,9 +410,8 @@ class CapacitorGoogleMap(
                         val bridge = delegate.bridge
                         val overSpeedMarker = OverSpeedCustomMarker(bridge.context)
 
-                         // Convert the iconUrl string ("overspeed_marker") into a drawable resource ID
                         val resId = bridge.context.resources.getIdentifier(
-                        marker.iconUrl, // e.g. "overspeed_marker"
+                        marker.iconUrl,
                          "drawable",
                          bridge.context.packageName
                         )
