@@ -1170,6 +1170,13 @@ to determine if a position is a 2D or 3D position.
 <code>number[]</code>
 
 
+#### Marker
+
+Supports markers of either either "legacy" or "advanced" types.
+
+<code>google.maps.<a href="#marker">Marker</a> | google.maps.marker.AdvancedMarkerElement</code>
+
+
 ### Enums
 
 
