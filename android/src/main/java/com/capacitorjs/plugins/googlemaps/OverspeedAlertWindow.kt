@@ -15,11 +15,6 @@ class OverSpeedCustomMarker(private val context: Context) {
     private val alertSnippet = view.findViewById<TextView>(R.id.alertSnippet)
     private val alertIconImage = view.findViewById<ImageView>(R.id.alertIconImage)
 
-    /**
-     * @param title (e.g. "Started at 10:30 AM")
-     * @param snippet (e.g. "MG Road, Bangalore")
-     * @param iconRes (drawable for overspeed marker, fallback to bus alert inactive if null)
-     */
     fun getMarkerIcon(title: String, snippet: String?, iconRes: Int? = null): BitmapDescriptor {
         
         alertTitle.text = title
