@@ -229,6 +229,10 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         }  else if(iconUrl?.contains("alert_stop_custom_marker") == true) {
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
+        } else if(iconUrl?.contains("overspeed_marker") == true) {
+            val busesMarker = OverSpeedCustomMarker(context)
+            val resId = context.resources.getIdentifier(iconUrl, "drawable", context.packageName)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, resId))
         }
 
     }
