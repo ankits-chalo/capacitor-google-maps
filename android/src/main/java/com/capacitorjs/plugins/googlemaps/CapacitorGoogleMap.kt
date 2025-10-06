@@ -406,6 +406,19 @@ class CapacitorGoogleMap(
                         markerOptions.title("")
                     }
 
+                    if(marker.iconUrl?.contains("overspeed_marker") == true) {
+                        val bridge = delegate.bridge
+                        val overSpeedMarker = OverSpeedCustomMarker(bridge.context)
+
+                        val resId = bridge.context.resources.getIdentifier(
+                        marker.iconUrl,
+                         "drawable",
+                         bridge.context.packageName
+                        )
+
+                        markerOptions.icon(overSpeedMarker.getMarkerIcon(marker.title, marker.snippet, resId))
+                        markerOptions.title("")
+                    }
 
                     if(marker.infoIcon.equals("not_show_info_window")) {
 //                        To remove info window set title as empty string
