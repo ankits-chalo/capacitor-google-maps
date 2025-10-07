@@ -128,6 +128,7 @@ public class Map {
     var timer : Timer?
     var infoWindowMarkers = [Int: GMSMarker]()
     // swiftlint:disable identifier_name
+    var multipleInfoWindowZoomLevel: Float = 10.0
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
@@ -340,10 +341,13 @@ public class Map {
                 }
                 newMarker.userData = marker
                 if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
-                                // Create info window as separate marker
-                                self.createInfoWindowAsMarker(for: newMarker, markerData: marker)
-                            }
-                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window") {
+                               let currentZoom = self.mapViewController.GMapView.camera.zoom
+                               if currentZoom >= self.multipleInfoWindowZoomLevel {
+                                   // Create info window as separate marker only if zoom level is sufficient
+                                   self.createInfoWindowAsMarker(for: newMarker, markerData: marker)
+                               }
+                           }
+                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
                         fetchAddressForMarker(newMarker)
@@ -352,7 +356,11 @@ public class Map {
                         mapView.selectedMarker = newMarker
                     }
                 }
-                if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
+                if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window"), infoIcon.contains("multiple_info_window") {
+                    newMarker.title = ""
+                    newMarker.snippet = ""
+                }
+                if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
                     newMarker.title = ""
                     newMarker.snippet = ""
                 }
@@ -464,6 +472,7 @@ public class Map {
                 "originalMarkerId": originalMarker.hash.hashValue,
                 "markerData": markerData
             ]
+            infoWindowMarker.zIndex = 1000
             
             // Create custom view for info window
             let infoWindowView = MultipleInfoWindowView.instanceFromNib()
@@ -502,6 +511,43 @@ public class Map {
             }
         }
     }
+    func updateInfoWindowsForCurrentZoom() {
+        DispatchQueue.main.async {
+            let currentZoom = self.mapViewController.GMapView.camera.zoom
+            
+            if currentZoom >= self.multipleInfoWindowZoomLevel {
+                // Show all multiple info windows
+                self.showAllMultipleInfoWindows()
+            } else {
+                // Hide all multiple info windows
+                self.hideAllMultipleInfoWindows()
+            }
+        }
+    }
+
+    private func showAllMultipleInfoWindows() {
+        // Find all markers that should have multiple info windows and create them
+        for (markerId, marker) in self.markers {
+            if let markerData = marker.userData as? Marker,
+               let infoIcon = markerData.infoIcon,
+               infoIcon.contains("multiple_info_window"),
+               self.infoWindowMarkers[markerId] == nil { // Only create if not already exists
+                
+                self.createInfoWindowAsMarker(for: marker, markerData: markerData)
+            }
+        }
+    }
+
+    private func hideAllMultipleInfoWindows() {
+        // Remove all multiple info window markers
+        for (markerId, infoWindowMarker) in self.infoWindowMarkers {
+            infoWindowMarker.map = nil
+        }
+        self.infoWindowMarkers.removeAll()
+    }
+    func onCameraMove() {
+        self.updateInfoWindowsForCurrentZoom()
+    }
     
     func setMarkerPosition(marker: Marker) throws  -> String  {
         if let oldMarker = self.markers[Int(marker.id!)!] {
@@ -533,11 +579,28 @@ public class Map {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(2.0)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                    let currentZoom = self.mapViewController.GMapView.camera.zoom
+                    let shouldShowInfoWindow = currentZoom >= self.multipleInfoWindowZoomLevel
                     if let infoWindowMarker = self.infoWindowMarkers[oldMarker.hash.hashValue] {
-                                    let newInfoWindowPosition = self.calculateInfoWindowPosition(for: oldMarker.position)
-                                    infoWindowMarker.position = newInfoWindowPosition
+                                    if shouldShowInfoWindow {
+                                        // Update info window position if exists and should be shown
+                                        let newInfoWindowPosition = self.calculateInfoWindowPosition(for: oldMarker.position)
+                                        infoWindowMarker.position = newInfoWindowPosition
+                                        infoWindowMarker.map = self.mapViewController.GMapView // Ensure it's on map
+                                    } else {
+                                        // Hide info window if zoom level is too low
+                                        infoWindowMarker.map = nil
+                                    }
+                                } else if shouldShowInfoWindow {
+                                    // Create info window if it doesn't exist but should be shown
+                                    // Check if this marker is supposed to have multiple info window
+                                    if let markerData = oldMarker.userData as? Marker,
+                                       let infoIcon = markerData.infoIcon,
+                                       infoIcon.contains("multiple_info_window") {
+                                        self.createInfoWindowAsMarker(for: oldMarker, markerData: markerData)
+                                    }
                                 }
-                    if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window") {
+                    if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                         oldMarker.title = marker.title
                         oldMarker.snippet = marker.snippet
                     }
@@ -614,7 +677,7 @@ public class Map {
                         self.mapViewController.GMapView.selectedMarker = oldMarker
                     }
                     oldMarker.userData = marker
-                    if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
+                    if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window"){
                         oldMarker.map = mapView
                         if let infoData = marker.infoData {
                             let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
@@ -667,7 +730,7 @@ public class Map {
                     }
                     
                     // If the marker is the selected marker, refresh the info window
-                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil && !(marker.infoIcon?.contains("not_show_info_window") ?? false)
+                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil && !(marker.infoIcon?.contains("not_show_info_window") ?? false) && !(marker.infoIcon?.contains("multiple_info_window") ?? false)
                     if showInfoIcon {
 //                            self.mapViewController.GMapView.selectedMarker = nil
                         oldMarker.map = self.mapViewController.GMapView
@@ -1473,7 +1536,6 @@ extension UIImage {
 class MultipleInfoWindowView: UIView {
     var titleLabel: UILabel!
     var snippetLabel: UILabel!
-    var closeButton: UIButton!
     var containerView: UIView!
     
     var onClose: (() -> Void)?
@@ -1516,19 +1578,10 @@ class MultipleInfoWindowView: UIView {
         snippetLabel.textColor = .darkGray
         snippetLabel.numberOfLines = 2
         
-        // Close button
-        closeButton = UIButton(type: .system)
-        closeButton.setTitle("×", for: .normal)
-        closeButton.setTitleColor(.darkGray, for: .normal)
-        closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        closeButton.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
-        closeButton.layer.cornerRadius = 10
-        
-        // Add subviews
+                // Add subviews
         containerView.addSubview(titleLabel)
         containerView.addSubview(snippetLabel)
-        containerView.addSubview(closeButton)
+
         self.addSubview(containerView)
         
         setupConstraints()
@@ -1538,7 +1591,6 @@ class MultipleInfoWindowView: UIView {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         snippetLabel.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -1546,14 +1598,10 @@ class MultipleInfoWindowView: UIView {
             containerView.topAnchor.constraint(equalTo: self.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             
-            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
-            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -4),
-            closeButton.widthAnchor.constraint(equalToConstant: 20),
-            closeButton.heightAnchor.constraint(equalToConstant: 20),
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -8),
+
             
             snippetLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
             snippetLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
@@ -1561,14 +1609,10 @@ class MultipleInfoWindowView: UIView {
             snippetLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8)
         ])
     }
-    
-    @objc func closeButtonTapped(_ sender: UIButton) {
-        onClose?()
-    }
-    
+        
     func configureWith(title: String?, snippet: String?, iconUrl: String?) {
         titleLabel.text = title
-        snippetLabel.text = snippet
+//        snippetLabel.text = snippet
         
         // Adjust size based on content
         if let title = title, let snippet = snippet {
@@ -1580,8 +1624,9 @@ class MultipleInfoWindowView: UIView {
                 context: nil
             )
             
-            let height = max(70, 8 + titleSize.height + 4 + snippetSize.height + 8)
-            self.frame.size = CGSize(width: 200, height: height)
+            let height = titleSize.height + 12
+            let width = titleSize.width + 18
+            self.frame.size = CGSize(width: width, height: height)
         }
     }
 }

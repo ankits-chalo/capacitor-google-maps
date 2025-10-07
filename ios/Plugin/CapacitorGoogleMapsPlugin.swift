@@ -580,6 +580,31 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
+    @objc func setMultipleInfoWindowZoomLevel(_ call: CAPPluginCall) {
+        do {
+            guard let id = call.getString("id") else {
+                throw GoogleMapErrors.invalidMapId
+            }
+
+            guard let zoomLevel = call.getFloat("zoomLevel") else {
+                throw GoogleMapErrors.invalidArguments("zoomLevel is missing")
+            }
+
+            guard let map = self.maps[id] else {
+                throw GoogleMapErrors.mapNotFound
+            }
+
+            // 🔥 ADD THIS - Set the zoom level threshold
+            map.multipleInfoWindowZoomLevel = zoomLevel
+            
+            // Update existing info windows based on new zoom level
+            map.updateInfoWindowsForCurrentZoom()
+
+            call.resolve()
+        } catch {
+            handleError(call, error: error)
+        }
+    }
 
     @objc func enableIndoorMaps(_ call: CAPPluginCall) {
         do {
@@ -1504,6 +1529,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
+                
+            } else if(imageUrl.contains("multiple_info_window")) {
+                return nil
+            
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
@@ -1568,6 +1597,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         for (mapId, map) in self.maps {
             if map.mapViewController.GMapView === mapView {
+                map.onCameraMove()
                 if(map.mapViewController.isCircleShow == true){
                     let height = map.mapViewController.circleView.frame.height
                     let xCenter = map.mapViewController.circleView.frame.origin.x
