@@ -126,6 +126,7 @@ public class Map {
     var removeMarkersArray = [removeArrayClass]()
     var polylineCords = [LatLng]()
     var timer : Timer?
+    var infoWindowMarkers = [Int: GMSMarker]()
     // swiftlint:disable identifier_name
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
@@ -338,6 +339,10 @@ public class Map {
                     newMarker.snippet = marker.snippet
                 }
                 newMarker.userData = marker
+                if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
+                                // Create info window as separate marker
+                                self.createInfoWindowAsMarker(for: newMarker, markerData: marker)
+                            }
                 if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window") {
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
@@ -404,13 +409,7 @@ public class Map {
                 }
                 do {
                     if((marker.rotation) == 1){
-                        if((marker.angleDiff ?? 0) > 0){
-                            newMarker.rotation = marker.angleDiff ?? 0
-                        }
-                        else{
-                            newMarker.rotation =  try getAngle(marker: marker)
-                        }
-                        
+                        newMarker.rotation =  try getAngle(marker: marker)
                     }else{
                         newMarker.rotation =  0
                     }
@@ -445,6 +444,65 @@ public class Map {
         
     }
     
+    // ... after addMarker method ...
+
+    // 🔥 ADD THESE 4 NEW METHODS:
+
+    private func createInfoWindowAsMarker(for originalMarker: GMSMarker, markerData: Marker) {
+        DispatchQueue.main.async {
+            // Calculate position above the original marker
+            let infoWindowPosition = self.calculateInfoWindowPosition(for: originalMarker.position)
+            
+            // Create info window marker
+            let infoWindowMarker = GMSMarker()
+            infoWindowMarker.position = infoWindowPosition
+            infoWindowMarker.groundAnchor = CGPoint(x: 0.5, y: 1.0) // Anchor at bottom center
+            infoWindowMarker.isFlat = true
+            infoWindowMarker.isTappable = true
+            infoWindowMarker.userData = [
+                "type": "infoWindow",
+                "originalMarkerId": originalMarker.hash.hashValue,
+                "markerData": markerData
+            ]
+            
+            // Create custom view for info window
+            let infoWindowView = MultipleInfoWindowView.instanceFromNib()
+            infoWindowView.configureWith(
+                title: markerData.title,
+                snippet: markerData.snippet,
+                iconUrl: markerData.infoIcon?.replacingOccurrences(of: "multiple_info_window", with: "info_icon")
+            )
+            
+            infoWindowView.onClose = { [weak self] in
+                self?.removeInfoWindowMarker(for: originalMarker.hash.hashValue)
+            }
+            
+            infoWindowMarker.iconView = infoWindowView
+            infoWindowMarker.map = self.mapViewController.GMapView
+            
+            // Store reference
+            self.infoWindowMarkers[originalMarker.hash.hashValue] = infoWindowMarker
+        }
+    }
+
+    private func calculateInfoWindowPosition(for markerPosition: CLLocationCoordinate2D) -> CLLocationCoordinate2D {
+        // Calculate position slightly above the marker (adjust offset based on your needs)
+        let offset: Double = 0.0002
+        return CLLocationCoordinate2D(
+            latitude: markerPosition.latitude + offset,
+            longitude: markerPosition.longitude
+        )
+    }
+
+    private func removeInfoWindowMarker(for originalMarkerId: Int) {
+        DispatchQueue.main.async {
+            if let infoWindowMarker = self.infoWindowMarkers[originalMarkerId] {
+                infoWindowMarker.map = nil
+                self.infoWindowMarkers.removeValue(forKey: originalMarkerId)
+            }
+        }
+    }
+    
     func setMarkerPosition(marker: Marker) throws  -> String  {
         if let oldMarker = self.markers[Int(marker.id!)!] {
             DispatchQueue.main.sync {
@@ -472,21 +530,13 @@ public class Map {
                 }
 
                 if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) || self.markerIdNotOnCluster.contains(String(marker.id!)) {
-                    
-                    var duration = 2.0
-                    
-                    if let infoData = marker.infoData {
-                        // Taking duration value form infoData
-                        let animationDuration = (infoData["animationDuration"] as? Double) ??
-                                                   (Double(infoData["animationDuration"] as? String ?? "")) ??
-                                                   2000
-
-                           duration = animationDuration > 0 ? animationDuration / 1000 : 0
-                    }
-                    
                     CATransaction.begin()
-                    CATransaction.setAnimationDuration(duration)
+                    CATransaction.setAnimationDuration(2.0)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                    if let infoWindowMarker = self.infoWindowMarkers[oldMarker.hash.hashValue] {
+                                    let newInfoWindowPosition = self.calculateInfoWindowPosition(for: oldMarker.position)
+                                    infoWindowMarker.position = newInfoWindowPosition
+                                }
                     if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window") {
                         oldMarker.title = marker.title
                         oldMarker.snippet = marker.snippet
@@ -582,13 +632,7 @@ public class Map {
                     do {
                         // Set the map style by passing the URL of the local file.
                         if((marker.rotation) == 1){
-                            if(marker.angleDiff ?? 0 > 0){
-                                oldMarker.rotation = marker.angleDiff ?? 0
-                            }
-                            else{
-                                oldMarker.rotation =  try self.getAngle(marker: marker)
-                            }
-                            
+                            oldMarker.rotation =  try self.getAngle(marker: marker)
                         }else{
                             oldMarker.rotation =  0
                         }
@@ -683,13 +727,7 @@ public class Map {
                  do {
                      // Set the map style by passing the URL of the local file.
                      if((marker.rotation) == 1){
-                         if(marker.angleDiff ?? 0 > 0){
-                             oldMarker.rotation =  marker.angleDiff ?? 0
-                         }
-                         else{
                              oldMarker.rotation =  try self.getAngle(marker: marker)
-                         }
-                             
                      }else{
                          oldMarker.rotation =  0
                      }
@@ -1009,6 +1047,7 @@ public class Map {
         if (id != 0) {
             if let marker = self.markers[id] {
                 DispatchQueue.main.async {
+                    self.removeInfoWindowMarker(for: id)
                     if self.mapViewController.clusteringEnabled {
                         self.mapViewController.removeMarkersFromCluster(markers: [marker])
                     }
@@ -1424,5 +1463,125 @@ extension UIImage {
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return resizedImage
+    }
+}
+
+// ... at the very end of Map.swift file, after all other code ...
+
+// 🔥 ADD THIS ENTIRE CLASS:
+
+class MultipleInfoWindowView: UIView {
+    var titleLabel: UILabel!
+    var snippetLabel: UILabel!
+    var closeButton: UIButton!
+    var containerView: UIView!
+    
+    var onClose: (() -> Void)?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
+    
+    class func instanceFromNib() -> MultipleInfoWindowView {
+        return MultipleInfoWindowView(frame: CGRect(x: 0, y: 0, width: 200, height: 80))
+    }
+    
+    private func setupView() {
+        // Container view with shadow
+        containerView = UIView()
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 8
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        containerView.layer.shadowOpacity = 0.3
+        containerView.layer.shadowRadius = 4
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.lightGray.cgColor
+        
+        // Title label
+        titleLabel = UILabel()
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        titleLabel.textColor = .black
+        titleLabel.numberOfLines = 1
+        
+        // Snippet label
+        snippetLabel = UILabel()
+        snippetLabel.font = UIFont.systemFont(ofSize: 12)
+        snippetLabel.textColor = .darkGray
+        snippetLabel.numberOfLines = 2
+        
+        // Close button
+        closeButton = UIButton(type: .system)
+        closeButton.setTitle("×", for: .normal)
+        closeButton.setTitleColor(.darkGray, for: .normal)
+        closeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        closeButton.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        closeButton.layer.cornerRadius = 10
+        
+        // Add subviews
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(snippetLabel)
+        containerView.addSubview(closeButton)
+        self.addSubview(containerView)
+        
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        snippetLabel.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: self.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
+            closeButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -4),
+            closeButton.widthAnchor.constraint(equalToConstant: 20),
+            closeButton.heightAnchor.constraint(equalToConstant: 20),
+            
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
+            titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -8),
+            
+            snippetLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+            snippetLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
+            snippetLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
+            snippetLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8)
+        ])
+    }
+    
+    @objc func closeButtonTapped(_ sender: UIButton) {
+        onClose?()
+    }
+    
+    func configureWith(title: String?, snippet: String?, iconUrl: String?) {
+        titleLabel.text = title
+        snippetLabel.text = snippet
+        
+        // Adjust size based on content
+        if let title = title, let snippet = snippet {
+            let titleSize = title.size(withAttributes: [.font: titleLabel.font!])
+            let snippetSize = snippet.boundingRect(
+                with: CGSize(width: 170, height: 100),
+                options: .usesLineFragmentOrigin,
+                attributes: [.font: snippetLabel.font!],
+                context: nil
+            )
+            
+            let height = max(70, 8 + titleSize.height + 4 + snippetSize.height + 8)
+            self.frame.size = CGSize(width: 200, height: height)
+        }
     }
 }

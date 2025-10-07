@@ -67,11 +67,12 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    private var locationManager = CLLocationManager()
 
     func checkLocationPermission() -> String {
         let locationState: String
 
-        switch CLLocationManager.authorizationStatus() {
+        switch self.locationManager.authorizationStatus {
         case .notDetermined:
             locationState = "prompt"
         case .restricted, .denied:
@@ -296,6 +297,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             try map.removeMarker(id: markerId)
+            
 
             call.resolve()
 
@@ -683,7 +685,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
             }
 
-            if enabled && checkLocationPermission() != "granted" {
+            let locationStatus = checkLocationPermission()
+
+            if enabled &&  !(locationStatus == "granted" || locationStatus == "prompt") {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
 
@@ -1321,6 +1325,22 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if let userData = marker.userData as? [String: Any],
+              userData["type"] as? String == "infoWindow",
+              let originalMarkerId = userData["originalMarkerId"] as? Int,
+              let markerData = userData["markerData"] as? Marker {
+               
+               self.notifyListeners("onInfoWindowClick", data: [
+                   "mapId": self.findMapIdByMapView(mapView),
+                   "markerId": String(originalMarkerId),
+                   "latitude": marker.position.latitude,
+                   "longitude": marker.position.longitude,
+                   "title": markerData.title ?? "",
+                   "snippet": markerData.snippet ?? "",
+                   "isCustomInfoWindow": true
+               ])
+               return true
+           }
         if let cluster = marker.userData as? GMUCluster {
             var items: [[String: Any?]] = []
 
@@ -1484,20 +1504,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
-            } else if(imageUrl.contains("replay_info_icon")) {
-                let historyReplayInfo = HistoryReplayInfoWindow.instanceFromNib()
-                
-                let latTitle = userData.infoData?["latTitle"] as? String ?? "Lat : "
-                let longTitle = userData.infoData?["longTitle"] as? String ?? "Long : "
-                let speedTitle = userData.infoData?["speedTitle"] as? String ?? "Speed : "
-                let timeTitle = userData.infoData?["timeTitle"] as? String ?? "Time : "
-                
-                historyReplayInfo.latTitle.text = latTitle
-                historyReplayInfo.longTitle.text = longTitle
-                historyReplayInfo.speedTitle.text = speedTitle
-                historyReplayInfo.timeTitle.text = timeTitle
-                
-                return historyReplayInfo
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
