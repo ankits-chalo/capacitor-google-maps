@@ -1042,18 +1042,7 @@ class CapacitorGoogleMap(
             callback(e)
         }
     }
-    fun setMultipleInfoWindowZoomLevel(zoomLevel: Float, callback: (error: GoogleMapsError?) -> Unit) {
-        try {
-            CoroutineScope(Dispatchers.Main).launch {
-                multipleInfoWindowZoomLevel = zoomLevel
-                updateInfoWindowsForCurrentZoom()
-                callback(null)
-            }
-        } catch (e: GoogleMapsError) {
-            callback(e)
-        }
-    }
-
+    
     fun removeMarker(id: String, callback: (error: GoogleMapsError?) -> Unit) {
         try {
             googleMap ?: throw GoogleMapNotAvailable()
