@@ -67,12 +67,11 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
-    private var locationManager = CLLocationManager()
 
     func checkLocationPermission() -> String {
         let locationState: String
 
-        switch self.locationManager.authorizationStatus {
+        switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
             locationState = "prompt"
         case .restricted, .denied:
@@ -580,32 +579,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-    @objc func setMultipleInfoWindowZoomLevel(_ call: CAPPluginCall) {
-        do {
-            guard let id = call.getString("id") else {
-                throw GoogleMapErrors.invalidMapId
-            }
-
-            guard let zoomLevel = call.getFloat("zoomLevel") else {
-                throw GoogleMapErrors.invalidArguments("zoomLevel is missing")
-            }
-
-            guard let map = self.maps[id] else {
-                throw GoogleMapErrors.mapNotFound
-            }
-
-            // 🔥 ADD THIS - Set the zoom level threshold
-            map.multipleInfoWindowZoomLevel = zoomLevel
-            
-            // Update existing info windows based on new zoom level
-            map.updateInfoWindowsForCurrentZoom()
-
-            call.resolve()
-        } catch {
-            handleError(call, error: error)
-        }
-    }
-
+    
     @objc func enableIndoorMaps(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {

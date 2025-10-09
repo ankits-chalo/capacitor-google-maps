@@ -452,9 +452,6 @@ public class Map {
         
     }
     
-    // ... after addMarker method ...
-
-    // 🔥 ADD THESE 4 NEW METHODS:
 
     private func createInfoWindowAsMarker(for originalMarker: GMSMarker, markerData: Marker) {
         DispatchQueue.main.async {
@@ -464,7 +461,7 @@ public class Map {
             // Create info window marker
             let infoWindowMarker = GMSMarker()
             infoWindowMarker.position = infoWindowPosition
-            infoWindowMarker.groundAnchor = CGPoint(x: 0.4, y: 1.0) // Anchor at bottom center
+            infoWindowMarker.groundAnchor = CGPoint(x: 0.4, y: 1.0) 
             infoWindowMarker.isFlat = true
             infoWindowMarker.isTappable = true
             infoWindowMarker.userData = [
@@ -574,8 +571,18 @@ public class Map {
                 }
 
                 if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) || self.markerIdNotOnCluster.contains(String(marker.id!)) {
+                                   var duration = 2.0
+                    
+                    if let infoData = marker.infoData {
+                        // Taking duration value form infoData
+                        let animationDuration = (infoData["animationDuration"] as? Double) ??
+                                                   (Double(infoData["animationDuration"] as? String ?? "")) ??
+                                                   2000
+
+                           duration = animationDuration > 0 ? animationDuration / 1000 : 0
+                    }
                     CATransaction.begin()
-                    CATransaction.setAnimationDuration(2.0)
+                    CATransaction.setAnimationDuration(duration)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
                     let currentZoom = self.mapViewController.GMapView.camera.zoom
                     let shouldShowInfoWindow = currentZoom >= self.multipleInfoWindowZoomLevel
