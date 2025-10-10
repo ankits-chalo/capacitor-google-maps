@@ -433,11 +433,6 @@ class CapacitorGoogleMap(
 //                        markerOptions.title("")
 //                        markerOptions.snippet("")
                     }
-                    if(marker.infoIcon.equals("multiple_info_window")) {
-//                        To remove info window set title as empty string
-                        markerOptions.title("")
-                        markerOptions.snippet("")
-                    }
 
 //                    val googleMapMarker = googleMap?.addMarker(markerOptions)
 
