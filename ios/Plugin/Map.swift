@@ -464,7 +464,7 @@ public class Map {
             // Create info window marker
             let infoWindowMarker = GMSMarker()
             infoWindowMarker.position = infoWindowPosition
-            infoWindowMarker.groundAnchor = CGPoint(x: 0.5, y: 1.0) // Anchor at bottom center
+            infoWindowMarker.groundAnchor = CGPoint(x: 0.4, y: 1.0) // Anchor at bottom center
             infoWindowMarker.isFlat = true
             infoWindowMarker.isTappable = true
             infoWindowMarker.userData = [
@@ -479,7 +479,7 @@ public class Map {
             infoWindowView.configureWith(
                 title: markerData.title,
                 snippet: markerData.snippet,
-                iconUrl: markerData.infoIcon?.replacingOccurrences(of: "multiple_info_window", with: "info_icon")
+                iconUrl: markerData.infoIcon
             )
             
             infoWindowView.onClose = { [weak self] in
@@ -495,10 +495,8 @@ public class Map {
     }
 
     private func calculateInfoWindowPosition(for markerPosition: CLLocationCoordinate2D) -> CLLocationCoordinate2D {
-        // Calculate position slightly above the marker (adjust offset based on your needs)
-        let offset: Double = 0.0002
         return CLLocationCoordinate2D(
-            latitude: markerPosition.latitude + offset,
+            latitude: markerPosition.latitude ,
             longitude: markerPosition.longitude
         )
     }
@@ -1122,6 +1120,10 @@ public class Map {
 
                     marker.map = nil
                     self.markers.removeValue(forKey: id)
+                    if let infoWindowMarker = self.infoWindowMarkers[id] {
+                        infoWindowMarker.map = nil
+                        self.infoWindowMarkers.removeValue(forKey: id)
+                    }
             }
         } else {
             throw GoogleMapErrors.markerNotFound
@@ -1529,104 +1531,4 @@ extension UIImage {
     }
 }
 
-// ... at the very end of Map.swift file, after all other code ...
 
-// 🔥 ADD THIS ENTIRE CLASS:
-
-class MultipleInfoWindowView: UIView {
-    var titleLabel: UILabel!
-    var snippetLabel: UILabel!
-    var containerView: UIView!
-    
-    var onClose: (() -> Void)?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
-    }
-    
-    class func instanceFromNib() -> MultipleInfoWindowView {
-        return MultipleInfoWindowView(frame: CGRect(x: 0, y: 0, width: 200, height: 80))
-    }
-    
-    private func setupView() {
-        // Container view with shadow
-        containerView = UIView()
-        containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 8
-        containerView.layer.shadowColor = UIColor.black.cgColor
-        containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        containerView.layer.shadowOpacity = 0.3
-        containerView.layer.shadowRadius = 4
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.lightGray.cgColor
-        
-        // Title label
-        titleLabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        titleLabel.textColor = .black
-        titleLabel.numberOfLines = 1
-        
-        // Snippet label
-        snippetLabel = UILabel()
-        snippetLabel.font = UIFont.systemFont(ofSize: 12)
-        snippetLabel.textColor = .darkGray
-        snippetLabel.numberOfLines = 2
-        
-                // Add subviews
-        containerView.addSubview(titleLabel)
-        containerView.addSubview(snippetLabel)
-
-        self.addSubview(containerView)
-        
-        setupConstraints()
-    }
-    
-    private func setupConstraints() {
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        snippetLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            containerView.topAnchor.constraint(equalTo: self.topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            
-            
-            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-
-            
-            snippetLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            snippetLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            snippetLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
-            snippetLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8)
-        ])
-    }
-        
-    func configureWith(title: String?, snippet: String?, iconUrl: String?) {
-        titleLabel.text = title
-//        snippetLabel.text = snippet
-        
-        // Adjust size based on content
-        if let title = title, let snippet = snippet {
-            let titleSize = title.size(withAttributes: [.font: titleLabel.font!])
-            let snippetSize = snippet.boundingRect(
-                with: CGSize(width: 170, height: 100),
-                options: .usesLineFragmentOrigin,
-                attributes: [.font: snippetLabel.font!],
-                context: nil
-            )
-            
-            let height = titleSize.height + 12
-            let width = titleSize.width + 18
-            self.frame.size = CGSize(width: width, height: height)
-        }
-    }
-}
