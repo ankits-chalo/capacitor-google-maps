@@ -1324,22 +1324,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
     // onClusterClick, onMarkerClick
     public func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        if let userData = marker.userData as? [String: Any],
-              userData["type"] as? String == "infoWindow",
-              let originalMarkerId = userData["originalMarkerId"] as? Int,
-              let markerData = userData["markerData"] as? Marker {
-               
-               self.notifyListeners("onInfoWindowClick", data: [
-                   "mapId": self.findMapIdByMapView(mapView),
-                   "markerId": String(originalMarkerId),
-                   "latitude": marker.position.latitude,
-                   "longitude": marker.position.longitude,
-                   "title": markerData.title ?? "",
-                   "snippet": markerData.snippet ?? "",
-                   "isCustomInfoWindow": true
-               ])
-               return true
-           }
         if let cluster = marker.userData as? GMUCluster {
             var items: [[String: Any?]] = []
 
@@ -1383,6 +1367,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
+            return true
             
         }
         return false

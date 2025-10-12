@@ -19,6 +19,7 @@ class MultipleInfoWindowView: UIView {
     private let arrowHeight: CGFloat = 8
     private let maxWidth: CGFloat = 300
     private let minWidth: CGFloat = 150
+    private let minHeight: CGFloat = 150
     private let iconSize: CGFloat = 16
     
     // Track which fields have content
@@ -52,10 +53,12 @@ class MultipleInfoWindowView: UIView {
         containerView.layer.shadowRadius = 4
         containerView.layer.shadowOffset = CGSize(width: 1, height: 2)
         containerView.layer.borderColor = UIColor.lightGray.cgColor
+        containerView.layer.zPosition = 0
         
         // Arrow view (downward pointing triangle)
         arrowView = UIView()
         arrowView.backgroundColor = .clear
+        arrowView.layer.zPosition = 1
         
         // Icon image view
         iconImageView = UIImageView()
@@ -155,7 +158,7 @@ class MultipleInfoWindowView: UIView {
     
     private func drawArrow() {
         let arrowPath = UIBezierPath()
-        arrowPath.move(to: CGPoint(x: 0, y: 0))
+        arrowPath.move(to: CGPoint(x: 0, y: -1))
         arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width, y: 0))
         arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width / 2, y: arrowView.bounds.height))
         arrowPath.close()
@@ -163,6 +166,7 @@ class MultipleInfoWindowView: UIView {
         let arrowLayer = CAShapeLayer()
         arrowLayer.path = arrowPath.cgPath
         arrowLayer.fillColor = UIColor.white.cgColor
+        arrowLayer.zPosition = 1
         
         arrowView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
         arrowView.layer.addSublayer(arrowLayer)
@@ -321,4 +325,7 @@ class MultipleInfoWindowView: UIView {
         
         return totalWidth
     }
+    func getMinimumSize() -> CGSize {
+           return CGSize(width: minWidth, height: minHeight)
+       }
 }
