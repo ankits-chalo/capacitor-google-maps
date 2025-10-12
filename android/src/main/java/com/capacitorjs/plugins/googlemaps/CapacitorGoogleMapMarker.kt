@@ -321,87 +321,9 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         }  else if(iconUrl?.contains("alert_stop_custom_marker") == true) {
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
-        } else if(iconUrl?.contains("new_3d_marker_north") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        } else if(iconUrl?.contains("new_3d_marker_ne1") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        } else if(iconUrl?.contains("new_3d_marker_ne2") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        } else if(iconUrl?.contains("new_3d_marker_ne3") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        } else if(iconUrl?.contains("new_3d_marker_east") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_se1") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_se2") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_se3") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_south") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_sw1") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_sw2") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }
-        else if(iconUrl?.contains("new_3d_marker_sw3") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_west") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_nw1") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_nw2") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
-        }else if(iconUrl?.contains("new_3d_marker_nw3") == true) {
-            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            googleMapMarker?.setIcon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)))
+        } else if (iconUrl?.contains("new_3d_marker") == true || iconUrl?.contains("new_3d_image") == true) {
+            val new3dMarker = New3dMarker(context)
+            googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!))
         }
 
     }

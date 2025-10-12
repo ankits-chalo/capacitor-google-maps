@@ -204,23 +204,17 @@ class MultipleInfoWindowView: UIView {
         
         // Configure based on the actual marker iconUrl patterns
         if let iconUrl = iconUrl, iconUrl.contains("halt") {
-            iconImageView.image = UIImage(named: "alert_halt_yellow")
-            iconImageView.tintColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0)
-            
-            // Add icon to the beginning of snippet stack view
+            iconImageView.image = UIImage(named: "alert_halted")
             snippetStackView.insertArrangedSubview(iconImageView, at: 0)
-            snippetLabel.textColor = UIColor(red: 0.8, green: 0.6, blue: 0.2, alpha: 1.0) // Yellow color
+            snippetLabel.textColor = UIColor(red: 0.678, green: 0.455, blue: 0.0, alpha: 1.0)
             snippetLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
             
         } else if let iconUrl = iconUrl, iconUrl.contains("inactive") {
             // Yellow theme for inactive GPS
-            iconImageView.image = UIImage(named: "alert_bus_inactive_red") // Replace with your actual image name
-            iconImageView.tintColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0)
-            
-            
-            // Add icon to the beginning of snippet stack view
+            iconImageView.image = UIImage(named: "alert_inactive")
+        
             snippetStackView.insertArrangedSubview(iconImageView, at: 0)
-            snippetLabel.textColor = UIColor(red: 0.8, green: 0.2, blue: 0.2, alpha: 1.0) // Red color
+            snippetLabel.textColor = UIColor(red: 0.776, green: 0.157, blue: 0.157, alpha: 1.0)
           
             snippetLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
             
