@@ -408,7 +408,14 @@ public class Map {
                         newMarker.iconView = alertMarker
                         newMarker.title = ""
                         newMarker.snippet = ""
-                    } else {
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("overspeed_marker") {
+                       let alertMarker = OverSpeedMarker.instanceFromNib()
+                        alertMarker.alertTitle.text = marker.title
+                        alertMarker.alertSnippet.text = marker.snippet
+                        newMarker.iconView = alertMarker
+                        newMarker.title = ""
+                        newMarker.snippet = ""
+                    }else {
                         // If it is present in assets folder then the icon is picked from it
 //                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
                         if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
@@ -736,7 +743,14 @@ public class Map {
                             oldMarker.iconView = alertMarker
                             oldMarker.title = ""
                             oldMarker.snippet = ""
-                        } else {
+                        } else if let iconUrl = marker.iconUrl, iconUrl.contains("overspeed_marker") {
+                           let alertMarker = OverSpeedMarker.instanceFromNib()
+                            alertMarker.alertTitle.text = marker.title
+                            alertMarker.alertSnippet.text = marker.snippet
+                            oldMarker.iconView = alertMarker
+                            oldMarker.title = ""
+                            oldMarker.snippet = ""
+                        }else {
                             // If it is present in assets folder then the icon is picked from it
 //                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
                             if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {

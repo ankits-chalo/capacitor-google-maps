@@ -324,6 +324,10 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         } else if (iconUrl?.contains("new_3d_marker") == true || iconUrl?.contains("new_3d_image") == true) {
             val new3dMarker = New3dMarker(context)
             googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!))
+        } else if(iconUrl?.contains("overspeed_marker") == true) {
+            val busesMarker = OverSpeedCustomMarker(context)
+            val resId = context.resources.getIdentifier(iconUrl, "drawable", context.packageName)
+            googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, resId))
         }
 
     }
