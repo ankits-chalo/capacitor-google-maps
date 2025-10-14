@@ -10,6 +10,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import android.graphics.drawable.Drawable
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 
 class MultipleInfoWindowView(private val context: Context) {
 
@@ -93,20 +96,58 @@ class MultipleInfoWindowView(private val context: Context) {
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
 
+
         // Update height after exact width measurement
         measuredHeight = container.measuredHeight.coerceAtLeast(minHeight)
 
         // Final layout
         container.layout(0, 0, measuredWidth, measuredHeight)
 
-        // Create bitmap without arrow space
-        val bitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = android.graphics.Canvas(bitmap)
+        // Create bitmap with shadow padding
+        val shadowPadding = dpToPx(8) // Extra space for shadow
+        val bitmapWidth = measuredWidth + shadowPadding * 2
+        val bitmapHeight = measuredHeight + shadowPadding * 2
 
-        // Draw container
+        val bitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        // Draw shadow
+        drawShadow(canvas, measuredWidth, measuredHeight-dpToPx(8), shadowPadding)
+
+        // Draw container on top of shadow (offset by shadow padding)
+        canvas.save()
+        canvas.translate(shadowPadding.toFloat(), shadowPadding.toFloat())
         container.draw(canvas)
+        canvas.restore()
 
         return bitmap
+    }
+
+    private fun drawShadow(canvas: Canvas, width: Int, height: Int, padding: Int) {
+        val shadowPaint = Paint().apply {
+            isAntiAlias = true
+            color = Color.TRANSPARENT
+            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(2, 0, 0, 0))
+        }
+
+        val rect = RectF(
+            padding.toFloat() - dpToPx(2).toFloat(),
+            padding.toFloat() - dpToPx(4).toFloat(),
+            (width + padding + dpToPx(2)).toFloat(),
+            (height + padding).toFloat()
+        )
+
+        // Draw shadow
+        canvas.drawRoundRect(rect, dpToPx(8).toFloat(), dpToPx(8).toFloat(), shadowPaint)
+
+        // Draw additional shadow layers for the specified effect
+        val shadowPaint2 = Paint().apply {
+            isAntiAlias = true
+            color = Color.TRANSPARENT
+            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(4, 0, 0, 0))
+        }
+
+        canvas.drawRoundRect(rect, dpToPx(4).toFloat(), dpToPx(4).toFloat(), shadowPaint2)
     }
 
     private fun getDrawableByName(drawableName: String): Drawable? {
