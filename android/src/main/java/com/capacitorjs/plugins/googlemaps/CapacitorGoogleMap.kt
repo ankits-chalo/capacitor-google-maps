@@ -1770,8 +1770,10 @@ class CapacitorGoogleMap(
     private fun updateInfoWindowsForCurrentZoom() {
         CoroutineScope(Dispatchers.Main).launch {
             val currentZoom = googleMap?.cameraPosition?.zoom ?: 0f
+            val shouldShowInfoWindows = currentZoom >= multipleInfoWindowZoomLevel
 
-            if (currentZoom >= multipleInfoWindowZoomLevel) {
+            // Immediate update without delay
+            if (shouldShowInfoWindows) {
                 showAllMultipleInfoWindows()
             } else {
                 hideAllMultipleInfoWindows()

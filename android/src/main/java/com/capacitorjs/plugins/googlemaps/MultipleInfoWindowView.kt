@@ -31,7 +31,8 @@ class MultipleInfoWindowView(private val context: Context) {
         titleText.text = marker.title ?: ""
 
         // Handle snippet with status-based styling
-        if (!marker.snippet.isNullOrEmpty()) {
+        val hasSnippet = !marker.snippet.isNullOrEmpty()
+        if (hasSnippet) {
             snippetContainer.visibility = View.VISIBLE
             snippetText.text = marker.snippet
 
@@ -110,9 +111,14 @@ class MultipleInfoWindowView(private val context: Context) {
 
         val bitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
+        val shadowHeightAdjustment = if (hasSnippet) {
+            dpToPx(12)
+        } else {
+            dpToPx(6)
+        }
 
         // Draw shadow
-        drawShadow(canvas, measuredWidth, measuredHeight-dpToPx(8), shadowPadding)
+        drawShadow(canvas, measuredWidth, measuredHeight-shadowHeightAdjustment, shadowPadding)
 
         // Draw container on top of shadow (offset by shadow padding)
         canvas.save()
@@ -132,9 +138,9 @@ class MultipleInfoWindowView(private val context: Context) {
 
         val rect = RectF(
             padding.toFloat() - dpToPx(2).toFloat(),
-            padding.toFloat() - dpToPx(4).toFloat(),
+            padding.toFloat() - dpToPx(2).toFloat(),
             (width + padding + dpToPx(2)).toFloat(),
-            (height + padding).toFloat()
+            (height).toFloat()
         )
 
         // Draw shadow
@@ -144,7 +150,7 @@ class MultipleInfoWindowView(private val context: Context) {
         val shadowPaint2 = Paint().apply {
             isAntiAlias = true
             color = Color.TRANSPARENT
-            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(4, 0, 0, 0))
+            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(32, 0, 0, 0))
         }
 
         canvas.drawRoundRect(rect, dpToPx(4).toFloat(), dpToPx(4).toFloat(), shadowPaint2)
