@@ -381,6 +381,7 @@ class CapacitorGoogleMap(
                 // we are returning ID that is already present.
                 if(markerIdOnWeb.contains(marker.getMarkerId())) {
                     for ((key, value) in markers) {
+
                         if(value.id == marker.getMarkerId()) {
                             markerId = key
                             break
@@ -753,7 +754,7 @@ class CapacitorGoogleMap(
                         //                    googleMap?.animateCamera(CameraUpdateFactory.newLatLng(marker!!.coordinate), 5000, null)
 
                         if (marker.rotation == 1) {
-                            if(marker.angleDiff>0){
+                            if(marker.angleDiff != 0.0f){
                                 oldMarker?.googleMapMarker?.rotation = marker.angleDiff
                             }
                             else{

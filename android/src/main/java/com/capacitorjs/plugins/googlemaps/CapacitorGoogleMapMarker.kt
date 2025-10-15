@@ -145,6 +145,12 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         // Default value of anchor is 0.5, 0.5 and for placing the icon on bottom is 0.5, 1
         markerOptions.anchor(customAnchor.x, customAnchor.y)
 
+        if (rotation == 1) {
+            markerOptions.rotation(angleDiff)
+        } else {
+            markerOptions.rotation(0f)
+        }
+
         if (zIndex > 0) {
             markerOptions.zIndex(zIndex)
         }
