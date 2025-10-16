@@ -67,6 +67,12 @@ export interface GoogleMapInterface {
   enableCurrentLocation(enabled: boolean): Promise<void>;
   setPadding(padding: MapPadding): Promise<void>;
   /**
+   * Get the map's current viewport latitude and longitude bounds.
+   *
+   * @returns {LatLngBounds}
+   */
+  getMapBounds(): Promise<LatLngBounds>;
+  /**
    * Sets the map viewport to contain the given bounds.
    * @param bounds The bounds to fit in the viewport.
    * @param padding Optional padding to apply in pixels. The bounds will be fit in the part of the map that remains after padding is removed.
@@ -279,6 +285,7 @@ export class GoogleMap {
 
     // small delay to allow for iOS WKWebView to setup corresponding element sub-scroll views ???
     await new Promise((resolve, reject) => {
+      console.log("GoogleMaps: Create Called 1");
       setTimeout(async () => {
         try {
           await CapacitorGoogleMaps.create(options);
@@ -652,15 +659,25 @@ export class GoogleMap {
   }
 
   initScrolling(): void {
-    const ionContents = document.getElementsByTagName("ion-content");
-
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < ionContents.length; i++) {
-      (ionContents[i] as any).scrollEvents = true;
+    console.log("GoogleMaps: initScrolling Called 1");
+    
+    // Find your specific scrollable container
+    const scrollableContainer = document.getElementById("scrollable_map_container");
+    
+    if (scrollableContainer) {
+      console.log("GoogleMaps: Found scrollable_map_container");
+      scrollableContainer.addEventListener("scroll", this.handleScrollEvent);
+    } else {
+      console.warn("GoogleMaps: scrollable_map_container not found, falling back to default listeners");
+      // Fallback to ion-content if your container isn't found
+      const ionContents = document.getElementsByTagName("ion-content");
+      for (let i = 0; i < ionContents.length; i++) {
+        (ionContents[i] as any).scrollEvents = true;
+      }
+      window.addEventListener("ionScroll", this.handleScrollEvent);
+      window.addEventListener("scroll", this.handleScrollEvent);
     }
 
-    window.addEventListener("ionScroll", this.handleScrollEvent);
-    window.addEventListener("scroll", this.handleScrollEvent);
     window.addEventListener("resize", this.handleScrollEvent);
     if (screen.orientation) {
       screen.orientation.addEventListener("change", () => {
@@ -674,9 +691,17 @@ export class GoogleMap {
   }
 
   disableScrolling(): void {
+    // Remove listener from your specific scrollable container
+    const scrollableContainer = document.getElementById("scrollable_container_live_trips");
+    if (scrollableContainer) {
+      scrollableContainer.removeEventListener("scroll", this.handleScrollEvent);
+    }
+    
+    // Remove fallback listeners
     window.removeEventListener("ionScroll", this.handleScrollEvent);
     window.removeEventListener("scroll", this.handleScrollEvent);
     window.removeEventListener("resize", this.handleScrollEvent);
+    
     if (screen.orientation) {
       screen.orientation.removeEventListener("change", () => {
         setTimeout(this.updateMapBounds, 1000);
@@ -688,9 +713,13 @@ export class GoogleMap {
     }
   }
 
-  handleScrollEvent = (): void => this.updateMapBounds();
+  handleScrollEvent = (): void => {
+    console.log("GoogleMaps: handleScrollEvent Called 1");
+    return this.updateMapBounds();
+  }
 
   private updateMapBounds(): void {
+    console.log("GoogleMaps: updateMapBounds Called 1");
     if (this.element) {
       const mapRect = this.element.getBoundingClientRect();
 

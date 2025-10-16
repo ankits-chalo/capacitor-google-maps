@@ -1,6 +1,6 @@
 {
   "name": "@capacitor/google-maps",
-  "version": "6.0.0-rc.0",
+  "version": "7.0.2",
   "description": "Google maps on Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -57,7 +57,7 @@
   "devDependencies": {
     "@capacitor/android": "next",
     "@capacitor/core": "next",
-    "@capacitor/docgen": "0.2.2",
+    "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "next",
     "@ionic/prettier-config": "^1.0.1",
     "@types/resize-observer-browser": "^0.1.7",
@@ -67,6 +67,7 @@
     "downlevel-dts": "^0.7.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-config-react-app": "^7.0.1",
     "prettier": "^2.8.8",
     "prettier-plugin-java": "~2.1.0",
@@ -76,7 +77,7 @@
     "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@capacitor/core": "next"
+    "@capacitor/core": ">=7.0.0"
   },
   "capacitor": {
     "ios": {
@@ -90,9 +91,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "~1.13.7",
-    "@googlemaps/markerclusterer": "~2.0.7",
-    "@types/google.maps": "~3.50.5",
+    "@googlemaps/js-api-loader": "~1.16.8",
+    "@googlemaps/markerclusterer": "~2.5.3",
+    "@types/google.maps": "~3.58.1",
     "@types/node": "^20.11.0"
   }
 }

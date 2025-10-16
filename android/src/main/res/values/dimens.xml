@@ -24,4 +24,13 @@
     <dimen name="alert_marker_width">
         38dp
     </dimen>
+    <dimen name="new_3d_marker_height">
+        80dp
+    </dimen>
+    <dimen name="new_3d_marker_width">
+        80dp
+    </dimen>
+    <dimen name="bus_depot_marker">
+        50dp
+    </dimen>
 </resources>
