@@ -67,11 +67,12 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    private var locationManager = CLLocationManager()
 
     func checkLocationPermission() -> String {
         let locationState: String
 
-        switch CLLocationManager.authorizationStatus() {
+        switch self.locationManager.authorizationStatus {
         case .notDetermined:
             locationState = "prompt"
         case .restricted, .denied:
