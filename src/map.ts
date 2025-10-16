@@ -46,11 +46,11 @@ export interface GoogleMapInterface {
   removePolygons(ids: string[]): Promise<void>;
   addCircles(circles: Circle[]): Promise<string[]>;
   removeCircles(ids: string[]): Promise<void>;
-  //addPolylines(polylines: Polyline[]): Promise<string[]>;
+  // addPolylines(polylines: Polyline[]): Promise<string[]>;
   addPolylines(
-	cords: any,
-	{ strokeWidth, strokeColor, strokeOpacity, zIndex }: any
-	): Promise<string[]>;
+    cords: any,
+    { strokeWidth, strokeColor, strokeOpacity, zIndex }: any
+  ): Promise<string[]>;
   setMarkerPosition(args: any): Promise<{ id: string }>;
   fitBound(args: any): Promise<void>;
   removePolylines(ids: string[]): Promise<void>;
