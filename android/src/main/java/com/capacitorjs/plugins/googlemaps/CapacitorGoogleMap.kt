@@ -1779,6 +1779,36 @@ class CapacitorGoogleMap(
             } else {
                 hideAllMultipleInfoWindows()
             }
+
+            cleanupStaleInfoWindows();
+        }
+    }
+
+    private fun cleanupStaleInfoWindows() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val currentZoom = googleMap?.cameraPosition?.zoom ?: 0f
+            val shouldShowInfoWindows = currentZoom >= multipleInfoWindowZoomLevel
+
+            val markersToRemove = mutableListOf<String>()
+
+            // Clean up info windows that don't have corresponding markers anymore
+            infoWindowMarkers.forEach { (originalMarkerId, infoWindowMarker) ->
+                val markerExists = markers.containsKey(originalMarkerId) &&
+                        markers[originalMarkerId]?.googleMapMarker != null
+
+                if (!markerExists) {
+                    // Remove if original marker doesn't exist
+                    markersToRemove.add(originalMarkerId)
+                    infoWindowMarker.remove()
+                } else if (!shouldShowInfoWindows) {
+                    // Remove if zoomed out beyond the threshold
+                    markersToRemove.add(originalMarkerId)
+                    infoWindowMarker.remove()
+                }
+            }
+
+            // Remove from our tracking map
+            markersToRemove.forEach { infoWindowMarkers.remove(it) }
         }
     }
 
