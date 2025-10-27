@@ -97,15 +97,18 @@ class MultipleInfoWindowView(private val context: Context) {
             View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
         )
 
-
         // Update height after exact width measurement
         measuredHeight = container.measuredHeight.coerceAtLeast(minHeight)
 
         // Final layout
         container.layout(0, 0, measuredWidth, measuredHeight)
 
-        // Create bitmap with shadow padding
-        val shadowPadding = dpToPx(8) // Extra space for shadow
+        // Calculate shadow values based on a base padding
+        val basePadding = dpToPx(8)
+        val shadowPadding = basePadding
+        val shadowRadius = basePadding * 0.75f
+        val shadowOffsetY = basePadding * 0.5f
+
         val bitmapWidth = measuredWidth + shadowPadding * 2
         val bitmapHeight = measuredHeight + shadowPadding * 2
 
@@ -117,8 +120,9 @@ class MultipleInfoWindowView(private val context: Context) {
             dpToPx(6)
         }
 
-        // Draw shadow
-        drawShadow(canvas, measuredWidth, measuredHeight-shadowHeightAdjustment, shadowPadding)
+        // Draw shadow with dynamic values
+        drawShadow(canvas, measuredWidth, measuredHeight - shadowHeightAdjustment,
+            shadowPadding, shadowRadius, shadowOffsetY)
 
         // Draw container on top of shadow (offset by shadow padding)
         canvas.save()
@@ -129,31 +133,38 @@ class MultipleInfoWindowView(private val context: Context) {
         return bitmap
     }
 
-    private fun drawShadow(canvas: Canvas, width: Int, height: Int, padding: Int) {
-        val shadowPaint = Paint().apply {
+    private fun drawShadow(canvas: Canvas, width: Int, height: Int,
+                           padding: Int, shadowRadius: Float, shadowOffsetY: Float) {
+
+        // First shadow layer - subtle outer shadow
+        val shadowPaint1 = Paint().apply {
             isAntiAlias = true
             color = Color.TRANSPARENT
-            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(2, 0, 0, 0))
+            setShadowLayer(shadowRadius * 1.5f, 0f, shadowOffsetY * 0.5f, Color.argb(15, 0, 0, 0))
         }
 
-        val rect = RectF(
-            padding.toFloat() - dpToPx(2).toFloat(),
-            padding.toFloat() - dpToPx(2).toFloat(),
-            (width + padding + dpToPx(2)).toFloat(),
-            (height).toFloat()
-        )
-
-        // Draw shadow
-        canvas.drawRoundRect(rect, dpToPx(8).toFloat(), dpToPx(8).toFloat(), shadowPaint)
-
-        // Draw additional shadow layers for the specified effect
+        // Second shadow layer - main shadow
         val shadowPaint2 = Paint().apply {
             isAntiAlias = true
             color = Color.TRANSPARENT
-            setShadowLayer(dpToPx(1).toFloat(), 0f, dpToPx(1).toFloat(), Color.argb(32, 0, 0, 0))
+            setShadowLayer(shadowRadius, 0f, shadowOffsetY, Color.argb(40, 0, 0, 0))
         }
 
-        canvas.drawRoundRect(rect, dpToPx(4).toFloat(), dpToPx(4).toFloat(), shadowPaint2)
+        // Calculate corner radius based on padding
+        val cornerRadius = padding * 1.25f
+
+        // Create shadow rectangle with dynamic inset
+        val shadowInset = (shadowRadius * 0.5f).toInt()
+        val rect = RectF(
+            (padding - shadowInset).toFloat(),
+            (padding - shadowInset).toFloat(),
+            (width + padding * 0.25 + shadowInset).toFloat(),
+            (height ).toFloat()
+        )
+
+        // Draw shadow layers
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, shadowPaint1)
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, shadowPaint2)
     }
 
     private fun getDrawableByName(drawableName: String): Drawable? {
