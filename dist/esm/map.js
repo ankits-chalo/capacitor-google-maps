@@ -22,7 +22,6 @@ export class GoogleMap {
         this.element = null;
         this.resizeObserver = null;
         this.handleScrollEvent = () => {
-            console.log("GoogleMaps: handleScrollEvent Called 1");
             return this.updateMapBounds();
         };
         this.id = id;
@@ -450,11 +449,9 @@ export class GoogleMap {
         // Find your specific scrollable container
         const scrollableContainer = document.getElementById("scrollable_map_container");
         if (scrollableContainer) {
-            console.log("GoogleMaps: Found scrollable_map_container");
             scrollableContainer.addEventListener("scroll", this.handleScrollEvent);
         }
         else {
-            console.warn("GoogleMaps: scrollable_map_container not found, falling back to default listeners");
             // Fallback to ion-content if your container isn't found
             const ionContents = document.getElementsByTagName("ion-content");
             for (let i = 0; i < ionContents.length; i++) {
@@ -497,7 +494,6 @@ export class GoogleMap {
         }
     }
     updateMapBounds() {
-        console.log("GoogleMaps: updateMapBounds Called 1");
         if (this.element) {
             const mapRect = this.element.getBoundingClientRect();
             CapacitorGoogleMaps.onScroll({
