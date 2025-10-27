@@ -297,6 +297,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             try map.removeMarker(id: markerId)
+            
 
             call.resolve()
 
@@ -579,7 +580,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-
+    
     @objc func enableIndoorMaps(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -1367,6 +1368,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
+            return true
             
         }
         return false
@@ -1487,20 +1489,10 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return lastUpdateInfo
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
-            } else if(imageUrl.contains("replay_info_icon")) {
-                let historyReplayInfo = HistoryReplayInfoWindow.instanceFromNib()
                 
-                let latTitle = userData.infoData?["latTitle"] as? String ?? "Lat : "
-                let longTitle = userData.infoData?["longTitle"] as? String ?? "Long : "
-                let speedTitle = userData.infoData?["speedTitle"] as? String ?? "Speed : "
-                let timeTitle = userData.infoData?["timeTitle"] as? String ?? "Time : "
-                
-                historyReplayInfo.latTitle.text = latTitle
-                historyReplayInfo.longTitle.text = longTitle
-                historyReplayInfo.speedTitle.text = speedTitle
-                historyReplayInfo.timeTitle.text = timeTitle
-                
-                return historyReplayInfo
+            } else if(imageUrl.contains("multiple_info_window")) {
+                return nil
+            
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
@@ -1565,6 +1557,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         for (mapId, map) in self.maps {
             if map.mapViewController.GMapView === mapView {
+                map.onCameraMove()
                 if(map.mapViewController.isCircleShow == true){
                     let height = map.mapViewController.circleView.frame.height
                     let xCenter = map.mapViewController.circleView.frame.origin.x
