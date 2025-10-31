@@ -12,6 +12,10 @@ public struct GoogleMapConfig: Codable {
     var mapId: String?
     let mapStyle: String
     let isCircleShow : Bool?
+    let topLeftRadius: Double
+    let topRightRadius: Double
+    let bottomLeftRadius: Double
+    let bottomRightRadius: Double
 
     init(fromJSObject: JSObject) throws {
         guard let width = fromJSObject["width"] as? Double else {
@@ -61,6 +65,18 @@ public struct GoogleMapConfig: Codable {
         } else {
             self.styles = nil
         }
+        if let borderRadius = fromJSObject["borderRadius"] as? JSObject {
+                    self.topLeftRadius = borderRadius["topLeft"] as? Double ?? 0.0
+                    self.topRightRadius = borderRadius["topRight"] as? Double ?? 0.0
+                    self.bottomLeftRadius = borderRadius["bottomLeft"] as? Double ?? 0.0
+                    self.bottomRightRadius = borderRadius["bottomRight"] as? Double ?? 0.0
+                } else {
+                    // Default values if borderRadius is not provided
+                    self.topLeftRadius = 0.0
+                    self.topRightRadius = 0.0
+                    self.bottomLeftRadius = 0.0
+                    self.bottomRightRadius = 0.0
+                }
 
         self.mapId = fromJSObject["iOSMapId"] as? String
     }

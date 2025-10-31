@@ -122,6 +122,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             DispatchQueue.main.sync {
                 let newMap = Map(id: id, config: config, delegate: self)
                 self.maps[id] = newMap
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if let mapView = newMap.mapViewController.GMapView {
+                        // Apply different corner radii
+                        mapView.roundCorners(topLeft: config.topLeftRadius, topRight: config.topRightRadius, bottomLeft: config.bottomLeftRadius, bottomRight:config.bottomRightRadius )
+                        mapView.layer.masksToBounds = true
+                        mapView.clipsToBounds = true
+                    }
+                }
             }
 
             call.resolve()
@@ -1554,6 +1562,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "longitude": location.longitude
         ])
     }
+    
     public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         for (mapId, map) in self.maps {
             if map.mapViewController.GMapView === mapView {
@@ -1618,5 +1627,57 @@ extension UIColor {
         }
 
         return nil
+    }
+}
+
+extension UIView {
+    func roundCorners(topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0) {
+        let path = UIBezierPath()
+        let bounds = self.bounds
+        
+        // Start from top-left
+        path.move(to: CGPoint(x: topLeft, y: 0))
+        
+        // Top edge
+        path.addLine(to: CGPoint(x: bounds.width - topRight, y: 0))
+        // Top-right corner
+        path.addArc(withCenter: CGPoint(x: bounds.width - topRight, y: topRight),
+                    radius: topRight,
+                    startAngle: -CGFloat.pi / 2,
+                    endAngle: 0,
+                    clockwise: true)
+        
+        // Right edge
+        path.addLine(to: CGPoint(x: bounds.width, y: bounds.height - bottomRight))
+        // Bottom-right corner
+        path.addArc(withCenter: CGPoint(x: bounds.width - bottomRight, y: bounds.height - bottomRight),
+                    radius: bottomRight,
+                    startAngle: 0,
+                    endAngle: CGFloat.pi / 2,
+                    clockwise: true)
+        
+        // Bottom edge
+        path.addLine(to: CGPoint(x: bottomLeft, y: bounds.height))
+        // Bottom-left corner
+        path.addArc(withCenter: CGPoint(x: bottomLeft, y: bounds.height - bottomLeft),
+                    radius: bottomLeft,
+                    startAngle: CGFloat.pi / 2,
+                    endAngle: CGFloat.pi,
+                    clockwise: true)
+        
+        // Left edge
+        path.addLine(to: CGPoint(x: 0, y: topLeft))
+        // Top-left corner
+        path.addArc(withCenter: CGPoint(x: topLeft, y: topLeft),
+                    radius: topLeft,
+                    startAngle: CGFloat.pi,
+                    endAngle: -CGFloat.pi / 2,
+                    clockwise: true)
+        
+        path.close()
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
     }
 }

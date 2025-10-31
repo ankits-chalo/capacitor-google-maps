@@ -8,6 +8,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.location.Geocoder
 import android.location.Location
@@ -38,7 +39,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.util.Locale
-
 
 class CapacitorGoogleMap(
     val id: String,
@@ -123,6 +123,15 @@ class CapacitorGoogleMap(
 
                 mapViewParent.tag = id
 
+                val borderRadius = config.borderRadius ?: GoogleMapConfig.BorderRadius()
+                mapView.background = createRoundedBackground(
+                    topLeftRadius = getScaledPixelsF(bridge, borderRadius.topLeft),
+                    topRightRadius = getScaledPixelsF(bridge, borderRadius.topRight),
+                    bottomLeftRadius = getScaledPixelsF(bridge, borderRadius.bottomLeft),
+                    bottomRightRadius = getScaledPixelsF(bridge, borderRadius.bottomRight)
+                )
+                mapView.clipToOutline = true
+
                 mapView.layoutParams = layoutParams
                 mapViewParent.addView(mapView)
 
@@ -199,6 +208,20 @@ class CapacitorGoogleMap(
 
             job.join()
         }
+    }
+
+    private fun createRoundedBackground(topLeftRadius: Float, topRightRadius: Float,bottomLeftRadius: Float,bottomRightRadius: Float): Drawable {
+        val drawable = GradientDrawable()
+        drawable.shape = GradientDrawable.RECTANGLE
+        // Set different radii for each corner: top-left, top-right, bottom-right, bottom-left
+        drawable.cornerRadii = floatArrayOf(
+            topLeftRadius, topLeftRadius,
+            topRightRadius, topRightRadius,
+            bottomLeftRadius, bottomLeftRadius,
+            bottomRightRadius, bottomRightRadius
+        )
+        drawable.setColor(Color.TRANSPARENT)
+        return drawable
     }
 
     fun addMarkers(
