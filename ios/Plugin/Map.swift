@@ -484,7 +484,11 @@ public class Map {
             
             // Calculate position and frame for the UIView
             let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
-                    let infoWindowPosition = self.calculateInfoWindowScreenPosition(for: originalMarker.position, isSnippet: hasSnippet)
+            let infoWindowPosition = self.calculateInfoWindowScreenPosition(
+                for: originalMarker.position,
+                markerId: originalMarker.hash.hashValue,
+                isSnippet: hasSnippet
+            )
             infoWindowView.frame = CGRect(
                 x: infoWindowPosition.x,
                 y: infoWindowPosition.y,
@@ -500,28 +504,29 @@ public class Map {
         }
     }
 
-    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, isSnippet: Bool) -> CGPoint {
+    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool) -> CGPoint {
         let point = self.mapViewController.GMapView.projection.point(for: coordinate)
         
-        if let infoWindowView = self.infoWindowMarkers.first(where: { $0.value.frame != .zero })?.value {
-            let infoWindowHeight = infoWindowView.frame.height
-            let infoWindowWidth = infoWindowView.frame.width
-            
-            if isSnippet {
-                return CGPoint(
-                    x: point.x - (infoWindowWidth * 0.4),
-                    y: point.y - infoWindowHeight
-                )
-            } else {
-                return CGPoint(
-                    x: point.x - (infoWindowWidth * 0.4),
-                    y: point.y - infoWindowHeight + 10
-                )
-            }
+        // Get the specific info window view for this marker
+        guard let infoWindowView = self.infoWindowMarkers[markerId] else {
+            // Fallback position if view not found
+            return CGPoint(x: point.x - 80, y: point.y - 60)
         }
         
-        // Fallback position without padding
-        return CGPoint(x: point.x - 80, y: point.y - 60)
+        let infoWindowHeight = infoWindowView.frame.height
+        let infoWindowWidth = infoWindowView.frame.width
+        
+        if isSnippet {
+            return CGPoint(
+                x: point.x - (infoWindowWidth * 0.4),
+                y: point.y - infoWindowHeight - 10
+            )
+        } else {
+            return CGPoint(
+                x: point.x - (infoWindowWidth * 0.4),
+                y: point.y - infoWindowHeight 
+            )
+        }
     }
     private func calculateInfoWindowPosition(for markerPosition: CLLocationCoordinate2D) -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(
@@ -657,7 +662,11 @@ public class Map {
                         if shouldShowInfoWindow {
                             // Update info window position
                             let hasSnippet = !(marker.snippet?.isEmpty ?? true)
-                            let newInfoWindowPosition = self.calculateInfoWindowScreenPosition(for: oldMarker.position, isSnippet: hasSnippet)
+                            let newInfoWindowPosition = self.calculateInfoWindowScreenPosition(
+                                for: oldMarker.position,
+                                markerId: oldMarker.hash.hashValue,
+                                isSnippet: hasSnippet
+                            )
 
                             UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
                                                 infoWindowView.frame.origin = newInfoWindowPosition
@@ -1201,7 +1210,11 @@ public class Map {
                 if let marker = self.markers[markerId] {
                     if let markerData = marker.userData as? Marker {
                         let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
-                        let screenPosition = self.calculateInfoWindowScreenPosition(for: marker.position, isSnippet: hasSnippet)
+                        let screenPosition = self.calculateInfoWindowScreenPosition(
+                                            for: marker.position,
+                                            markerId: markerId,
+                                            isSnippet: hasSnippet
+                                        )
                         infoWindowView.frame.origin = screenPosition
                     }
                 }
