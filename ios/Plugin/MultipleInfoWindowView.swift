@@ -69,7 +69,11 @@ class MultipleInfoWindowView: UIView {
         
         // Title label
         titleLabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        if let notoSansBold = UIFont(name: "NotoSans-Bold", size: 14) {
+            titleLabel.font = notoSansBold
+        } else {
+            titleLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        }
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -77,7 +81,11 @@ class MultipleInfoWindowView: UIView {
         
         // Snippet label
         snippetLabel = UILabel()
-        snippetLabel.font = UIFont.systemFont(ofSize: 12)
+        if let notoSansBold = UIFont(name: "NotoSans-Bold", size: 12) {
+            snippetLabel.font = notoSansBold
+        } else {
+            snippetLabel.font = UIFont.boldSystemFont(ofSize: 12)
+        }
         snippetLabel.textColor = .darkGray
         snippetLabel.numberOfLines = 0
         snippetLabel.lineBreakMode = .byWordWrapping
@@ -211,7 +219,11 @@ class MultipleInfoWindowView: UIView {
             iconImageView.image = UIImage(named: "alert_halted")
             snippetStackView.insertArrangedSubview(iconImageView, at: 0)
             snippetLabel.textColor = UIColor(red: 0.678, green: 0.455, blue: 0.0, alpha: 1.0)
-            snippetLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+            if let notoSansBold = UIFont(name: "NotoSans-Bold", size: 12) {
+                snippetLabel.font = notoSansBold
+            } else {
+                snippetLabel.font = UIFont.boldSystemFont(ofSize: 12)
+            }
             
         } else if let iconUrl = iconUrl, iconUrl.contains("inactive") {
             // Yellow theme for inactive GPS
@@ -219,13 +231,21 @@ class MultipleInfoWindowView: UIView {
         
             snippetStackView.insertArrangedSubview(iconImageView, at: 0)
             snippetLabel.textColor = UIColor(red: 0.776, green: 0.157, blue: 0.157, alpha: 1.0)
-          
-            snippetLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+
+            if let notoSansBold = UIFont(name: "NotoSans-Bold", size: 12) {
+                snippetLabel.font = notoSansBold
+            } else {
+                snippetLabel.font = UIFont.boldSystemFont(ofSize: 12)
+            }
             
         } else {
             // Default appearance - no icon
             snippetLabel.textColor = .darkGray
-            snippetLabel.font = UIFont.systemFont(ofSize: 12)
+            if let notoSansBold = UIFont(name: "NotoSans-Bold", size: 12) {
+                snippetLabel.font = notoSansBold
+            } else {
+                snippetLabel.font = UIFont.boldSystemFont(ofSize: 12)
+            }
         }
         
         // Always add the text stack view to content
