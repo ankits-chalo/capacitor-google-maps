@@ -129,7 +129,7 @@ public class Map {
     var timer : Timer?
     var infoWindowMarkers = [Int: UIView]()
     // swiftlint:disable identifier_name
-    var multipleInfoWindowZoomLevel: Float = 12.5
+    var multipleInfoWindowZoomLevel: Float = 15
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
@@ -425,7 +425,16 @@ public class Map {
                 }
                 do {
                     if((marker.rotation) == 1){
-                        newMarker.rotation =  try getAngle(marker: marker)
+                        guard let angleDiff = marker.angleDiff else{
+                            newMarker.rotation = try getAngle(marker: marker)
+                            return;
+                        }
+                        if angleDiff != 0{
+                            newMarker.rotation = angleDiff
+                        }
+                        else{
+                            newMarker.rotation = try getAngle(marker: marker)
+                        }
                     }else{
                         newMarker.rotation =  0
                     }
@@ -793,7 +802,17 @@ public class Map {
                     do {
                         // Set the map style by passing the URL of the local file.
                         if((marker.rotation) == 1){
-                            oldMarker.rotation =  try self.getAngle(marker: marker)
+                            guard let angleDiff = marker.angleDiff else{
+                                oldMarker.rotation = try self.getAngle(marker: marker)
+                                return;
+                            }
+                            if angleDiff != 0{
+                                oldMarker.rotation = angleDiff
+                            }
+                            else{
+                                oldMarker.rotation =  try self.getAngle(marker: marker)
+                            }
+                            
                         }else{
                             oldMarker.rotation =  0
                         }
