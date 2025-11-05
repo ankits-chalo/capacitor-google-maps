@@ -30,8 +30,9 @@ class CustomInfoWindowAdapter(private val context: Context) : GoogleMap.InfoWind
             // Get the image from resources
             val resources: Resources = context.resources
             val resourceId: Int = resources.getIdentifier(it.infoIcon, "drawable", context.packageName)
-            imageView.setImageDrawable(context.getDrawable(resourceId))
-
+            if (resourceId != 0) {
+                imageView.setImageDrawable(context.getDrawable(resourceId))
+            }
             view
         }
     }
