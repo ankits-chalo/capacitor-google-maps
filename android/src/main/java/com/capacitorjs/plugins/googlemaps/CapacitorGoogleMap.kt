@@ -416,12 +416,6 @@ class CapacitorGoogleMap(
 
                     val markerOptions = marker.getMarkerOptionsUpdated()
                     val googleMapMarker = googleMap?.addMarker(markerOptions)
-                    if (marker.infoIcon?.contains("multiple_info_window") == true) {
-                        val currentZoom = googleMap?.cameraPosition?.zoom ?: 0f
-                        if (currentZoom >= multipleInfoWindowZoomLevel) {
-                            createInfoWindowAsMarker(marker, googleMapMarker!!)
-                        }
-                    }
                     if(marker.rotation == 1) {
                         if (marker.angleDiff > 0) {
                             markerOptions.rotation(marker.angleDiff)
@@ -494,7 +488,13 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
-                        }else if(marker.infoIcon!!.contains("replay_info_icon")) {
+                        }
+                        else if(marker.infoIcon!!.contains("stop_arrival_info")) {
+                            val bridge = delegate.bridge
+                            googleMapMarker?.tag = marker
+                            googleMap?.setInfoWindowAdapter(StopArrivalInfoWindowAdapter(bridge.context))
+                        }
+                        else if(marker.infoIcon!!.contains("replay_info_icon")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             googleMap?.setInfoWindowAdapter(HistoryReplayInfoWindowAdapter(bridge.context))
