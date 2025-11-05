@@ -68,7 +68,7 @@ class CapacitorGoogleMap(
     private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private val infoWindowMarkers = HashMap<String, Marker>()
-    private var multipleInfoWindowZoomLevel: Float = 12.5f
+    private var multipleInfoWindowZoomLevel: Float = 15.0f
     private lateinit var multipleInfoWindowView: MultipleInfoWindowView
     private var clusterManager: ClusterManager<CapacitorGoogleMapMarker>? = null
     private var markerIdOnWeb = ArrayList<String>()
