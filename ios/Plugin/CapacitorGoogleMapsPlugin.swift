@@ -1376,7 +1376,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
-            return true
             
         }
         return false
