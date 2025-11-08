@@ -1376,7 +1376,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 "title": title ?? "",
                 "snippet": marker.snippet ?? ""
             ])
-            return true
             
         }
         return false
@@ -1490,7 +1489,15 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
                 return alertMarkerInfo
-            } else if(imageUrl.contains("last_updated_info")) {
+            } else if(imageUrl.contains("stop_arrival_info")) {
+                let arrivalTime = userData.infoData?["arrival_time"] as? String ?? "N/A"
+                let departureTime = userData.infoData?["departure_time"] as? String ?? "N/A"
+                let stopArrivalInfo = StopArrivalInfoWindow.instanceFromNib()
+                stopArrivalInfo.busTitle.text = marker.title
+                stopArrivalInfo.arrivalTime.text = arrivalTime
+                stopArrivalInfo.departureTime.text = departureTime
+                return stopArrivalInfo
+            }else if(imageUrl.contains("last_updated_info")) {
                 let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
                 lastUpdateInfo.infoTitle.text = marker.title
                 lastUpdateInfo.infoSnippet.text = marker.snippet

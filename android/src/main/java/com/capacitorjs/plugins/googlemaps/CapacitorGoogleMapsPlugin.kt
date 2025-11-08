@@ -458,7 +458,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.fitBound(cords, 50) { err ->
+            map.fitBound(cords, 40) { err ->
                 if (err != null) {
                     throw err
                 }

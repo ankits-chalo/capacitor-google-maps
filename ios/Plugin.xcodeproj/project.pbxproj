@@ -61,6 +61,8 @@
 		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
 		ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */; };
 		ECD18C8E2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */; };
+		EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */; };
+		EEC1D56E2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +135,8 @@
 		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSingleLineInfoWindow.swift; sourceTree = "<group>"; };
 		ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSingleLineInfoWindow.xib; sourceTree = "<group>"; };
+		EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopArrivalInfoWindow.swift; sourceTree = "<group>"; };
+		EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StopArrivalInfoWindow.xib; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -270,6 +274,8 @@
 				EC11CB412BC92C6B00310392 /* InfoWindowWithImage.swift */,
 				EC11CB392BC92C6B00310392 /* InfoWindowWithImage.xib */,
 				EC11CB3F2BC92C6B00310392 /* mapStyle.json */,
+				EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */,
+				EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -392,6 +398,7 @@
 				EC578B7F2BCD40B8000C9339 /* BusesMarkerInfoWindowLoading.xib in Resources */,
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC1FC3FF2C0EEA7D006AA7E4 /* AlertStopMarker.xib in Resources */,
+				EEC1D56E2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib in Resources */,
 				EC0028362CC00A7800400425 /* LastUpdatedInfoWindow.xib in Resources */,
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
@@ -538,6 +545,7 @@
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
+				EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */,
 				EC9AB75C2D12C643007314B3 /* HistoryReplayInfoWindow.swift in Sources */,
 				02C6EDF22798803E00D51BF6 /* Map.swift in Sources */,
 				EC578B882BCD4157000C9339 /* BusesMarkerInfoWindow.swift in Sources */,
