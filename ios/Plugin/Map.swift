@@ -706,7 +706,7 @@ public class Map {
                     }
                     
                     
-                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 15)
+                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 13.5)
                     
                     //                CATransaction.beg`in()
                     //                CATransaction.setAnimationDuration(5.0)
