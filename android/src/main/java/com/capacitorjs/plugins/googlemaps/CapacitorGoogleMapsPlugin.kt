@@ -454,11 +454,12 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                 }
                 cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
             }
+             val padding = call.getInt("padding", 10) ?: 10
 
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.fitBound(cords, 40) { err ->
+            map.fitBound(cords, padding) { err ->
                 if (err != null) {
                     throw err
                 }

@@ -1062,11 +1062,13 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 cords.append(cord)
             }
             
+            let padding = CGFloat(call.getInt("padding", 10))
+            
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
             
-            map.fitBound(cords: cords, padding: 100)
+            map.fitBound(cords: cords, padding: padding)
             call.resolve()
             
         } catch {
@@ -1493,7 +1495,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let arrivalTime = userData.infoData?["arrival_time"] as? String ?? "N/A"
                 let departureTime = userData.infoData?["departure_time"] as? String ?? "N/A"
                 let stopArrivalInfo = StopArrivalInfoWindow.instanceFromNib()
-                stopArrivalInfo.busTitle.text = marker.title
+                stopArrivalInfo.BusTitle.text = marker.title
                 stopArrivalInfo.arrivalTime.text = arrivalTime
                 stopArrivalInfo.departureTime.text = departureTime
                 return stopArrivalInfo

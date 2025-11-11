@@ -129,7 +129,7 @@ public class Map {
     var timer : Timer?
     var infoWindowMarkers = [Int: UIView]()
     // swiftlint:disable identifier_name
-    var multipleInfoWindowZoomLevel: Float = 15
+    var multipleInfoWindowZoomLevel: Float = 13.5
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
@@ -341,13 +341,6 @@ public class Map {
                     newMarker.snippet = marker.snippet
                 }
                 newMarker.userData = marker
-                if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
-                               let currentZoom = self.mapViewController.GMapView.camera.zoom
-                               if currentZoom >= self.multipleInfoWindowZoomLevel {
-                                   // Create info window as separate marker only if zoom level is sufficient
-                                   self.createInfoWindowAsMarker(for: newMarker, markerData: marker)
-                               }
-                           }
                 if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
@@ -706,7 +699,7 @@ public class Map {
                     }
                     
                     
-                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 13.5)
+                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 15)
                     
                     //                CATransaction.beg`in()
                     //                CATransaction.setAnimationDuration(5.0)
@@ -876,7 +869,7 @@ public class Map {
             }
             let cameraUpdate = GMSCameraUpdate.fit(bounds, withPadding: padding)
             if let mapView = self.mapViewController.GMapView {
-                mapView.animate(with: cameraUpdate)
+                mapView.moveCamera(cameraUpdate)
             }
         }
     }
