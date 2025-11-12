@@ -470,7 +470,7 @@ class CapacitorGoogleMap(
                     googleMapMarker?.tag = marker
 
 
-                    if (!marker.infoIcon.isNullOrEmpty() && (!marker.infoIcon.equals("not_show_info_window"))) {
+                    if (!marker.infoIcon.isNullOrEmpty() && (!marker.iconUrl!!.contains("new_3d_marker")) && (!marker.infoIcon.equals("not_show_info_window")) ) {
                         if(marker.infoIcon.equals("buses_info_icon")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -523,7 +523,7 @@ class CapacitorGoogleMap(
                             markerIdNotOnCluster.add(googleMapMarker!!.id)
                         }
                     } else {
-                        if (!marker.infoIcon.isNullOrEmpty() && (!marker.infoIcon.equals("not_show_info_window") )) {
+                        if (!marker.infoIcon.isNullOrEmpty() && (!marker.infoIcon.equals("not_show_info_window")) ) {
                             if(marker.infoIcon.equals("buses_info_icon")) {
                                 val bridge = delegate.bridge
                                 googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
