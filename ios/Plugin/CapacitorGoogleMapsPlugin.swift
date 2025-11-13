@@ -1061,12 +1061,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let cord = LatLng(lat: lat, lng: lng)
                 cords.append(cord)
             }
+
+            let padding = CGFloat(call.getInt("padding", 100))
             
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
             
-            map.fitBound(cords: cords, padding: 100)
+            map.fitBound(cords: cords, padding: padding)
             call.resolve()
             
         } catch {

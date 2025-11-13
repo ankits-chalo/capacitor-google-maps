@@ -488,6 +488,7 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
+                            googleMapMarker?.showInfoWindow()
                         }
                         else if(marker.infoIcon!!.contains("stop_arrival_info")) {
                             val bridge = delegate.bridge
@@ -1664,6 +1665,42 @@ class CapacitorGoogleMap(
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val data = JSObject()
+        // For multi_info_window
+        val markerTag = marker.tag
+        if (markerTag is HashMap<*, *> && markerTag["type"] == "infoWindow") {
+            // This is an info window marker click
+            val originalMarkerId = markerTag["originalMarkerId"] as? String
+            val markerData = markerTag["markerData"] as? CapacitorGoogleMapMarker
+
+            if (originalMarkerId != null && markerData != null) {
+                data.put("mapId", this@CapacitorGoogleMap.id)
+                data.put("markerId", originalMarkerId)
+                data.put("isInfoWindow", true)
+                data.put("latitude", marker.position.latitude)
+                data.put("longitude", marker.position.longitude)
+                data.put("title", markerData.title)
+                data.put("snippet", markerData.snippet)
+
+                // Add info data if available
+                markerData.infoData?.let { infoData ->
+                    val infoJsObject = JSObject()
+                    infoData.keys().forEach { key ->
+                        when (val value = infoData.get(key)) {
+                            is String -> infoJsObject.put(key, value)
+                            is Int -> infoJsObject.put(key, value)
+                            is Boolean -> infoJsObject.put(key, value)
+                            is Double -> infoJsObject.put(key, value)
+                            // Add other types as needed
+                        }
+                    }
+                    data.put("infoData", infoJsObject)
+                }
+
+                delegate.notify("onMarkerClick", data)
+                return true // Consume the event
+            }
+        }
+
         val infoData = (marker?.tag as? CapacitorGoogleMapMarker)?.infoData
         var title = marker.title
         if(marker.title.isNullOrEmpty() && infoData is JSONObject && infoData.has("title")){

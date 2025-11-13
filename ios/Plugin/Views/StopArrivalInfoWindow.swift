@@ -11,7 +11,7 @@ import UIKit
 class StopArrivalInfoWindow: UIView {
     
     @IBOutlet weak var arrivalView: UIView!
-    @IBOutlet weak var BusTitle: UILabel!
+    @IBOutlet weak var busTitle: UILabel!
     @IBOutlet weak var arrivalTime: UILabel!
     @IBOutlet weak var departureTime: UILabel!
     

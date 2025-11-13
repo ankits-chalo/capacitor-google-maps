@@ -77,7 +77,7 @@
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="BusTitle" destination="eLe-xp-k2F" id="pz2-RT-Dfm"/>
+                <outlet property="busTitle" destination="eLe-xp-k2F" id="pz2-RT-Dfm"/>
                 <outlet property="arrivalTime" destination="8GC-Wf-Mum" id="OXc-l7-sSk"/>
                 <outlet property="arrivalView" destination="7Dm-Cc-V5X" id="pKy-hu-gCw"/>
                 <outlet property="departureTime" destination="fJt-tU-iB4" id="lNL-86-CAQ"/>

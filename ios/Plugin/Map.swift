@@ -129,7 +129,7 @@ public class Map {
     var timer : Timer?
     var infoWindowMarkers = [Int: UIView]()
     // swiftlint:disable identifier_name
-    var multipleInfoWindowZoomLevel: Float = 15
+    var multipleInfoWindowZoomLevel: Float = 13.5
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
@@ -341,13 +341,6 @@ public class Map {
                     newMarker.snippet = marker.snippet
                 }
                 newMarker.userData = marker
-                if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
-                               let currentZoom = self.mapViewController.GMapView.camera.zoom
-                               if currentZoom >= self.multipleInfoWindowZoomLevel {
-                                   // Create info window as separate marker only if zoom level is sufficient
-                                   self.createInfoWindowAsMarker(for: newMarker, markerData: marker)
-                               }
-                           }
                 if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
@@ -490,6 +483,10 @@ public class Map {
             infoWindowView.onClose = { [weak self] in
                 self?.removeInfoWindowMarker(for: originalMarker.hash.hashValue)
             }
+            infoWindowView.onTap = { [weak self] in
+                self?.handleMultipleInfoWindowTap(marker: originalMarker, markerData: markerData)
+            }
+            
             
             // Calculate position and frame for the UIView
             let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
@@ -510,8 +507,30 @@ public class Map {
             
             // Store reference
             self.infoWindowMarkers[originalMarker.hash.hashValue] = infoWindowView
+            
+            
         }
     }
+    private func handleMultipleInfoWindowTap(marker: GMSMarker, markerData: Marker) {
+        NSLog("MultipleInfoWindowView tapped for marker: \(marker.hash.hashValue)")
+        
+        let userInfo = markerData
+        var title = marker.title
+        if title == nil || title?.isEmpty == true {
+            title = userInfo.title
+        }
+        
+        // Trigger the same onMarkerClick event as regular marker taps
+        self.delegate.notifyListeners("onMarkerClick", data: [
+            "mapId": self.id,
+            "markerId": String(marker.hash.hashValue),
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
 
     private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool) -> CGPoint {
         let point = self.mapViewController.GMapView.projection.point(for: coordinate)
@@ -706,7 +725,7 @@ public class Map {
                     }
                     
                     
-                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 13.5)
+                    let newCamera = GMSCameraPosition(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng, zoom: 15)
                     
                     //                CATransaction.beg`in()
                     //                CATransaction.setAnimationDuration(5.0)
@@ -876,7 +895,7 @@ public class Map {
             }
             let cameraUpdate = GMSCameraUpdate.fit(bounds, withPadding: padding)
             if let mapView = self.mapViewController.GMapView {
-                mapView.animate(with: cameraUpdate)
+                mapView.moveCamera(cameraUpdate)
             }
         }
     }

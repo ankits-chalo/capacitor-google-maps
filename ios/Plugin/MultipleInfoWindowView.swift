@@ -1,6 +1,6 @@
 import UIKit
 
-class MultipleInfoWindowView: UIView {
+class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
     var titleLabel: UILabel!
     var snippetLabel: UILabel!
     var containerView: UIView!
@@ -55,6 +55,15 @@ class MultipleInfoWindowView: UIView {
         containerView.layer.borderColor = UIColor.lightGray.cgColor
         containerView.layer.zPosition = 0
         
+        containerView.isUserInteractionEnabled = true
+                
+                // Add tap gesture with delegate
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.delegate = self  // Set delegate
+        tapGesture.cancelsTouchesInView = false  // Important: don't cancel other touches
+        self.addGestureRecognizer(tapGesture)
+                
         // Arrow view (downward pointing triangle)
         arrowView = UIView()
         arrowView.backgroundColor = .clear
@@ -116,6 +125,21 @@ class MultipleInfoWindowView: UIView {
         self.addSubview(arrowView)
         
         setupConstraints()
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+           // Allow this gesture to work simultaneously with map gestures
+        NSLog("Should recognize simultaneously with: \(otherGestureRecognizer)")
+        return true
+    }
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        NSLog("Should receive touch: \(touch.location(in: self))")
+            return true
+    }
+    @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+        NSLog("Tap Called - SUCCESS!")
+        NSLog("Tap location in view: \(gesture.location(in: self))")
+        NSLog("Tap location in container: \(gesture.location(in: containerView))")
     }
     
     private func setupConstraints() {
