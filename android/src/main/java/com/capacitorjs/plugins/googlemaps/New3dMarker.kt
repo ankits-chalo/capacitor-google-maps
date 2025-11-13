@@ -3,17 +3,18 @@ package com.capacitorjs.plugins.googlemaps
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Size
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 class New3dMarker(private val context: Context) {
 
-    fun getMarkerIcon(iconUrl: String): BitmapDescriptor {
+    fun getMarkerIcon(iconUrl: String,iconSize: Size? = null): BitmapDescriptor {
         val resourceId = getResourceIdFromIconUrl(iconUrl)
 
         if (resourceId != 0) {
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            val scaledBitmap = getScaledBitmap(bitmap, iconUrl)
+            val scaledBitmap = getScaledBitmap(bitmap, iconUrl,iconSize)
             return BitmapDescriptorFactory.fromBitmap(scaledBitmap)
         }
 
@@ -25,11 +26,16 @@ class New3dMarker(private val context: Context) {
         return context.resources.getIdentifier(iconUrl, "drawable", context.packageName)
     }
 
-    private fun getScaledBitmap(bitmap: Bitmap, iconUrl: String): Bitmap {
-        val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-        val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-
-        return Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)
+    private fun getScaledBitmap(bitmap: Bitmap, iconUrl: String, iconSize: Size?): Bitmap {
+        return if (iconSize != null && iconSize.width > 0 && iconSize.height > 0) {
+            // Use dynamic dimensions from iconSize
+            Bitmap.createScaledBitmap(bitmap, iconSize.width, iconSize.height, false)
+        } else {
+            // Fallback to default dimensions
+            val new3DHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
+            val new3DWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
+            Bitmap.createScaledBitmap(bitmap, new3DWidth, new3DHeight, false)
+        }
     }
 
     // Helper method to check if an icon URL is a 3D marker

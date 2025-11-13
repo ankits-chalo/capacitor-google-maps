@@ -186,7 +186,14 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val markerWidth = context.resources.getDimension(R.dimen.start_end_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
-        }else if(iconUrl?.contains("bus_depot_marker") == true ) {
+        } else if(iconUrl?.contains("new_3d_marker") == true) {
+            val markerHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
+            val markerWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,
+                iconSize?.width ?: markerWidth, iconSize?.height ?: markerHeight, false)))
+        }
+        else if(iconUrl?.contains("bus_depot_marker") == true ) {
             val markerHeight = context.resources.getDimension(R.dimen.bus_depot_marker).toInt()
             val markerWidth = context.resources.getDimension(R.dimen.bus_depot_marker).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
@@ -244,7 +251,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         } else if (iconUrl?.contains("new_3d_marker") == true || iconUrl?.contains("new_3d_image") == true) {
             val new3dMarker = New3dMarker(context)
-            googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!))
+            googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!,iconSize))
         } else if(iconUrl?.contains("overspeed_marker") == true) {
             val busesMarker = OverSpeedCustomMarker(context)
             val resId = context.resources.getIdentifier(iconUrl, "drawable", context.packageName)
