@@ -483,10 +483,11 @@ export class GoogleMap {
     return res.id;
   }
 
-  async fitBound(cords: any) {
+  async fitBound(cords: any, padding: number) {
     return CapacitorGoogleMaps.fitBound({
       id: this.id,
       cords,
+      padding,
     });
   }
 
@@ -660,10 +661,12 @@ export class GoogleMap {
 
   initScrolling(): void {
     console.log("GoogleMaps: initScrolling Called 1");
-    
+
     // Find your specific scrollable container
-    const scrollableContainer = document.getElementById("scrollable_map_container");
-    
+    const scrollableContainer = document.getElementById(
+      "scrollable_map_container"
+    );
+
     if (scrollableContainer) {
       scrollableContainer.addEventListener("scroll", this.handleScrollEvent);
     } else {
@@ -690,16 +693,18 @@ export class GoogleMap {
 
   disableScrolling(): void {
     // Remove listener from your specific scrollable container
-    const scrollableContainer = document.getElementById("scrollable_container_live_trips");
+    const scrollableContainer = document.getElementById(
+      "scrollable_container_live_trips"
+    );
     if (scrollableContainer) {
       scrollableContainer.removeEventListener("scroll", this.handleScrollEvent);
     }
-    
+
     // Remove fallback listeners
     window.removeEventListener("ionScroll", this.handleScrollEvent);
     window.removeEventListener("scroll", this.handleScrollEvent);
     window.removeEventListener("resize", this.handleScrollEvent);
-    
+
     if (screen.orientation) {
       screen.orientation.removeEventListener("change", () => {
         setTimeout(this.updateMapBounds, 1000);
@@ -713,7 +718,7 @@ export class GoogleMap {
 
   handleScrollEvent = (): void => {
     return this.updateMapBounds();
-  }
+  };
 
   private updateMapBounds(): void {
     if (this.element) {
