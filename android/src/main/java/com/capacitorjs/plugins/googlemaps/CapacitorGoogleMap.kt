@@ -894,7 +894,7 @@ class CapacitorGoogleMap(
                 val bounds = builder.build()
                 if(width > 0 && height > 0) {
                     // Create a camera update with the bounds and the specified padding
-                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
+                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
                 }
                 callback(null)
             }

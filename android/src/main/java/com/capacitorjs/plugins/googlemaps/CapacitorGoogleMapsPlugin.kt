@@ -454,8 +454,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                 }
                 cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
             }
-             val padding = call.getInt("padding", 40) ?: 40
-
+             val padding = call.getInt("padding", 200) ?: 200
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
