@@ -11,6 +11,7 @@ class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
     var snippetStackView: UIStackView!
     
     var onClose: (() -> Void)?
+    var onTap:(()-> Void)?
     
     // Constants for padding
     private let horizontalPadding: CGFloat = 8
@@ -137,9 +138,7 @@ class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
             return true
     }
     @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-        NSLog("Tap Called - SUCCESS!")
-        NSLog("Tap location in view: \(gesture.location(in: self))")
-        NSLog("Tap location in container: \(gesture.location(in: containerView))")
+        onTap?()
     }
     
     private func setupConstraints() {
