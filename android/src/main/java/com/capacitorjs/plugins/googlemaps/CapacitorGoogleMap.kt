@@ -902,6 +902,7 @@ class CapacitorGoogleMap(
             callback(e)
         }
     }
+    
 
     private fun setMultipleMarkerPosition(marker: CapacitorGoogleMapMarker) {
         try {
