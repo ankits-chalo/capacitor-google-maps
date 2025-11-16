@@ -897,6 +897,7 @@ public class Map {
             if let mapView = self.mapViewController.GMapView {
                 mapView.moveCamera(cameraUpdate)
             }
+            onCameraMove()
         }
     }
     
