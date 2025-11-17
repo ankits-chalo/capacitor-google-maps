@@ -22,6 +22,7 @@ class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
     private let minWidth: CGFloat = 150
     private let minHeight: CGFloat = 150
     private let iconSize: CGFloat = 16
+    private var isArrowUpward: Bool = false
     
     // Track which fields have content
     private var hasTitle: Bool = false
@@ -171,29 +172,52 @@ class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
     
     override func layoutSubviews() {
            super.layoutSubviews()
+            isArrowUpward = currentIconUrl?.contains("reverse") == true
            
            // Calculate 40% position for arrow
            let arrowCenterX = self.bounds.width * 0.4
            let arrowLeading = arrowCenterX - 6
            
-           // Update arrow frame
-           arrowView.frame = CGRect(
-               x: arrowLeading,
-               y: containerView.frame.maxY,
-               width: 12,
-               height: arrowHeight
-           )
-           
+            if isArrowUpward {
+               arrowView.frame = CGRect(
+                   x: arrowLeading,
+                   y: 0, // Position at top
+                   width: 12,
+                   height: arrowHeight
+               )
+               containerView.frame = CGRect(
+                   x: 0,
+                   y: arrowHeight,
+                   width: containerView.frame.width,
+                   height: containerView.frame.height
+               )
+            } else {
+               arrowView.frame = CGRect(
+                   x: arrowLeading,
+                   y: containerView.frame.maxY,
+                   width: 12,
+                   height: arrowHeight
+               )
+            }
+        
            drawArrow()
        }
     
     private func drawArrow() {
         let arrowPath = UIBezierPath()
-        arrowPath.move(to: CGPoint(x: 0, y: -1))
-        arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width, y: 0))
-        arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width / 2, y: arrowView.bounds.height))
-        arrowPath.close()
-        
+        if isArrowUpward {
+               // Upward pointing arrow
+            arrowPath.move(to: CGPoint(x: arrowView.bounds.width / 2, y: 0))
+            arrowPath.addLine(to: CGPoint(x: 0, y: arrowView.bounds.height))
+            arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width, y: arrowView.bounds.height))
+            arrowPath.close()
+        } else {
+            // Downward pointing arrow (default)
+            arrowPath.move(to: CGPoint(x: 0, y: 0))
+            arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width, y: 0))
+            arrowPath.addLine(to: CGPoint(x: arrowView.bounds.width / 2, y: arrowView.bounds.height))
+            arrowPath.close()
+        }
         let arrowLayer = CAShapeLayer()
         arrowLayer.path = arrowPath.cgPath
         arrowLayer.fillColor = UIColor.white.cgColor
