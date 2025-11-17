@@ -19,8 +19,10 @@ class MultipleInfoWindowView(private val context: Context) {
     fun createInfoWindowBitmap(marker: CapacitorGoogleMapMarker): Bitmap {
         // Inflate the XML layout
         val inflater = LayoutInflater.from(context)
-        val container = inflater.inflate(R.layout.multiple_info_window, null) as LinearLayout
-
+        var container = inflater.inflate(R.layout.multiple_info_window, null) as LinearLayout
+        if(marker.infoIcon?.contains("reverse") == true){
+            container = inflater.inflate(R.layout.multiple_info_window_reverse, null) as LinearLayout
+        }
         // Get views from layout
         val titleText = container.findViewById<TextView>(R.id.title_text)
         val snippetContainer = container.findViewById<LinearLayout>(R.id.snippet_container)

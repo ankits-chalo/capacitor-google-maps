@@ -553,13 +553,17 @@ class CapacitorGoogleMap(
             }
 
             val infoWindowPosition = calculateInfoWindowPosition(googleMapMarker.position)
-
             // Create info window marker options
             val infoWindowMarkerOptions = MarkerOptions()
                 .position(infoWindowPosition)
-                .anchor(0.4f, 1.0f)
                 .flat(true)
                 .zIndex(googleMapMarker.zIndex + 1.0f)
+
+            if (originalMarker.infoIcon?.contains("reverse") == true) {
+                infoWindowMarkerOptions.anchor(0.4f, -0.1f)
+            } else {
+                infoWindowMarkerOptions.anchor(0.4f, 1.0f)
+            }
 
             // Create bitmap in background thread to avoid UI blocking
             val infoWindowBitmap = withContext(Dispatchers.Default) {

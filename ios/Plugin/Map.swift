@@ -493,7 +493,8 @@ public class Map {
             let infoWindowPosition = self.calculateInfoWindowScreenPosition(
                 for: originalMarker.position,
                 markerId: originalMarker.hash.hashValue,
-                isSnippet: hasSnippet
+                isSnippet: hasSnippet,
+                isReverseInfoWindow: markerData.infoIcon?.contains("reverse") ?? false
             )
             infoWindowView.frame = CGRect(
                 x: infoWindowPosition.x,
@@ -532,7 +533,7 @@ public class Map {
     }
 
 
-    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool) -> CGPoint {
+    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool, isReverseInfoWindow: Bool) -> CGPoint {
         let point = self.mapViewController.GMapView.projection.point(for: coordinate)
         
         // Get the specific info window view for this marker
@@ -547,12 +548,12 @@ public class Map {
         if isSnippet {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: point.y - infoWindowHeight - 10
+                y: isReverseInfoWindow ? point.y + 10 : point.y - infoWindowHeight - 10
             )
         } else {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: point.y - infoWindowHeight 
+                y: isReverseInfoWindow ? point.y  : point.y - infoWindowHeight
             )
         }
     }
@@ -693,7 +694,8 @@ public class Map {
                             let newInfoWindowPosition = self.calculateInfoWindowScreenPosition(
                                 for: oldMarker.position,
                                 markerId: oldMarker.hash.hashValue,
-                                isSnippet: hasSnippet
+                                isSnippet: hasSnippet,
+                                isReverseInfoWindow: marker.infoIcon?.contains("reverse") ?? false
                             )
 
                             UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
@@ -1252,7 +1254,8 @@ public class Map {
                         let screenPosition = self.calculateInfoWindowScreenPosition(
                                             for: marker.position,
                                             markerId: markerId,
-                                            isSnippet: hasSnippet
+                                            isSnippet: hasSnippet,
+                                            isReverseInfoWindow :markerData.infoIcon?.contains("reverse") ?? false
                                         )
                         infoWindowView.frame.origin = screenPosition
                     }
