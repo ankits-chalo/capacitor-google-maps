@@ -61,6 +61,8 @@
 		ECAD59B42BC917E500158D06 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */; };
 		ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */; };
 		ECD18C8E2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */; };
+		EE04642B2ECC8F5600607511 /* LasrUpdatedInfoWindowReverse.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE04642A2ECC8F5600607511 /* LasrUpdatedInfoWindowReverse.xib */; };
+		EE04642D2ECC8F5600607511 /* LastUpdatedInfoWindowReverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE04642C2ECC8F5600607511 /* LastUpdatedInfoWindowReverse.swift */; };
 		EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */; };
 		EEC1D56E2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */; };
 /* End PBXBuildFile section */
@@ -135,6 +137,8 @@
 		ECAD59B12BC917E500158D06 /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		ECD18C8B2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertSingleLineInfoWindow.swift; sourceTree = "<group>"; };
 		ECD18C8C2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertSingleLineInfoWindow.xib; sourceTree = "<group>"; };
+		EE04642A2ECC8F5600607511 /* LasrUpdatedInfoWindowReverse.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LasrUpdatedInfoWindowReverse.xib; sourceTree = "<group>"; };
+		EE04642C2ECC8F5600607511 /* LastUpdatedInfoWindowReverse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastUpdatedInfoWindowReverse.swift; sourceTree = "<group>"; };
 		EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopArrivalInfoWindow.swift; sourceTree = "<group>"; };
 		EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StopArrivalInfoWindow.xib; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 				EC1FC3F32C0E353D006AA7E4 /* AlertBusMarkerHalt.swift */,
 				EC1FC3F02C0E353D006AA7E4 /* AlertBusMarkerHalt.xib */,
 				EC1FC3EC2C09CC22006AA7E4 /* AlertMarkerInfoWindow.swift */,
+				EE04642C2ECC8F5600607511 /* LastUpdatedInfoWindowReverse.swift */,
+				EE04642A2ECC8F5600607511 /* LasrUpdatedInfoWindowReverse.xib */,
 				EC1FC3ED2C09CC22006AA7E4 /* AlertMarkerInfoWindow.xib */,
 				EC3BE86E2BCE59CB00158F2C /* BusesMarkers.swift */,
 				EC3BE86D2BCE59CB00158F2C /* BusesMarkers.xib */,
@@ -392,6 +398,7 @@
 				EC578B872BCD4157000C9339 /* BusesMarkerInfoWindow.xib in Resources */,
 				EC9AB75E2D12C65E007314B3 /* HistoryReplayInfoWindow.xib in Resources */,
 				EC3BE86F2BCE59CB00158F2C /* BusesMarkers.xib in Resources */,
+				EE04642B2ECC8F5600607511 /* LasrUpdatedInfoWindowReverse.xib in Resources */,
 				EC11CB452BC92C6B00310392 /* infoWindowBackground.xib in Resources */,
 				EC3BE8732BCE697B00158F2C /* notosans.ttf in Resources */,
 				ECD18C8E2C254FFC0095B7ED /* AlertSingleLineInfoWindow.xib in Resources */,
@@ -544,6 +551,7 @@
 				ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */,
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
+				EE04642D2ECC8F5600607511 /* LastUpdatedInfoWindowReverse.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
 				EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */,
 				EC9AB75C2D12C643007314B3 /* HistoryReplayInfoWindow.swift in Sources */,
