@@ -1,13 +1,13 @@
 //
-//  LastUpdatedInfoWindowReverse.swift
+//  LastUpdatedInfoWindowReversed.swift
 //  App
 //
-//  Created by Abhay.
+//  Created by Saksham.
 //
 
 import UIKit
 
-class LastUpdatedInfoWindowReverse: UIView {
+class LastUpdatedInfoWindowReversed: UIView {
 
     @IBOutlet weak var lastUpdatedCardView: UIView!
     @IBOutlet weak var infoTitle: UILabel!
@@ -27,7 +27,7 @@ class LastUpdatedInfoWindowReverse: UIView {
         
     }
 
-    class func instanceFromNib() -> LastUpdatedInfoWindowReverse {
-        return UINib(nibName: "LastUpdatedInfoWindowReverse", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! LastUpdatedInfoWindowReverse
+    class func instanceFromNib() -> LastUpdatedInfoWindowReversed {
+        return UINib(nibName: "LastUpdatedInfoWindowReversed", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! LastUpdatedInfoWindowReversed
     }
 }
