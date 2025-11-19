@@ -1500,10 +1500,20 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 stopArrivalInfo.departureTime.text = departureTime
                 return stopArrivalInfo
             }else if(imageUrl.contains("last_updated_info")) {
-                let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
-                lastUpdateInfo.infoTitle.text = marker.title
-                lastUpdateInfo.infoSnippet.text = marker.snippet
-                return lastUpdateInfo
+                if(imageUrl.contains("reverse")){
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 1.8)
+                    let lastUpdateInfo = LastUpdatedInfoWindowReversed.instanceFromNib()
+                    lastUpdateInfo.infoTitle.text = marker.title
+                    lastUpdateInfo.infoSnippet.text = marker.snippet
+                    return lastUpdateInfo
+                }
+                else{
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 0.5)
+                    let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
+                    lastUpdateInfo.infoTitle.text = marker.title
+                    lastUpdateInfo.infoSnippet.text = marker.snippet
+                    return lastUpdateInfo
+                }
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
                 
