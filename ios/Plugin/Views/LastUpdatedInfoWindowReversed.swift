@@ -2,7 +2,7 @@
 //  LastUpdatedInfoWindowReversed.swift
 //  App
 //
-//  Created by Saksham.
+//  Created by Abhay.
 //
 
 import UIKit
