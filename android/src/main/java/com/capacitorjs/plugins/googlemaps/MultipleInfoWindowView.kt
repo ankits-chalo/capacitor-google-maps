@@ -20,7 +20,8 @@ class MultipleInfoWindowView(private val context: Context) {
         // Inflate the XML layout
         val inflater = LayoutInflater.from(context)
         var container = inflater.inflate(R.layout.multiple_info_window, null) as LinearLayout
-        if(marker.infoIcon?.contains("reverse") == true){
+        var isReverse =  marker.infoIcon?.contains("reverse") == true
+        if(isReverse){
             container = inflater.inflate(R.layout.multiple_info_window_reverse, null) as LinearLayout
         }
         // Get views from layout
@@ -124,7 +125,7 @@ class MultipleInfoWindowView(private val context: Context) {
 
         // Draw shadow with dynamic values
         drawShadow(canvas, measuredWidth, measuredHeight - shadowHeightAdjustment,
-            shadowPadding, shadowRadius, shadowOffsetY)
+            shadowPadding, shadowRadius, shadowOffsetY, isReverse)
 
         // Draw container on top of shadow (offset by shadow padding)
         canvas.save()
@@ -136,33 +137,44 @@ class MultipleInfoWindowView(private val context: Context) {
     }
 
     private fun drawShadow(canvas: Canvas, width: Int, height: Int,
-                           padding: Int, shadowRadius: Float, shadowOffsetY: Float) {
+                           padding: Int, shadowRadius: Float, shadowOffsetY: Float, isReverse:Boolean) {
 
         // First shadow layer - subtle outer shadow
         val shadowPaint1 = Paint().apply {
             isAntiAlias = true
             color = Color.TRANSPARENT
-            setShadowLayer(shadowRadius * 1.5f, 0f, shadowOffsetY * 0.5f, Color.argb(15, 0, 0, 0))
+            setShadowLayer(shadowRadius * 0.5f, 0f, shadowOffsetY * 0.25f, Color.argb(0x14, 0, 0, 0))
         }
 
         // Second shadow layer - main shadow
         val shadowPaint2 = Paint().apply {
             isAntiAlias = true
             color = Color.TRANSPARENT
-            setShadowLayer(shadowRadius, 0f, shadowOffsetY, Color.argb(40, 0, 0, 0))
+            setShadowLayer(shadowRadius * 0.8f, 0f, shadowOffsetY * 0.5f, Color.argb(0x14, 0, 0, 0))
         }
 
         // Calculate corner radius based on padding
         val cornerRadius = padding * 1.25f
 
         // Create shadow rectangle with dynamic inset
-        val shadowInset = (shadowRadius * 0.5f).toInt()
-        val rect = RectF(
-            (padding - shadowInset).toFloat(),
-            (padding - shadowInset).toFloat(),
-            (width + padding * 0.25 + shadowInset).toFloat(),
-            (height ).toFloat()
-        )
+        val shadowInset = (shadowRadius * 0.3f).toInt()
+
+        val rect = if (isReverse) {
+            RectF(
+                (padding - shadowInset  ).toFloat(),
+                (padding + shadowInset * 4).toFloat(),
+                (width + padding - shadowInset).toFloat(),
+                (height  + padding-shadowInset ).toFloat()
+            )
+        } else {
+            RectF(
+                (padding - shadowInset).toFloat(),
+                (padding - shadowInset).toFloat(),
+                (width + padding - shadowInset).toFloat(),
+                (height).toFloat()
+            )
+        }
+
 
         // Draw shadow layers
         canvas.drawRoundRect(rect, cornerRadius, cornerRadius, shadowPaint1)
