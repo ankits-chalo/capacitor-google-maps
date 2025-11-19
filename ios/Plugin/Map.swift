@@ -564,12 +564,12 @@ public class Map {
         if isSnippet {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y + 20 : point.y - infoWindowHeight - 20
+                y: isReverseInfoWindow ? point.y + 15 : point.y - infoWindowHeight - 15
             )
         } else {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y + 20  : point.y - infoWindowHeight - 20
+                y: isReverseInfoWindow ? point.y + 15  : point.y - infoWindowHeight - 15
             )
         }
     }

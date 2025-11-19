@@ -1501,14 +1501,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 return stopArrivalInfo
             }else if(imageUrl.contains("last_updated_info")) {
                 if(imageUrl.contains("reverse")){
-                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 1.8)
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 1.85)
                     let lastUpdateInfo = LastUpdatedInfoWindowReversed.instanceFromNib()
                     lastUpdateInfo.infoTitle.text = marker.title
                     lastUpdateInfo.infoSnippet.text = marker.snippet
                     return lastUpdateInfo
                 }
                 else{
-                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 0.5)
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 0.25)
                     let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
                     lastUpdateInfo.infoTitle.text = marker.title
                     lastUpdateInfo.infoSnippet.text = marker.snippet

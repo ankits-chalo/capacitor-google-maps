@@ -488,10 +488,10 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             if(marker.infoIcon!!.contains("reverse") == true){
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.5f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.8f)
                             }
                             else{
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.0f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.2f)
                             }
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
                             googleMapMarker?.showInfoWindow()
@@ -566,9 +566,9 @@ class CapacitorGoogleMap(
                 .zIndex(googleMapMarker.zIndex + 1.0f)
 
             if (originalMarker.infoIcon?.contains("reverse") == true) {
-                infoWindowMarkerOptions.anchor(0.4f, -0.2f)
+                infoWindowMarkerOptions.anchor(0.4f, -0.1f)
             } else {
-                infoWindowMarkerOptions.anchor(0.4f, 1.05f)
+                infoWindowMarkerOptions.anchor(0.4f, 0.95f)
             }
 
             // Create bitmap in background thread to avoid UI blocking
@@ -752,9 +752,9 @@ class CapacitorGoogleMap(
 
                                 // Update anchor
                                 if (marker.infoIcon?.contains("reverse") == true) {
-                                    existingInfoWindow.setAnchor(0.4f, -0.2f)
+                                    existingInfoWindow.setAnchor(0.4f, -0.1f)
                                 } else {
-                                    existingInfoWindow.setAnchor(0.4f, 1.05f)
+                                    existingInfoWindow.setAnchor(0.4f, 0.95f)
                                 }
                             }
                         } else {
@@ -807,9 +807,9 @@ class CapacitorGoogleMap(
 
                                     // Update anchor if needed based on the new type
                                     if (marker.infoIcon?.contains("reverse") == true) {
-                                        existingInfoWindow.setAnchor(0.4f, -0.2f)
+                                        existingInfoWindow.setAnchor(0.4f, -0.1f)
                                     } else {
-                                        existingInfoWindow.setAnchor(0.4f, 1.05f)
+                                        existingInfoWindow.setAnchor(0.4f, 0.95f)
                                     }
                                 }
                             }
@@ -863,10 +863,10 @@ class CapacitorGoogleMap(
                             } else if(marker.infoIcon!!.contains("last_updated_info")) {
                                 oldMarker?.googleMapMarker?.tag = marker
                                 if(marker.infoIcon!!.contains("reverse") == true){
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.5f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.8f)
                                 }
                                 else{
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.0f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.4f)
                                 }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {
