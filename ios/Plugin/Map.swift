@@ -512,6 +512,22 @@ public class Map {
             
         }
     }
+    private func updateInfoWindowContent(for markerId: Int, markerData: Marker) {
+        DispatchQueue.main.async {
+            guard let infoWindowView = self.infoWindowMarkers[markerId] as? MultipleInfoWindowView else { return }
+            
+            // Update the info window content with new marker data
+            infoWindowView.configureWith(
+                title: markerData.title,
+                snippet: markerData.snippet,
+                iconUrl: markerData.infoIcon
+            )
+            
+            // Force layout update
+            infoWindowView.setNeedsLayout()
+            infoWindowView.layoutIfNeeded()
+        }
+    }
     private func handleMultipleInfoWindowTap(marker: GMSMarker, markerData: Marker) {
         NSLog("MultipleInfoWindowView tapped for marker: \(marker.hash.hashValue)")
         
@@ -548,12 +564,12 @@ public class Map {
         if isSnippet {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y + 10 : point.y - infoWindowHeight - 10
+                y: isReverseInfoWindow ? point.y + 15 : point.y - infoWindowHeight - 15
             )
         } else {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y  : point.y - infoWindowHeight
+                y: isReverseInfoWindow ? point.y + 15  : point.y - infoWindowHeight - 15
             )
         }
     }
@@ -701,6 +717,7 @@ public class Map {
                             UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
                                                 infoWindowView.frame.origin = newInfoWindowPosition
                                             })
+                            self.updateInfoWindowContent(for: oldMarker.hash.hashValue, markerData: marker)
                             infoWindowView.isHidden = false // Ensure it's visible
                         } else {
                             // Hide info window

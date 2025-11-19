@@ -470,7 +470,7 @@ class CapacitorGoogleMap(
                     googleMapMarker?.tag = marker
 
 
-                    if (!marker.infoIcon.isNullOrEmpty() && (!marker.iconUrl!!.contains("new_3d_marker")) && (!marker.infoIcon.equals("not_show_info_window")) ) {
+                    if (!marker.infoIcon.isNullOrEmpty()  && (!marker.iconUrl!!.contains("new_3d_marker") || marker.infoIcon!!.contains("last_updated_info")) && (!marker.infoIcon.equals("not_show_info_window")) ) {
                         if(marker.infoIcon.equals("buses_info_icon")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
@@ -487,6 +487,12 @@ class CapacitorGoogleMap(
                         } else if(marker.infoIcon!!.contains("last_updated_info")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
+                            if(marker.infoIcon!!.contains("reverse") == true){
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.8f)
+                            }
+                            else{
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.2f)
+                            }
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
                             googleMapMarker?.showInfoWindow()
                         }
@@ -562,7 +568,7 @@ class CapacitorGoogleMap(
             if (originalMarker.infoIcon?.contains("reverse") == true) {
                 infoWindowMarkerOptions.anchor(0.4f, -0.1f)
             } else {
-                infoWindowMarkerOptions.anchor(0.4f, 1.0f)
+                infoWindowMarkerOptions.anchor(0.4f, 0.95f)
             }
 
             // Create bitmap in background thread to avoid UI blocking
@@ -731,11 +737,26 @@ class CapacitorGoogleMap(
 
                     if (shouldShowInfoWindow && marker.infoIcon?.contains("multiple_info_window") == true) {
                         val infoWindowMarker = infoWindowMarkers[marker.id]
+                        val existingInfoWindow = infoWindowMarkers[marker.id]
+                        val infoWindowTypeChanged = oldMarker?.infoIcon != marker.infoIcon
                         if (infoWindowMarker != null) {
                             //  UPDATE EXISTING INFO WINDOW POSITION (DON'T CREATE NEW ONE)
                             val newInfoWindowPosition = calculateInfoWindowPosition(marker.coordinate)
                             infoWindowMarker.position = newInfoWindowPosition
                             infoWindowMarker.zIndex = oldMarker?.googleMapMarker?.zIndex?.plus(10.0f) ?: 1000.0f
+                            if (existingInfoWindow != null && infoWindowTypeChanged) {
+                                val newInfoWindowBitmap = withContext(Dispatchers.Default) {
+                                    multipleInfoWindowView.createInfoWindowBitmap(marker)
+                                }
+                                existingInfoWindow.setIcon(BitmapDescriptorFactory.fromBitmap(newInfoWindowBitmap))
+
+                                // Update anchor
+                                if (marker.infoIcon?.contains("reverse") == true) {
+                                    existingInfoWindow.setAnchor(0.4f, -0.1f)
+                                } else {
+                                    existingInfoWindow.setAnchor(0.4f, 0.95f)
+                                }
+                            }
                         } else {
                             // Create new info window only if it doesn't exist
                             oldMarker?.googleMapMarker?.let { googleMapMarker ->
@@ -776,6 +797,21 @@ class CapacitorGoogleMap(
                             if (infoWindowMarker != null) {
                                 val newInfoWindowPosition = calculateInfoWindowPosition(marker.coordinate)
                                 infoWindowMarker.position = newInfoWindowPosition
+                                val existingInfoWindow = infoWindowMarkers[marker.id]
+                                val infoWindowTypeChanged = oldMarker?.infoIcon != marker.infoIcon
+                                if (existingInfoWindow != null && infoWindowTypeChanged && shouldShowInfoWindow && marker.infoIcon?.contains("multiple_info_window") == true) {
+                                    val newInfoWindowBitmap = withContext(Dispatchers.Default) {
+                                        multipleInfoWindowView.createInfoWindowBitmap(marker)
+                                    }
+                                    existingInfoWindow.setIcon(BitmapDescriptorFactory.fromBitmap(newInfoWindowBitmap))
+
+                                    // Update anchor if needed based on the new type
+                                    if (marker.infoIcon?.contains("reverse") == true) {
+                                        existingInfoWindow.setAnchor(0.4f, -0.1f)
+                                    } else {
+                                        existingInfoWindow.setAnchor(0.4f, 0.95f)
+                                    }
+                                }
                             }
                         }
                         // Set the camera position of map to the centre of the marker
@@ -826,6 +862,12 @@ class CapacitorGoogleMap(
                                 }
                             } else if(marker.infoIcon!!.contains("last_updated_info")) {
                                 oldMarker?.googleMapMarker?.tag = marker
+                                if(marker.infoIcon!!.contains("reverse") == true){
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.8f)
+                                }
+                                else{
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.4f)
+                                }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {
                                 if (marker.infoData?.getBoolean("showInfoIcon") == true) {
@@ -906,7 +948,7 @@ class CapacitorGoogleMap(
             callback(e)
         }
     }
-    
+
 
     private fun setMultipleMarkerPosition(marker: CapacitorGoogleMapMarker) {
         try {
