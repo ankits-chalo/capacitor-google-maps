@@ -566,9 +566,9 @@ class CapacitorGoogleMap(
                 .zIndex(googleMapMarker.zIndex + 1.0f)
 
             if (originalMarker.infoIcon?.contains("reverse") == true) {
-                infoWindowMarkerOptions.anchor(0.4f, -0.1f)
+                infoWindowMarkerOptions.anchor(0.4f, -0.15f)
             } else {
-                infoWindowMarkerOptions.anchor(0.4f, 0.95f)
+                infoWindowMarkerOptions.anchor(0.4f, 1.0f)
             }
 
             // Create bitmap in background thread to avoid UI blocking
@@ -752,9 +752,9 @@ class CapacitorGoogleMap(
 
                                 // Update anchor
                                 if (marker.infoIcon?.contains("reverse") == true) {
-                                    existingInfoWindow.setAnchor(0.4f, -0.1f)
+                                    existingInfoWindow.setAnchor(0.4f, -0.15f)
                                 } else {
-                                    existingInfoWindow.setAnchor(0.4f, 0.95f)
+                                    existingInfoWindow.setAnchor(0.4f, 1.0f)
                                 }
                             }
                         } else {
@@ -807,9 +807,9 @@ class CapacitorGoogleMap(
 
                                     // Update anchor if needed based on the new type
                                     if (marker.infoIcon?.contains("reverse") == true) {
-                                        existingInfoWindow.setAnchor(0.4f, -0.1f)
+                                        existingInfoWindow.setAnchor(0.4f, -0.15f)
                                     } else {
-                                        existingInfoWindow.setAnchor(0.4f, 0.95f)
+                                        existingInfoWindow.setAnchor(0.4f, 1.0f)
                                     }
                                 }
                             }

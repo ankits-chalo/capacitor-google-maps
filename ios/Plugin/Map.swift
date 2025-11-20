@@ -349,6 +349,9 @@ public class Map {
                     if(infoIcon.contains("bus_alert_info")) {
                         mapView.selectedMarker = newMarker
                     }
+                    if(infoIcon.contains("last_updated_info")) {
+                        mapView.selectedMarker = newMarker
+                    }
                 }
                 if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window"), infoIcon.contains("multiple_info_window") {
                     newMarker.title = ""
@@ -564,12 +567,12 @@ public class Map {
         if isSnippet {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y + 15 : point.y - infoWindowHeight - 15
+                y: isReverseInfoWindow ? point.y + 20 : point.y - infoWindowHeight - 20
             )
         } else {
             return CGPoint(
                 x: point.x - (infoWindowWidth * 0.4),
-                y: isReverseInfoWindow ? point.y + 15  : point.y - infoWindowHeight - 15
+                y: isReverseInfoWindow ? point.y + 20  : point.y - infoWindowHeight - 20
             )
         }
     }
