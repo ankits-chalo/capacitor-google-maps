@@ -866,7 +866,7 @@ class CapacitorGoogleMap(
                                     oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.8f)
                                 }
                                 else{
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.4f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.2f)
                                 }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {
