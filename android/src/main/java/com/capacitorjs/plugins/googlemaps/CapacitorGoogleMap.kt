@@ -415,7 +415,7 @@ class CapacitorGoogleMap(
                     marker.getMarkerId()?.let { markerIdOnWeb.add(it) }
 
                     val markerOptions = marker.getMarkerOptionsUpdated()
-                    val googleMapMarker = googleMap?.addMarker(markerOptions)
+     //               val googleMapMarker = googleMap?.addMarker(markerOptions)
                     if(marker.rotation == 1) {
                         if (marker.angleDiff > 0) {
                             markerOptions.rotation(marker.angleDiff)
@@ -465,7 +465,7 @@ class CapacitorGoogleMap(
 //                        markerOptions.snippet("")
                     }
 
-//                    val googleMapMarker = googleMap?.addMarker(markerOptions)
+                    val googleMapMarker = googleMap?.addMarker(markerOptions)
 
                     googleMapMarker?.tag = marker
 
