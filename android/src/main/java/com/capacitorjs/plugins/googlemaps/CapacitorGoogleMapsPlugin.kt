@@ -454,11 +454,11 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                 }
                 cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
             }
-
+             val padding = call.getInt("padding", 200) ?: 200
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
-            map.fitBound(cords, 50) { err ->
+            map.fitBound(cords, padding) { err ->
                 if (err != null) {
                     throw err
                 }
@@ -1076,7 +1076,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                     } else {
                         this.bridge.webView.onTouchEvent(event)
                     }
-                    events.removeFirst()
+                    events.removeAt(0)
                 }
             }
 

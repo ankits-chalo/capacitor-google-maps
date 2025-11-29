@@ -67,11 +67,12 @@ extension CGRect {
 public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
     private var maps = [String: Map]()
     private var isInitialized = false
+    private var locationManager = CLLocationManager()
 
     func checkLocationPermission() -> String {
         let locationState: String
 
-        switch CLLocationManager.authorizationStatus() {
+        switch self.locationManager.authorizationStatus {
         case .notDetermined:
             locationState = "prompt"
         case .restricted, .denied:
@@ -121,6 +122,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             DispatchQueue.main.sync {
                 let newMap = Map(id: id, config: config, delegate: self)
                 self.maps[id] = newMap
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    if let mapView = newMap.mapViewController.GMapView {
+                        // Apply different corner radii
+                        mapView.roundCorners(topLeft: config.topLeftRadius, topRight: config.topRightRadius, bottomLeft: config.bottomLeftRadius, bottomRight:config.bottomRightRadius )
+                        mapView.layer.masksToBounds = true
+                        mapView.clipsToBounds = true
+                    }
+                }
             }
 
             call.resolve()
@@ -296,6 +305,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             }
 
             try map.removeMarker(id: markerId)
+            
 
             call.resolve()
 
@@ -578,7 +588,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             handleError(call, error: error)
         }
     }
-
+    
     @objc func enableIndoorMaps(_ call: CAPPluginCall) {
         do {
             guard let id = call.getString("id") else {
@@ -683,7 +693,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("enabled is missing")
             }
 
-            if enabled && checkLocationPermission() != "granted" {
+            let locationStatus = checkLocationPermission()
+
+            if enabled &&  !(locationStatus == "granted" || locationStatus == "prompt") {
                 throw GoogleMapErrors.permissionsDeniedLocation
             }
 
@@ -1049,12 +1061,14 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 let cord = LatLng(lat: lat, lng: lng)
                 cords.append(cord)
             }
+
+            let padding = CGFloat(call.getInt("padding", 100))
             
             guard let map = self.maps[id] else {
                 throw GoogleMapErrors.mapNotFound
             }
             
-            map.fitBound(cords: cords, padding: 100)
+            map.fitBound(cords: cords, padding: padding)
             call.resolve()
             
         } catch {
@@ -1477,27 +1491,35 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 alertMarkerInfo.alertTitle.text = marker.title
                 alertMarkerInfo.alertSnippet.text = marker.snippet ?? "Loading..."
                 return alertMarkerInfo
-            } else if(imageUrl.contains("last_updated_info")) {
-                let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
-                lastUpdateInfo.infoTitle.text = marker.title
-                lastUpdateInfo.infoSnippet.text = marker.snippet
-                return lastUpdateInfo
+            } else if(imageUrl.contains("stop_arrival_info")) {
+                let arrivalTime = userData.infoData?["arrival_time"] as? String ?? "N/A"
+                let departureTime = userData.infoData?["departure_time"] as? String ?? "N/A"
+                let stopArrivalInfo = StopArrivalInfoWindow.instanceFromNib()
+                stopArrivalInfo.busTitle.text = marker.title
+                stopArrivalInfo.arrivalTime.text = arrivalTime
+                stopArrivalInfo.departureTime.text = departureTime
+                return stopArrivalInfo
+            }else if(imageUrl.contains("last_updated_info")) {
+                if(imageUrl.contains("reverse")){
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 1.85)
+                    let lastUpdateInfo = LastUpdatedInfoWindowReversed.instanceFromNib()
+                    lastUpdateInfo.infoTitle.text = marker.title
+                    lastUpdateInfo.infoSnippet.text = marker.snippet
+                    return lastUpdateInfo
+                }
+                else{
+                    marker.infoWindowAnchor = CGPoint(x: 0.5, y: 0.25)
+                    let lastUpdateInfo = LastUpdatedInfoWindow.instanceFromNib()
+                    lastUpdateInfo.infoTitle.text = marker.title
+                    lastUpdateInfo.infoSnippet.text = marker.snippet
+                    return lastUpdateInfo
+                }
             } else if(imageUrl.contains("not_show_info_window")) {
                 return nil
-            } else if(imageUrl.contains("replay_info_icon")) {
-                let historyReplayInfo = HistoryReplayInfoWindow.instanceFromNib()
                 
-                let latTitle = userData.infoData?["latTitle"] as? String ?? "Lat : "
-                let longTitle = userData.infoData?["longTitle"] as? String ?? "Long : "
-                let speedTitle = userData.infoData?["speedTitle"] as? String ?? "Speed : "
-                let timeTitle = userData.infoData?["timeTitle"] as? String ?? "Time : "
-                
-                historyReplayInfo.latTitle.text = latTitle
-                historyReplayInfo.longTitle.text = longTitle
-                historyReplayInfo.speedTitle.text = speedTitle
-                historyReplayInfo.timeTitle.text = timeTitle
-                
-                return historyReplayInfo
+            } else if(imageUrl.contains("multiple_info_window")) {
+                return nil
+            
             } else {
                 let infoWindow = InfoWindowWithImage.instanceFromNib()
                 infoWindow.titleLabel.text = marker.title
@@ -1559,9 +1581,11 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             "longitude": location.longitude
         ])
     }
+    
     public func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         for (mapId, map) in self.maps {
             if map.mapViewController.GMapView === mapView {
+                map.onCameraMove()
                 if(map.mapViewController.isCircleShow == true){
                     let height = map.mapViewController.circleView.frame.height
                     let xCenter = map.mapViewController.circleView.frame.origin.x
@@ -1622,5 +1646,57 @@ extension UIColor {
         }
 
         return nil
+    }
+}
+
+extension UIView {
+    func roundCorners(topLeft: CGFloat = 0, topRight: CGFloat = 0, bottomLeft: CGFloat = 0, bottomRight: CGFloat = 0) {
+        let path = UIBezierPath()
+        let bounds = self.bounds
+        
+        // Start from top-left
+        path.move(to: CGPoint(x: topLeft, y: 0))
+        
+        // Top edge
+        path.addLine(to: CGPoint(x: bounds.width - topRight, y: 0))
+        // Top-right corner
+        path.addArc(withCenter: CGPoint(x: bounds.width - topRight, y: topRight),
+                    radius: topRight,
+                    startAngle: -CGFloat.pi / 2,
+                    endAngle: 0,
+                    clockwise: true)
+        
+        // Right edge
+        path.addLine(to: CGPoint(x: bounds.width, y: bounds.height - bottomRight))
+        // Bottom-right corner
+        path.addArc(withCenter: CGPoint(x: bounds.width - bottomRight, y: bounds.height - bottomRight),
+                    radius: bottomRight,
+                    startAngle: 0,
+                    endAngle: CGFloat.pi / 2,
+                    clockwise: true)
+        
+        // Bottom edge
+        path.addLine(to: CGPoint(x: bottomLeft, y: bounds.height))
+        // Bottom-left corner
+        path.addArc(withCenter: CGPoint(x: bottomLeft, y: bounds.height - bottomLeft),
+                    radius: bottomLeft,
+                    startAngle: CGFloat.pi / 2,
+                    endAngle: CGFloat.pi,
+                    clockwise: true)
+        
+        // Left edge
+        path.addLine(to: CGPoint(x: 0, y: topLeft))
+        // Top-left corner
+        path.addArc(withCenter: CGPoint(x: topLeft, y: topLeft),
+                    radius: topLeft,
+                    startAngle: CGFloat.pi,
+                    endAngle: -CGFloat.pi / 2,
+                    clockwise: true)
+        
+        path.close()
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
     }
 }

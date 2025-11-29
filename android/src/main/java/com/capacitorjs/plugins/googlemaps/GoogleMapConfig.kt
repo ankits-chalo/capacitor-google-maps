@@ -17,6 +17,14 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
     var devicePixelRatio: Float = 1.00f
     var styles: String? = null
     var mapId: String? = null
+    var borderRadius: BorderRadius? = null
+
+    data class BorderRadius(
+        val topLeft: Float = 0f,
+        val topRight: Float = 0f,
+        val bottomLeft: Float = 0f,
+        val bottomRight: Float = 0f
+    )
 
     init {
         if (!fromJSONObject.has("width")) {
@@ -80,6 +88,16 @@ class GoogleMapConfig(fromJSONObject: JSONObject) {
         val lat = centerJSONObject.getDouble("lat")
         val lng = centerJSONObject.getDouble("lng")
         center = LatLng(lat, lng)
+
+        if (fromJSONObject.has("borderRadius")) {
+            val borderRadiusObj = fromJSONObject.getJSONObject("borderRadius")
+            borderRadius = BorderRadius(
+                topLeft = borderRadiusObj.optDouble("topLeft", 0.0).toFloat(),
+                topRight = borderRadiusObj.optDouble("topRight", 0.0).toFloat(),
+                bottomLeft = borderRadiusObj.optDouble("bottomLeft", 0.0).toFloat(),
+                bottomRight = borderRadiusObj.optDouble("bottomRight", 0.0).toFloat()
+            )
+        }
 
         val cameraPosition = CameraPosition(center, zoom.toFloat(), 0.0F, 0.0F)
 

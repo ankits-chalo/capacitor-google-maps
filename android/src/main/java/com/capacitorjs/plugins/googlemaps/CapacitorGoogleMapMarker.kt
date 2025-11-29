@@ -15,6 +15,7 @@ import org.json.JSONObject
 
 
 class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject): ClusterItem {
+    var angleDiff:Float = 0.0f
     var coordinate: LatLng = LatLng(0.0, 0.0)
     var opacity: Float = 1.0f
     private var title: String
@@ -86,6 +87,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         id = fromJSONObject.optString("id")
         zIndex = fromJSONObject.optDouble("zIndex", 1.0 ).toFloat()
         rotation = fromJSONObject.optInt("rotation")
+        angleDiff = fromJSONObject.optDouble("angleDiff", 0.0 ).toFloat()
     }
 
     override fun getPosition(): LatLng {
@@ -143,6 +145,12 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         // Default value of anchor is 0.5, 0.5 and for placing the icon on bottom is 0.5, 1
         markerOptions.anchor(customAnchor.x, customAnchor.y)
 
+        if (rotation == 1) {
+            markerOptions.rotation(angleDiff)
+        } else {
+            markerOptions.rotation(0f)
+        }
+
         if (zIndex > 0) {
             markerOptions.zIndex(zIndex)
         }
@@ -178,9 +186,21 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val markerWidth = context.resources.getDimension(R.dimen.start_end_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
-        } else if(iconUrl?.contains("alert_bus") == true) {
+        } else if(iconUrl?.contains("new_3d_marker") == true) {
+            val markerHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
+            val markerWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,
+                iconSize?.width ?: markerWidth, iconSize?.height ?: markerHeight, false)))
+        }
+        else if(iconUrl?.contains("bus_depot_marker") == true ) {
+            val markerHeight = context.resources.getDimension(R.dimen.bus_depot_marker).toInt()
+            val markerWidth = context.resources.getDimension(R.dimen.bus_depot_marker).toInt()
+            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
+        }  else if(iconUrl?.contains("alert_bus") == true) {
             val markerHeight = context.resources.getDimension(R.dimen.alert_marker_height).toInt()
-            val markerWidth = context.resources.getDimension(R.dimen.alert_marker_width).toInt()
+            val markerWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             if(bitmap != null) {
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
@@ -229,6 +249,9 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         }  else if(iconUrl?.contains("alert_stop_custom_marker") == true) {
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
+        } else if (iconUrl?.contains("new_3d_marker") == true || iconUrl?.contains("new_3d_image") == true) {
+            val new3dMarker = New3dMarker(context)
+            googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!,iconSize))
         } else if(iconUrl?.contains("overspeed_marker") == true) {
             val busesMarker = OverSpeedCustomMarker(context)
             val resId = context.resources.getIdentifier(iconUrl, "drawable", context.packageName)

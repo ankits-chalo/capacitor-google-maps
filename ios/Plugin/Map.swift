@@ -36,6 +36,7 @@ class GMViewController: UIViewController {
             self.GMapView = GMSMapView(frame: frame, camera: camera)
         }
 
+        self.GMapView.settings.rotateGestures = false
         self.view = GMapView
     }
 
@@ -126,7 +127,9 @@ public class Map {
     var removeMarkersArray = [removeArrayClass]()
     var polylineCords = [LatLng]()
     var timer : Timer?
+    var infoWindowMarkers = [Int: UIView]()
     // swiftlint:disable identifier_name
+    var multipleInfoWindowZoomLevel: Float = 13.5
     public static let MAP_TAG = 99999
     // swiftlint:enable identifier_name
 
@@ -338,7 +341,7 @@ public class Map {
                     newMarker.snippet = marker.snippet
                 }
                 newMarker.userData = marker
-                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window") {
+                if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                     newMarker.map = mapView
                     if(infoIcon.contains("address")) {
                         fetchAddressForMarker(newMarker)
@@ -346,8 +349,15 @@ public class Map {
                     if(infoIcon.contains("bus_alert_info")) {
                         mapView.selectedMarker = newMarker
                     }
+                    if(infoIcon.contains("last_updated_info")) {
+                        mapView.selectedMarker = newMarker
+                    }
                 }
-                if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window") {
+                if let infoIcon = marker.infoIcon, infoIcon.contains("not_show_info_window"), infoIcon.contains("multiple_info_window") {
+                    newMarker.title = ""
+                    newMarker.snippet = ""
+                }
+                if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
                     newMarker.title = ""
                     newMarker.snippet = ""
                 }
@@ -411,7 +421,16 @@ public class Map {
                 }
                 do {
                     if((marker.rotation) == 1){
-                        newMarker.rotation =  try getAngle(marker: marker)
+                        guard let angleDiff = marker.angleDiff else{
+                            newMarker.rotation = try getAngle(marker: marker)
+                            return;
+                        }
+                        if angleDiff != 0{
+                            newMarker.rotation = angleDiff
+                        }
+                        else{
+                            newMarker.rotation = try getAngle(marker: marker)
+                        }
                     }else{
                         newMarker.rotation =  0
                     }
@@ -446,6 +465,202 @@ public class Map {
         
     }
     
+
+    private func createInfoWindowAsMarker(for originalMarker: GMSMarker, markerData: Marker) {
+        DispatchQueue.main.async {
+            // Check if info window already exists for this marker
+            guard self.infoWindowMarkers[originalMarker.hash.hashValue] == nil else { return }
+            
+            // Hide the original marker's title and snippet to avoid duplication
+            originalMarker.title = ""
+            originalMarker.snippet = ""
+            
+            // Create custom view for info window
+            let infoWindowView = MultipleInfoWindowView.instanceFromNib()
+            infoWindowView.configureWith(
+                title: markerData.title,
+                snippet: markerData.snippet,
+                iconUrl: markerData.infoIcon
+            )
+            
+            infoWindowView.onClose = { [weak self] in
+                self?.removeInfoWindowMarker(for: originalMarker.hash.hashValue)
+            }
+            infoWindowView.onTap = { [weak self] in
+                self?.handleMultipleInfoWindowTap(marker: originalMarker, markerData: markerData)
+            }
+            
+            
+            // Calculate position and frame for the UIView
+            let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
+            let infoWindowPosition = self.calculateInfoWindowScreenPosition(
+                for: originalMarker.position,
+                markerId: originalMarker.hash.hashValue,
+                isSnippet: hasSnippet,
+                isReverseInfoWindow: markerData.infoIcon?.contains("reverse") ?? false
+            )
+            infoWindowView.frame = CGRect(
+                x: infoWindowPosition.x,
+                y: infoWindowPosition.y,
+                width: infoWindowView.frame.width,
+                height: infoWindowView.frame.height
+            )
+            
+            // Add the view to the map view
+            self.mapViewController.GMapView.addSubview(infoWindowView)
+            
+            // Store reference
+            self.infoWindowMarkers[originalMarker.hash.hashValue] = infoWindowView
+            
+            
+        }
+    }
+    private func updateInfoWindowContent(for markerId: Int, markerData: Marker) {
+        DispatchQueue.main.async {
+            guard let infoWindowView = self.infoWindowMarkers[markerId] as? MultipleInfoWindowView else { return }
+            
+            // Update the info window content with new marker data
+            infoWindowView.configureWith(
+                title: markerData.title,
+                snippet: markerData.snippet,
+                iconUrl: markerData.infoIcon
+            )
+            
+            // Force layout update
+            infoWindowView.setNeedsLayout()
+            infoWindowView.layoutIfNeeded()
+        }
+    }
+    private func handleMultipleInfoWindowTap(marker: GMSMarker, markerData: Marker) {
+        NSLog("MultipleInfoWindowView tapped for marker: \(marker.hash.hashValue)")
+        
+        let userInfo = markerData
+        var title = marker.title
+        if title == nil || title?.isEmpty == true {
+            title = userInfo.title
+        }
+        
+        // Trigger the same onMarkerClick event as regular marker taps
+        self.delegate.notifyListeners("onMarkerClick", data: [
+            "mapId": self.id,
+            "markerId": String(marker.hash.hashValue),
+            "latitude": marker.position.latitude,
+            "longitude": marker.position.longitude,
+            "title": title ?? "",
+            "snippet": marker.snippet ?? ""
+        ])
+    }
+
+
+    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool, isReverseInfoWindow: Bool) -> CGPoint {
+        let point = self.mapViewController.GMapView.projection.point(for: coordinate)
+        
+        // Get the specific info window view for this marker
+        guard let infoWindowView = self.infoWindowMarkers[markerId] else {
+            // Fallback position if view not found
+            return CGPoint(x: point.x - 80, y: point.y - 60)
+        }
+        
+        let infoWindowHeight = infoWindowView.frame.height
+        let infoWindowWidth = infoWindowView.frame.width
+        
+        if isSnippet {
+            return CGPoint(
+                x: point.x - (infoWindowWidth * 0.4),
+                y: isReverseInfoWindow ? point.y + 20 : point.y - infoWindowHeight - 20
+            )
+        } else {
+            return CGPoint(
+                x: point.x - (infoWindowWidth * 0.4),
+                y: isReverseInfoWindow ? point.y + 20  : point.y - infoWindowHeight - 20
+            )
+        }
+    }
+    private func calculateInfoWindowPosition(for markerPosition: CLLocationCoordinate2D) -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(
+            latitude: markerPosition.latitude ,
+            longitude: markerPosition.longitude
+        )
+    }
+
+    private func removeInfoWindowMarker(for originalMarkerId: Int) {
+        DispatchQueue.main.async {
+            if let infoWindowView = self.infoWindowMarkers[originalMarkerId] {
+                infoWindowView.removeFromSuperview()
+                self.infoWindowMarkers.removeValue(forKey: originalMarkerId)
+                
+                // Clean up the view to prevent memory leaks
+                if let infoWindowView = infoWindowView as? MultipleInfoWindowView {
+                    infoWindowView.onClose = nil
+                }
+                
+                // Restore the original marker's title and snippet if needed
+                if let originalMarker = self.markers[originalMarkerId] {
+                    if let markerData = originalMarker.userData as? Marker {
+                        let shouldShowInfo = !(markerData.infoIcon?.contains("not_show_info_window") ?? false)
+                                            && !(markerData.infoIcon?.contains("multiple_info_window") ?? false)
+                        if shouldShowInfo {
+                            originalMarker.title = markerData.title
+                            originalMarker.snippet = markerData.snippet
+                        }
+                    }
+                }
+            }
+        }
+    }
+    func updateInfoWindowsForCurrentZoom() {
+        DispatchQueue.main.async {
+            let currentZoom = self.mapViewController.GMapView.camera.zoom
+            
+            if currentZoom >= self.multipleInfoWindowZoomLevel {
+                // Show all multiple info windows
+                self.showAllMultipleInfoWindows()
+            } else {
+                // Hide all multiple info windows
+                self.hideAllMultipleInfoWindows()
+            }
+        }
+    }
+
+    private func showAllMultipleInfoWindows() {
+        // Find all markers that should have multiple info windows and create them
+        for (markerId, marker) in self.markers {
+
+            if let markerData = marker.userData as? Marker,
+               let infoIcon = markerData.infoIcon,
+               infoIcon.contains("multiple_info_window"),
+               self.infoWindowMarkers[markerId] == nil { // Only create if not already exists
+                self.removeInfoWindowMarker(for: markerId)
+                self.createInfoWindowAsMarker(for: marker, markerData: markerData)
+            }
+        }
+    }
+
+    private func hideAllMultipleInfoWindows() {
+        // Remove all multiple info window views
+        for (markerId, infoWindowView) in self.infoWindowMarkers {
+            infoWindowView.removeFromSuperview()
+            
+            // Restore original marker's title and snippet if needed
+            if let originalMarker = self.markers[markerId] {
+                if let markerData = originalMarker.userData as? Marker {
+                    let shouldShowInfo = !(markerData.infoIcon?.contains("not_show_info_window") ?? false)
+                                        && !(markerData.infoIcon?.contains("multiple_info_window") ?? false)
+                    if shouldShowInfo {
+                        originalMarker.title = markerData.title
+                        originalMarker.snippet = markerData.snippet
+                    }
+                }
+            }
+        }
+        
+        self.infoWindowMarkers.removeAll()
+    }
+    func onCameraMove() {
+        self.updateInfoWindowsForCurrentZoom()
+        self.updateInfoWindowPositions()
+    }
+    
     func setMarkerPosition(marker: Marker) throws  -> String  {
         if let oldMarker = self.markers[Int(marker.id!)!] {
             DispatchQueue.main.sync {
@@ -473,8 +688,7 @@ public class Map {
                 }
 
                 if !self.mapViewController.clusteringEnabled || !(marker.isClustered ?? true) || self.markerIdNotOnCluster.contains(String(marker.id!)) {
-                    
-                    var duration = 2.0
+                                   var duration = 2.0
                     
                     if let infoData = marker.infoData {
                         // Taking duration value form infoData
@@ -484,11 +698,50 @@ public class Map {
 
                            duration = animationDuration > 0 ? animationDuration / 1000 : 0
                     }
-                    
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(duration)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window") {
+                    let currentZoom = self.mapViewController.GMapView.camera.zoom
+                                let shouldShowInfoWindow = currentZoom >= self.multipleInfoWindowZoomLevel
+                    
+                        
+                                
+                    if let infoWindowView = self.infoWindowMarkers[oldMarker.hash.hashValue] {
+                        if shouldShowInfoWindow {
+                            // Update info window position
+                            let hasSnippet = !(marker.snippet?.isEmpty ?? true)
+                            let newInfoWindowPosition = self.calculateInfoWindowScreenPosition(
+                                for: oldMarker.position,
+                                markerId: oldMarker.hash.hashValue,
+                                isSnippet: hasSnippet,
+                                isReverseInfoWindow: marker.infoIcon?.contains("reverse") ?? false
+                            )
+
+                            UIView.animate(withDuration: duration, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
+                                                infoWindowView.frame.origin = newInfoWindowPosition
+                                            })
+                            self.updateInfoWindowContent(for: oldMarker.hash.hashValue, markerData: marker)
+                            infoWindowView.isHidden = false // Ensure it's visible
+                        } else {
+                            // Hide info window
+                            infoWindowView.isHidden = true
+                            // Restore original marker's title/snippet if needed
+                            if !(marker.infoIcon?.contains("not_show_info_window") ?? false)
+                               && !(marker.infoIcon?.contains("multiple_info_window") ?? false) {
+                                oldMarker.title = marker.title
+                                oldMarker.snippet = marker.snippet
+                            }
+                        }
+                    } else if shouldShowInfoWindow {
+                        // Create info window if it doesn't exist but should be shown
+                        if let markerData = oldMarker.userData as? Marker,
+                           let infoIcon = markerData.infoIcon,
+                           infoIcon.contains("multiple_info_window") {
+                            self.removeInfoWindowMarker(for: oldMarker.hash.hashValue)
+                            self.createInfoWindowAsMarker(for: oldMarker, markerData: markerData)
+                        }
+                    }
+                    if let infoIcon = marker.infoIcon, !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window") {
                         oldMarker.title = marker.title
                         oldMarker.snippet = marker.snippet
                     }
@@ -572,7 +825,7 @@ public class Map {
                         self.mapViewController.GMapView.selectedMarker = oldMarker
                     }
                     oldMarker.userData = marker
-                    if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"){
+                    if let infoIcon = marker.infoIcon, let mapView = self.mapViewController.GMapView , !infoIcon.contains("not_show_info_window"),!infoIcon.contains("multiple_info_window"){
                         oldMarker.map = mapView
                         if let infoData = marker.infoData {
                             let showInfoIcon = infoData["showInfoIcon"] as? Bool ?? false
@@ -590,7 +843,17 @@ public class Map {
                     do {
                         // Set the map style by passing the URL of the local file.
                         if((marker.rotation) == 1){
-                            oldMarker.rotation =  try self.getAngle(marker: marker)
+                            guard let angleDiff = marker.angleDiff else{
+                                oldMarker.rotation = try self.getAngle(marker: marker)
+                                return;
+                            }
+                            if angleDiff != 0{
+                                oldMarker.rotation = angleDiff
+                            }
+                            else{
+                                oldMarker.rotation =  try self.getAngle(marker: marker)
+                            }
+                            
                         }else{
                             oldMarker.rotation =  0
                         }
@@ -625,7 +888,7 @@ public class Map {
                     }
                     
                     // If the marker is the selected marker, refresh the info window
-                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil && !(marker.infoIcon?.contains("not_show_info_window") ?? false)
+                    let showInfoIcon = marker.infoData?["showInfoIcon"] as? Bool ?? false && oldMarker.map != nil && !(marker.infoIcon?.contains("not_show_info_window") ?? false) && !(marker.infoIcon?.contains("multiple_info_window") ?? false)
                     if showInfoIcon {
 //                            self.mapViewController.GMapView.selectedMarker = nil
                         oldMarker.map = self.mapViewController.GMapView
@@ -654,8 +917,9 @@ public class Map {
             }
             let cameraUpdate = GMSCameraUpdate.fit(bounds, withPadding: padding)
             if let mapView = self.mapViewController.GMapView {
-                mapView.animate(with: cameraUpdate)
+                mapView.moveCamera(cameraUpdate)
             }
+            onCameraMove()
         }
     }
     
@@ -1000,11 +1264,31 @@ public class Map {
             }
         }
     }
+    
+    func updateInfoWindowPositions() {
+        DispatchQueue.main.async {
+            for (markerId, infoWindowView) in self.infoWindowMarkers {
+                if let marker = self.markers[markerId] {
+                    if let markerData = marker.userData as? Marker {
+                        let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
+                        let screenPosition = self.calculateInfoWindowScreenPosition(
+                                            for: marker.position,
+                                            markerId: markerId,
+                                            isSnippet: hasSnippet,
+                                            isReverseInfoWindow :markerData.infoIcon?.contains("reverse") ?? false
+                                        )
+                        infoWindowView.frame.origin = screenPosition
+                    }
+                }
+            }
+        }
+    }
 
     func removeMarker(id: Int) throws {
         if (id != 0) {
             if let marker = self.markers[id] {
                 DispatchQueue.main.async {
+                    self.removeInfoWindowMarker(for: id)
                     if self.mapViewController.clusteringEnabled {
                         self.mapViewController.removeMarkersFromCluster(markers: [marker])
                     }
@@ -1016,10 +1300,16 @@ public class Map {
 
                     marker.map = nil
                     self.markers.removeValue(forKey: id)
+                    
+                    // Remove info window view if it exists
+                    if let infoWindowView = self.infoWindowMarkers[id] {
+                        infoWindowView.removeFromSuperview()
+                        self.infoWindowMarkers.removeValue(forKey: id)
+                    }
+                }
+            } else {
+                throw GoogleMapErrors.markerNotFound
             }
-        } else {
-            throw GoogleMapErrors.markerNotFound
-        }
         }
     }
 
@@ -1422,3 +1712,5 @@ extension UIImage {
         return resizedImage
     }
 }
+
+
