@@ -421,14 +421,9 @@ public class Map {
                 }
                 do {
                     if((marker.rotation) == 1){
-                        guard let angleDiff = marker.angleDiff else{
-                            newMarker.rotation = try getAngle(marker: marker)
-                            return;
-                        }
-                        if angleDiff != 0{
-                            newMarker.rotation = angleDiff
-                        }
-                        else{
+                        if let angleDiff = marker.angleDiff {
+                            newMarker.rotation = angleDiff != 0 ? angleDiff : try getAngle(marker: marker)
+                        } else {
                             newMarker.rotation = try getAngle(marker: marker)
                         }
                     }else{
@@ -843,17 +838,12 @@ public class Map {
                     do {
                         // Set the map style by passing the URL of the local file.
                         if((marker.rotation) == 1){
-                            guard let angleDiff = marker.angleDiff else{
-                                oldMarker.rotation = try self.getAngle(marker: marker)
-                                return;
+                            if let angleDiff = marker.angleDiff {
+                                oldMarker.rotation = angleDiff != 0 ? angleDiff : try getAngle(marker: marker)
+                            } else {
+                                oldMarker.rotation = try getAngle(marker: marker)
                             }
-                            if angleDiff != 0{
-                                oldMarker.rotation = angleDiff
-                            }
-                            else{
-                                oldMarker.rotation =  try self.getAngle(marker: marker)
-                            }
-                            
+
                         }else{
                             oldMarker.rotation =  0
                         }
