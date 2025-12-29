@@ -1213,6 +1213,7 @@ public class Map {
                         newPolyline.strokeColor = strokeColor
                    }
                    newPolyline.zIndex = Int32(zIndexs[index])
+                   self.polylines[newPolyline.hash.hashValue] = newPolyline
                    polylineHashes.append(newPolyline.hash.hashValue)
             }
             
