@@ -66,6 +66,7 @@ class CapacitorGoogleMap(
     private val polygons = HashMap<String, CapacitorGoogleMapsPolygon>()
     private val circles = HashMap<String, CapacitorGoogleMapsCircle>()
     private val polylines = HashMap<String, CapacitorGoogleMapPolyline>()
+    private val customPolylines = HashMap<String, Polyline>()
     private val markerIcons = HashMap<String, Bitmap>()
     private val infoWindowMarkers = HashMap<String, Marker>()
     private var multipleInfoWindowZoomLevel: Float = 13.5f
@@ -1010,7 +1011,7 @@ class CapacitorGoogleMap(
                      strokeWidths: MutableList<Int>,
                      zIndexs: MutableList<Int>,
                      strokeOpacities: MutableList<Int>,
-                     callback: (result: Result<String>) -> Unit
+                     callback: (ids: Result<List<String>>) -> Unit
     ) {
         // addPolylines is our custom implementation. If we want to use both add and remove polylines we can copy the plugins code here addPolylines
         try {
@@ -1026,11 +1027,12 @@ class CapacitorGoogleMap(
                     polylineOptions.color(Color.parseColor(strokeColors[index]))
                     polylineOptions.zIndex(zIndexs[index].toFloat())
                     val googleMapPolyline = googleMap?.addPolyline(polylineOptions)
+                    customPolylines[googleMapPolyline!!.id] = googleMapPolyline
 
-                    googleMapPolyline?.id?.let { it1 -> polylineIds.add(it1) }
+                    polylineIds.add(googleMapPolyline.id)
                 }
 
-                callback(Result.success(polylineIds[0]))
+                callback(Result.success(polylineIds))
             }
         } catch (e: GoogleMapsError) {
             callback(Result.failure(e))
@@ -1240,10 +1242,10 @@ class CapacitorGoogleMap(
 
             CoroutineScope(Dispatchers.Main).launch {
                 ids.forEach {
-                    val polyline = polylines[it]
-                    if (polyline != null) {
-                        polyline.googleMapsPolyline?.remove()
-                        polylines.remove(it)
+                    val googleMapsPolyline = customPolylines[it]
+                    if (googleMapsPolyline != null) {
+                        googleMapsPolyline?.remove()
+                        customPolylines.remove(it)
                     }
                 }
 
