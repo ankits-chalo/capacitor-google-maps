@@ -411,7 +411,9 @@ public class Map {
                         newMarker.iconView = alertMarker
                         newMarker.title = ""
                         newMarker.snippet = ""
-                    }else {
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                        renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
+                    } else {
                         // If it is present in assets folder then the icon is picked from it
 //                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
                         if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
@@ -805,21 +807,8 @@ public class Map {
                             oldMarker.title = ""
                             oldMarker.snippet = ""
                         } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
-                        let generator = DynamicMarkerGenerator()
-                        let marker = GMSMarker()
-                        marker.icon = generator.generateMarker(
-                            busImage: UIImage(named: "ic_bus_white")!,
-                            statusColor: .systemGreen,
-                            angle: marker.bearingAngle
-                        )
-
-                        let anchor = generator.anchor()
-                        marker.groundAnchor = anchor
-                        marker.position = coordinate
-                        marker.map = mapView
-                        oldMarker.title = ""
-                        oldMarker.snippet = ""
-                        }else {
+                            renderDynamicMarker(gmsMarker: oldMarker, markerData: marker)
+                        } else {
                             // If it is present in assets folder then the icon is picked from it
 //                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
                             if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
@@ -948,7 +937,9 @@ public class Map {
                  else{
                      oldMarker.title = marker.title
                  }
-                 if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                 if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                     renderDynamicMarker(gmsMarker: oldMarker, markerData: marker)
+                 } else if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
                      oldMarker.icon = getResizedIcon(image,marker)
                  }
                  do {
@@ -1079,7 +1070,11 @@ public class Map {
                  newMarker.isFlat = marker.isFlat ?? false
                  newMarker.opacity = marker.opacity ?? 1
                  newMarker.isDraggable = marker.draggable ?? false
-                 newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                 if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                     renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
+                 } else {
+                     newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                 }
 
                  if self.mapViewController.clusteringEnabled {
                      googleMapsMarkers.append(newMarker)
@@ -1638,6 +1633,21 @@ public class Map {
         }
 
         return newMarker
+    }
+
+    private func renderDynamicMarker(gmsMarker: GMSMarker, markerData: Marker) {
+        if let iconUrl = markerData.iconUrl, iconUrl.contains("new_3d_marker") {
+            gmsMarker.iconView = nil
+            let generator = DynamicMarkerGenerator()
+            gmsMarker.icon = generator.generateMarker(
+                busImage: UIImage(named: "ic_bus_white") ?? UIImage(),
+                statusColor: markerData.markerBgColor ?? .systemGreen,
+                angle: CGFloat(markerData.bearingAngle ?? 0)
+            )
+            gmsMarker.groundAnchor = generator.anchor()
+            gmsMarker.title = ""
+            gmsMarker.snippet = ""
+        }
     }
 }
 

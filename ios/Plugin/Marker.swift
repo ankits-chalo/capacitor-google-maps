@@ -22,6 +22,8 @@ public struct Marker {
     let infoData: JSObject?
     let infoIcon: String?
     let customAnchor: CGPoint?
+    let bearingAngle: Double?
+    let markerBgColor: UIColor?
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -71,6 +73,17 @@ public struct Marker {
             }
         }
 
+        var markerBgColor: UIColor?
+        if let rgbObject = fromJSObject["markerBgColor"] as? JSObject {
+            if let r = rgbObject["r"] as? Double, let g = rgbObject["g"] as? Double, let b = rgbObject["b"] as? Double, let a = rgbObject["a"] as? Double {
+
+                let uiColorR = CGFloat(r / 255).clamp(min: 0, max: 255)
+                let uiColorG = CGFloat(g / 255).clamp(min: 0, max: 255)
+                let uiColorB = CGFloat(b / 255).clamp(min: 0, max: 255)
+                markerBgColor = UIColor(red: uiColorR, green: uiColorG, blue: uiColorB, alpha: CGFloat(a))
+            }
+        }
+
         self.coordinate = LatLng(lat: lat, lng: lng)
         self.opacity = fromJSObject["opacity"] as? Float
         self.title = fromJSObject["title"] as? String
@@ -83,9 +96,11 @@ public struct Marker {
         self.iconAnchor = iconAnchor
         self.customAnchor = customAnchor
         self.color = tintColor
+        self.markerBgColor = markerBgColor
         self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
         self.rotation = fromJSObject["rotation"] as? Double
         self.angleDiff = fromJSObject["angleDiff"] as? Double
+        self.bearingAngle = fromJSObject["bearingAngle"] as? Double
         self.infoData = fromJSObject["infoData"] as? JSObject
         self.infoIcon = fromJSObject["infoIcon"] as? String
         self.id = fromJSObject["id"] as? String
