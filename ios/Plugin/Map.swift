@@ -804,6 +804,21 @@ public class Map {
                             oldMarker.iconView = alertMarker
                             oldMarker.title = ""
                             oldMarker.snippet = ""
+                        } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                        let generator = DynamicMarkerGenerator()
+                        let marker = GMSMarker()
+                        marker.icon = generator.generateMarker(
+                            busImage: UIImage(named: "ic_bus_white")!,
+                            statusColor: .systemGreen,
+                            angle: marker.bearingAngle
+                        )
+
+                        let anchor = generator.anchor()
+                        marker.groundAnchor = anchor
+                        marker.position = coordinate
+                        marker.map = mapView
+                        oldMarker.title = ""
+                        oldMarker.snippet = ""
                         }else {
                             // If it is present in assets folder then the icon is picked from it
 //                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
