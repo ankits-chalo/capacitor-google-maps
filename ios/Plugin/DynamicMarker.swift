@@ -14,10 +14,10 @@ final class DynamicMarkerGenerator {
 
     // MARK: - Constants
 
-    private let circleSize: CGFloat = 100
-    private let arrowWidth: CGFloat = 36
-    private let arrowHeight: CGFloat = 32
-    private let gap: CGFloat = 8
+    private let circleSize: CGFloat = 30
+    private let arrowWidth: CGFloat = 14
+    private let arrowHeight: CGFloat = 12
+    private let gap: CGFloat = 4
     private let shadowRadius: CGFloat = 8.909
     private let shadowColor = UIColor.black.withAlphaComponent(0.4)
 

@@ -1639,10 +1639,23 @@ public class Map {
         if let iconUrl = markerData.iconUrl, iconUrl.contains("new_3d_marker") {
             gmsMarker.iconView = nil
             let generator = DynamicMarkerGenerator()
+
+            var statusColor = markerData.markerBgColor
+            var bearingAngle = markerData.bearingAngle
+            
+            if let oldData = gmsMarker.userData as? Marker {
+                if statusColor == nil {
+                    statusColor = oldData.markerBgColor
+                }
+                if bearingAngle == nil {
+                    bearingAngle = oldData.bearingAngle
+                }
+            }
+
             gmsMarker.icon = generator.generateMarker(
                 busImage: UIImage(named: "ic_bus_white") ?? UIImage(),
-                statusColor: markerData.markerBgColor ?? .systemGreen,
-                angle: CGFloat(markerData.bearingAngle ?? 0)
+                statusColor: statusColor ?? .systemGreen,
+                angle: CGFloat(bearingAngle ?? 0)
             )
             gmsMarker.groundAnchor = generator.anchor()
             gmsMarker.title = ""
