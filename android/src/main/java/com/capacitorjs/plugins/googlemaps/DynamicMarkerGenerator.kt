@@ -14,8 +14,8 @@ class DynamicMarkerGenerator(private val context: Context) {
 
     companion object {
         private const val CIRCLE_SIZE = 95       // Circle diameter
-        private const val ARROW_WIDTH = 34        // Arrow width
-        private const val ARROW_HEIGHT = 30       // Arrow height
+        private const val ARROW_WIDTH = 38        // Arrow width
+        private const val ARROW_HEIGHT = 32       // Arrow height
         private const val GAP = 8                 // Gap between arrow and circle
         private const val BITMAP_WIDTH = 210      // Total bitmap width
         private const val BITMAP_HEIGHT = CIRCLE_SIZE + ARROW_HEIGHT * 2 + GAP * 2 + 46// Total height
@@ -57,37 +57,34 @@ class DynamicMarkerGenerator(private val context: Context) {
     }
 
     // -------------------- PRIVATE HELPERS -------------------- //
-
     private fun drawArrow(canvas: Canvas, @ColorInt statusColor: Int, angle: Float) {
-//        val shadowColor = Color.argb((0.4f * 255).toInt(), 0, 0, 0)
+
+        val cornerRadius = 8f   // adjust if needed
+
         val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = statusColor
             style = Paint.Style.FILL
+            pathEffect = CornerPathEffect(cornerRadius)
             setShadowLayer(SHADOW_RADIUS, SHADOW_DX, SHADOW_DY, SHADOW_COLOR)
         }
 
-        // Bus circle center (pivot for rotation)
         val pivotX = BITMAP_WIDTH / 2f
         val pivotY = ARROW_HEIGHT + GAP + CIRCLE_SIZE / 2f
 
-        // Arrow coordinates relative to pivot
-        val arrowTipX = pivotX
         val arrowTipY = pivotY - CIRCLE_SIZE / 2f - GAP - ARROW_HEIGHT
         val arrowBaseY = pivotY - CIRCLE_SIZE / 2f - GAP
         val arrowLeft = pivotX - ARROW_WIDTH / 2f
         val arrowRight = pivotX + ARROW_WIDTH / 2f
 
-        // Rotate canvas around bus center
-        canvas.save()
-        canvas.rotate(angle, pivotX, pivotY)
-
         val arrowPath = Path().apply {
-            moveTo(arrowTipX, arrowTipY)      // tip
-            lineTo(arrowLeft, arrowBaseY)     // left base
-            lineTo(arrowRight, arrowBaseY)    // right base
+            moveTo(pivotX, arrowTipY)
+            lineTo(arrowLeft, arrowBaseY)
+            lineTo(arrowRight, arrowBaseY)
             close()
         }
 
+        canvas.save()
+        canvas.rotate(angle, pivotX, pivotY)
         canvas.drawPath(arrowPath, arrowPaint)
         canvas.restore()
     }

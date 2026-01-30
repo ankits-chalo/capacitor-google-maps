@@ -6,7 +6,6 @@
 //  Copyright © 2026 Max Lynch. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import GoogleMaps
 
@@ -14,10 +13,12 @@ final class DynamicMarkerGenerator {
 
     // MARK: - Constants
 
-    private let circleSize: CGFloat = 30
-    private let arrowWidth: CGFloat = 14
-    private let arrowHeight: CGFloat = 12
-    private let gap: CGFloat = 4
+    private let circleSize: CGFloat = 35
+    private let arrowWidth: CGFloat = 19
+    private let arrowHeight: CGFloat = 14
+    private let gap: CGFloat = 6
+    private let topPadding: CGFloat = 20
+
     private let shadowRadius: CGFloat = 8.909
     private let shadowColor = UIColor.black.withAlphaComponent(0.4)
 
@@ -26,7 +27,7 @@ final class DynamicMarkerGenerator {
     }
 
     private var bitmapHeight: CGFloat {
-        arrowHeight + gap + circleSize + 40
+        topPadding + arrowHeight + gap + circleSize + 40
     }
 
     // MARK: - Public
@@ -46,26 +47,28 @@ final class DynamicMarkerGenerator {
             context.setAllowsAntialiasing(true)
             context.setShouldAntialias(true)
 
-            let centerX = bitmapWidth / 2
-            let centerY = 20 + arrowHeight + gap + circleSize / 2
+            let pivot = CGPoint(
+                x: bitmapWidth / 2,
+                y: topPadding + arrowHeight + gap + circleSize / 2
+            )
 
             drawArrow(
                 context: context,
-                pivot: CGPoint(x: centerX, y: centerY),
+                pivot: pivot,
                 angle: angle,
                 color: statusColor
             )
 
             drawCircle(
                 context: context,
-                center: CGPoint(x: centerX, y: centerY),
+                center: pivot,
                 color: statusColor
             )
 
             drawBusIcon(
                 context: context,
                 image: busImage,
-                center: CGPoint(x: centerX, y: centerY)
+                center: pivot
             )
         }
     }
@@ -80,6 +83,7 @@ final class DynamicMarkerGenerator {
     ) {
         context.saveGState()
 
+        // Rotate around circle center
         context.translateBy(x: pivot.x, y: pivot.y)
         context.rotate(by: angle * .pi / 180)
         context.translateBy(x: -pivot.x, y: -pivot.y)
@@ -90,25 +94,37 @@ final class DynamicMarkerGenerator {
             color: shadowColor.cgColor
         )
 
-        let tip = CGPoint(
-            x: pivot.x,
-            y: pivot.y - circleSize / 2 - gap - arrowHeight
-        )
+        let baseY = pivot.y - circleSize / 2 - gap
+        let tipY = baseY - arrowHeight
 
-        let left = CGPoint(
-            x: pivot.x - arrowWidth / 2,
-            y: pivot.y - circleSize / 2 - gap
-        )
+        let leftX = pivot.x - arrowWidth / 2
+        let rightX = pivot.x + arrowWidth / 2
 
-        let right = CGPoint(
-            x: pivot.x + arrowWidth / 2,
-            y: pivot.y - circleSize / 2 - gap
-        )
+        let r: CGFloat = 1.07   // 🔑 softness (1.5–2.5 is ideal)
 
         let path = UIBezierPath()
-        path.move(to: tip)
-        path.addLine(to: left)
-        path.addLine(to: right)
+
+        // Start at left base (slightly inset)
+        path.move(to: CGPoint(x: leftX + r, y: baseY))
+
+        // Left edge → near tip
+        path.addLine(to: CGPoint(x: pivot.x - r, y: tipY + r))
+
+        // Tip corner (soft)
+        path.addQuadCurve(
+            to: CGPoint(x: pivot.x + r, y: tipY + r),
+            controlPoint: CGPoint(x: pivot.x, y: tipY)
+        )
+
+        // Right edge → base
+        path.addLine(to: CGPoint(x: rightX - r, y: baseY))
+
+        // Bottom-right corner
+        path.addQuadCurve(
+            to: CGPoint(x: leftX + r, y: baseY),
+            controlPoint: CGPoint(x: pivot.x, y: baseY + r)
+        )
+
         path.close()
 
         color.setFill()
@@ -144,14 +160,30 @@ final class DynamicMarkerGenerator {
         image: UIImage,
         center: CGPoint
     ) {
-        let scale: CGFloat = 0.65
-        let size = min(image.size.width, image.size.height) * scale
+        let scale: CGFloat = 0.55
+        let targetSize = circleSize * scale
+
+        // 🔑 Aspect-fit logic (prevents stretching)
+        let imageAspect = image.size.width / image.size.height
+
+        let drawSize: CGSize
+        if imageAspect > 1 {
+            drawSize = CGSize(
+                width: targetSize,
+                height: targetSize / imageAspect
+            )
+        } else {
+            drawSize = CGSize(
+                width: targetSize * imageAspect,
+                height: targetSize
+            )
+        }
 
         let rect = CGRect(
-            x: center.x - size / 2,
-            y: center.y - size / 2,
-            width: size,
-            height: size
+            x: center.x - drawSize.width / 2,
+            y: center.y - drawSize.height / 2,
+            width: drawSize.width,
+            height: drawSize.height
         )
 
         image.draw(in: rect)
@@ -160,7 +192,7 @@ final class DynamicMarkerGenerator {
     // MARK: - Anchor
 
     func anchor() -> CGPoint {
-        let pivotY = 20 + arrowHeight + gap + circleSize / 2
+        let pivotY = topPadding + arrowHeight + gap + circleSize / 2
         return CGPoint(x: 0.5, y: pivotY / bitmapHeight)
     }
 }
