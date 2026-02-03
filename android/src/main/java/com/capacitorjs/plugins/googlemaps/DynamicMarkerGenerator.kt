@@ -14,8 +14,8 @@ class DynamicMarkerGenerator(private val context: Context) {
 
     companion object {
         private const val CIRCLE_SIZE = 95       // Circle diameter
-        private const val ARROW_WIDTH = 38        // Arrow width
-        private const val ARROW_HEIGHT = 32       // Arrow height
+        private const val ARROW_WIDTH = 42        // Arrow width
+        private const val ARROW_HEIGHT = 36       // Arrow height
         private const val GAP = 8                 // Gap between arrow and circle
         private const val BITMAP_WIDTH = 210      // Total bitmap width
         private const val BITMAP_HEIGHT = CIRCLE_SIZE + ARROW_HEIGHT * 2 + GAP * 2 + 46// Total height
@@ -59,7 +59,7 @@ class DynamicMarkerGenerator(private val context: Context) {
     // -------------------- PRIVATE HELPERS -------------------- //
     private fun drawArrow(canvas: Canvas, @ColorInt statusColor: Int, angle: Float) {
 
-        val cornerRadius = 8f   // adjust if needed
+        val cornerRadius = 5f   // adjust if needed
 
         val arrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = statusColor
