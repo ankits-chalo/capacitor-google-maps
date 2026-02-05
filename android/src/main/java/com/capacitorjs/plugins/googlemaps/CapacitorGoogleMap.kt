@@ -489,10 +489,10 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             if(marker.infoIcon!!.contains("reverse") == true){
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.8f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.4f)
                             }
                             else{
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.2f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.15f)
                             }
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
                             googleMapMarker?.showInfoWindow()
@@ -864,10 +864,10 @@ oldMarker?.googleMapMarker?.rotation = marker.angleDiff
                             } else if(marker.infoIcon!!.contains("last_updated_info")) {
                                 oldMarker?.googleMapMarker?.tag = marker
                                 if(marker.infoIcon!!.contains("reverse") == true){
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.8f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.4f)
                                 }
                                 else{
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.2f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.15f)
                                 }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {

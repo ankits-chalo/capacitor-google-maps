@@ -1658,8 +1658,8 @@ public class Map {
                 angle: CGFloat(bearingAngle ?? 0)
             )
             gmsMarker.groundAnchor = generator.anchor()
-            gmsMarker.title = ""
-            gmsMarker.snippet = ""
+            gmsMarker.title = markerData.title
+            gmsMarker.snippet = markerData.snippet
         }
     }
 }
