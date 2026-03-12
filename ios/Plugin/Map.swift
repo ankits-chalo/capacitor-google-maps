@@ -1653,7 +1653,7 @@ public class Map {
             }
 
             gmsMarker.icon = generator.generateMarker(
-                busImage: UIImage(named: "ic_bus_white") ?? UIImage(),
+                busImage: UIImage(named: "white_bus") ?? UIImage(),
                 statusColor: statusColor ?? .systemGreen,
                 angle: CGFloat(bearingAngle ?? 0)
             )

@@ -179,6 +179,12 @@ final class DynamicMarkerGenerator {
             )
         }
 
+    // Save the current graphics state before drawing the busIcon
+    context.saveGState()
+
+    // Disable shadow for the busIcon
+    context.setShadow(offset: .zero, blur: 0)
+
         let rect = CGRect(
             x: center.x - drawSize.width / 2,
             y: center.y - drawSize.height / 2,
@@ -186,7 +192,11 @@ final class DynamicMarkerGenerator {
             height: drawSize.height
         )
 
+// Draw the busIcon image
         image.draw(in: rect)
+
+    // Restore the graphics state to reapply the shadow for subsequent drawings
+    context.restoreGState()
     }
 
     // MARK: - Anchor
