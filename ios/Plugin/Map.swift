@@ -411,7 +411,9 @@ public class Map {
                         newMarker.iconView = alertMarker
                         newMarker.title = ""
                         newMarker.snippet = ""
-                    }else {
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                        renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
+                    } else {
                         // If it is present in assets folder then the icon is picked from it
 //                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
                         if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
@@ -605,7 +607,10 @@ public class Map {
     }
     func updateInfoWindowsForCurrentZoom() {
         DispatchQueue.main.async {
-            let currentZoom = self.mapViewController.GMapView.camera.zoom
+            guard let mapView = self.mapViewController.GMapView else {
+                return
+            }
+            let currentZoom = mapView.camera.zoom
             
             if currentZoom >= self.multipleInfoWindowZoomLevel {
                 // Show all multiple info windows
@@ -696,7 +701,10 @@ public class Map {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(duration)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    let currentZoom = self.mapViewController.GMapView.camera.zoom
+                    guard let mapView = self.mapViewController.GMapView else {
+                        return
+                    }
+                    let currentZoom = mapView.camera.zoom
                                 let shouldShowInfoWindow = currentZoom >= self.multipleInfoWindowZoomLevel
                     
                         
@@ -804,7 +812,9 @@ public class Map {
                             oldMarker.iconView = alertMarker
                             oldMarker.title = ""
                             oldMarker.snippet = ""
-                        }else {
+                        } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                            renderDynamicMarker(gmsMarker: oldMarker, markerData: marker)
+                        } else {
                             // If it is present in assets folder then the icon is picked from it
 //                            oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
                             if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
@@ -933,7 +943,9 @@ public class Map {
                  else{
                      oldMarker.title = marker.title
                  }
-                 if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
+                 if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                     renderDynamicMarker(gmsMarker: oldMarker, markerData: marker)
+                 } else if let iconUrl = marker.iconUrl, let image = UIImage(named: iconUrl) {
                      oldMarker.icon = getResizedIcon(image,marker)
                  }
                  do {
@@ -1064,7 +1076,11 @@ public class Map {
                  newMarker.isFlat = marker.isFlat ?? false
                  newMarker.opacity = marker.opacity ?? 1
                  newMarker.isDraggable = marker.draggable ?? false
-                 newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                 if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
+                     renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
+                 } else {
+                     newMarker.icon = UIImage(named: marker.iconUrl ?? "")
+                 }
 
                  if self.mapViewController.clusteringEnabled {
                      googleMapsMarkers.append(newMarker)
@@ -1623,6 +1639,34 @@ public class Map {
         }
 
         return newMarker
+    }
+
+    private func renderDynamicMarker(gmsMarker: GMSMarker, markerData: Marker) {
+        if let iconUrl = markerData.iconUrl, iconUrl.contains("new_3d_marker") {
+            gmsMarker.iconView = nil
+            let generator = DynamicMarkerGenerator()
+
+            var statusColor = markerData.markerBgColor
+            var bearingAngle = markerData.bearingAngle
+            
+            if let oldData = gmsMarker.userData as? Marker {
+                if statusColor == nil {
+                    statusColor = oldData.markerBgColor
+                }
+                if bearingAngle == nil {
+                    bearingAngle = oldData.bearingAngle
+                }
+            }
+
+            gmsMarker.icon = generator.generateMarker(
+                busImage: UIImage(named: "white_bus") ?? UIImage(),
+                statusColor: statusColor ?? .systemGreen,
+                angle: CGFloat(bearingAngle ?? 0)
+            )
+            gmsMarker.groundAnchor = generator.anchor()
+            gmsMarker.title = markerData.title
+            gmsMarker.snippet = markerData.snippet
+        }
     }
 }
 

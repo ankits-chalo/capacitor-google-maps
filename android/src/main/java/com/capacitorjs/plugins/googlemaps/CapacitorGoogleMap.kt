@@ -489,10 +489,10 @@ class CapacitorGoogleMap(
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
                             if(marker.infoIcon!!.contains("reverse") == true){
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.8f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,1.4f)
                             }
                             else{
-                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.2f)
+                                googleMapMarker?.setInfoWindowAnchor(0.5f,0.15f)
                             }
                             googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
                             googleMapMarker?.showInfoWindow()
@@ -820,7 +820,7 @@ class CapacitorGoogleMap(
 
                         if (marker.rotation == 1) {
                             if(marker.angleDiff != 0.0f){
-                                oldMarker?.googleMapMarker?.rotation = marker.angleDiff
+oldMarker?.googleMapMarker?.rotation = marker.angleDiff
                             }
                             else{
                                 oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
@@ -841,7 +841,7 @@ class CapacitorGoogleMap(
                             }
                         } else {
                             // Setting the new icon if the icon is modified
-                            marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
+                            marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet, marker.bearingAngle) }
                         }
 
                         if (!marker.infoIcon.isNullOrEmpty() && (!marker.infoIcon.equals("not_show_info_window"))) {
@@ -864,10 +864,10 @@ class CapacitorGoogleMap(
                             } else if(marker.infoIcon!!.contains("last_updated_info")) {
                                 oldMarker?.googleMapMarker?.tag = marker
                                 if(marker.infoIcon!!.contains("reverse") == true){
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.8f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.4f)
                                 }
                                 else{
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.2f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.15f)
                                 }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {
@@ -991,7 +991,7 @@ class CapacitorGoogleMap(
                     }
                 } else {
                     // Setting the new icon if the icon is modified
-                    marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet) }
+                    marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet, marker.bearingAngle) }
                 }
 
                 markerId = marker?.id.toString()

@@ -21,6 +21,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
     private var title: String
     private var snippet: String
     private var zIndex: Float = 1.0f
+    var markerBgColor: String? = null
     var isFlat: Boolean = false
     var iconUrl: String? = null
     var iconSize: Size? = null
@@ -34,6 +35,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
     var infoData: JSONObject? = null
     var rotation: Int = 0
     var id: String? = null
+    var bearingAngle: Float = 0.0f
     private var customAnchor: CapacitorGoogleMapsPoint = CapacitorGoogleMapsPoint(0.5F, 0.5F)
 
     init {
@@ -46,6 +48,8 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
         }
 
+        markerBgColor = fromJSONObject.optString("markerBgColor")
+
         coordinate = LatLng(latLngObj.getDouble("lat"), latLngObj.getDouble("lng"))
         title = fromJSONObject.optString("title")
 //        opacity = fromJSONObject.optDouble("opacity", 1.0).toFloat()
@@ -54,6 +58,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         infoData = fromJSONObject.optJSONObject("infoData")
         isFlat = fromJSONObject.optBoolean("isFlat", false)
         iconUrl = fromJSONObject.optString("iconUrl")
+
         if (fromJSONObject.has("iconSize")) {
             val iconSizeObject = fromJSONObject.getJSONObject("iconSize")
             iconSize = Size(iconSizeObject.optInt("width", 0), iconSizeObject.optInt("height", 0))
@@ -88,6 +93,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         zIndex = fromJSONObject.optDouble("zIndex", 1.0 ).toFloat()
         rotation = fromJSONObject.optInt("rotation")
         angleDiff = fromJSONObject.optDouble("angleDiff", 0.0 ).toFloat()
+        bearingAngle = fromJSONObject.optDouble("bearingAngle",0.0).toFloat()
     }
 
     override fun getPosition(): LatLng {
@@ -187,11 +193,24 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
         } else if(iconUrl?.contains("new_3d_marker") == true) {
-            val markerHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
-            val markerWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
-            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,
-                iconSize?.width ?: markerWidth, iconSize?.height ?: markerHeight, false)))
+            val generator = DynamicMarkerGenerator(context)
+            val descriptor = generator.generateMarker(
+                busIconRes =  R.drawable.ic_bus_white,   // your bus drawable
+                statusColor = Color.parseColor(markerBgColor),
+                angle = bearingAngle ?: 0f
+            )
+
+            markerOptions
+                .icon(descriptor)
+                .anchor(
+                    generator.getAnchor().first,
+                    generator.getAnchor().second
+                )
+//            val markerHeight = context.resources.getDimension(R.dimen.new_3d_marker_height).toInt()
+//            val markerWidth = context.resources.getDimension(R.dimen.new_3d_marker_width).toInt()
+//            val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
+//            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap,
+//                iconSize?.width ?: markerWidth, iconSize?.height ?: markerHeight, false)))
         }
         else if(iconUrl?.contains("bus_depot_marker") == true ) {
             val markerHeight = context.resources.getDimension(R.dimen.bus_depot_marker).toInt()
@@ -226,7 +245,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         return markerOptions
     }
 
-    fun updateIcon(newIconName: String, title: String, snippet: String ) {
+    fun updateIcon(newIconName: String, title: String, snippet: String, bearingAngle: Float) {
         iconUrl = newIconName
         val resources: Resources = context.resources
         val resourceId: Int = resources.getIdentifier(iconUrl, "drawable", context.packageName)
@@ -250,8 +269,16 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val busesMarker = AlertStopCustomMarker(context)
             googleMapMarker?.setIcon(busesMarker.getMarkerIcon(title, snippet, iconUrl!!))
         } else if (iconUrl?.contains("new_3d_marker") == true || iconUrl?.contains("new_3d_image") == true) {
-            val new3dMarker = New3dMarker(context)
-            googleMapMarker?.setIcon(new3dMarker.getMarkerIcon(iconUrl!!,iconSize))
+            val generator = DynamicMarkerGenerator(context)
+            googleMapMarker?.apply {
+                setIcon(
+                generator.generateMarker(
+                    busIconRes = R.drawable.ic_bus_white,
+                    statusColor =  Color.parseColor(markerBgColor),
+                    angle = bearingAngle
+                )
+                )
+            }
         } else if(iconUrl?.contains("overspeed_marker") == true) {
             val busesMarker = OverSpeedCustomMarker(context)
             val resId = context.resources.getIdentifier(iconUrl, "drawable", context.packageName)

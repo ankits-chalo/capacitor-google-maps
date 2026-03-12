@@ -22,6 +22,8 @@ public struct Marker {
     let infoData: JSObject?
     let infoIcon: String?
     let customAnchor: CGPoint?
+    let bearingAngle: Double?
+    let markerBgColor: UIColor?
 
     init(fromJSObject: JSObject) throws {
         guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
@@ -71,6 +73,12 @@ public struct Marker {
             }
         }
 
+        var markerBgColor: UIColor?
+        if let hex = fromJSObject["markerBgColor"] as? String {
+            
+            markerBgColor = UIColor(hex: hex)
+        }
+
         self.coordinate = LatLng(lat: lat, lng: lng)
         self.opacity = fromJSObject["opacity"] as? Float
         self.title = fromJSObject["title"] as? String
@@ -83,9 +91,11 @@ public struct Marker {
         self.iconAnchor = iconAnchor
         self.customAnchor = customAnchor
         self.color = tintColor
+        self.markerBgColor = markerBgColor
         self.zIndex = Int32((fromJSObject["zIndex"] as? Int) ?? 0)
         self.rotation = fromJSObject["rotation"] as? Double
         self.angleDiff = fromJSObject["angleDiff"] as? Double
+        self.bearingAngle = fromJSObject["bearingAngle"] as? Double
         self.infoData = fromJSObject["infoData"] as? JSObject
         self.infoIcon = fromJSObject["infoIcon"] as? String
         self.id = fromJSObject["id"] as? String
