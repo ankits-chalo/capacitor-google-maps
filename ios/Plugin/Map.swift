@@ -607,7 +607,10 @@ public class Map {
     }
     func updateInfoWindowsForCurrentZoom() {
         DispatchQueue.main.async {
-            let currentZoom = self.mapViewController.GMapView.camera.zoom
+            guard let mapView = self.mapViewController.GMapView else {
+                return
+            }
+            let currentZoom = mapView.camera.zoom
             
             if currentZoom >= self.multipleInfoWindowZoomLevel {
                 // Show all multiple info windows
@@ -698,7 +701,10 @@ public class Map {
                     CATransaction.begin()
                     CATransaction.setAnimationDuration(duration)
                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
-                    let currentZoom = self.mapViewController.GMapView.camera.zoom
+                    guard let mapView = self.mapViewController.GMapView else {
+                        return
+                    }
+                    let currentZoom = mapView.camera.zoom
                                 let shouldShowInfoWindow = currentZoom >= self.multipleInfoWindowZoomLevel
                     
                         
