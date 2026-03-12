@@ -156,28 +156,28 @@ final class DynamicMarkerGenerator {
     }
 
     private func drawBusIcon(
-        context: CGContext,
-        image: UIImage,
-        center: CGPoint
-    ) {
-        let scale: CGFloat = 0.55
-        let targetSize = circleSize * scale
+    context: CGContext,
+    image: UIImage,
+    center: CGPoint
+) {
+    let scale: CGFloat = 0.55
+    let targetSize = circleSize * scale
 
-        // 🔑 Aspect-fit logic (prevents stretching)
-        let imageAspect = image.size.width / image.size.height
+    // 🔑 Aspect-fit logic (prevents stretching)
+    let imageAspect = image.size.width / image.size.height
 
-        let drawSize: CGSize
-        if imageAspect > 1 {
-            drawSize = CGSize(
-                width: targetSize,
-                height: targetSize / imageAspect
-            )
-        } else {
-            drawSize = CGSize(
-                width: targetSize * imageAspect,
-                height: targetSize
-            )
-        }
+    let drawSize: CGSize
+    if imageAspect > 1 {
+        drawSize = CGSize(
+            width: targetSize,
+            height: targetSize / imageAspect
+        )
+    } else {
+        drawSize = CGSize(
+            width: targetSize * imageAspect,
+            height: targetSize
+        )
+    }
 
     // Save the current graphics state before drawing the busIcon
     context.saveGState()
@@ -185,19 +185,19 @@ final class DynamicMarkerGenerator {
     // Disable shadow for the busIcon
     context.setShadow(offset: .zero, blur: 0)
 
-        let rect = CGRect(
-            x: center.x - drawSize.width / 2,
-            y: center.y - drawSize.height / 2,
-            width: drawSize.width,
-            height: drawSize.height
-        )
+    let rect = CGRect(
+        x: center.x - drawSize.width / 2,
+        y: center.y - drawSize.height / 2,
+        width: drawSize.width,
+        height: drawSize.height
+    )
 
-// Draw the busIcon image
-        image.draw(in: rect)
+    // Draw the busIcon image
+    image.draw(in: rect)
 
     // Restore the graphics state to reapply the shadow for subsequent drawings
     context.restoreGState()
-    }
+}
 
     // MARK: - Anchor
 
