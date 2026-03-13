@@ -11,7 +11,7 @@ import UIKit
 class RouteNameInfoWindow: UIView {
 
     @IBOutlet weak var routeNameCardView: UIView!
-  
+    
     @IBOutlet weak var infoTitle: UILabel!
     
 

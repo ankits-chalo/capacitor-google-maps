@@ -39,6 +39,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="infoTitle" destination="As0-e8-I0B" id="Yxv-XA-4QB"/>
+                <outlet property="routeNameCardView" destination="O7w-m6-lu6" id="IeI-6p-yRY"/>
                 <outlet property="routeNameView" destination="O7w-m6-lu6" id="w6V-PX-3Ew"/>
             </connections>
             <point key="canvasLocation" x="-293.89312977099235" y="-574.64788732394368"/>
