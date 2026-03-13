@@ -12,9 +12,9 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LastUpdatedInfoWindowReversed" customModule="CapacitorGoogleMaps" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LastUpdatedInfoWindowReversed" customModule="Plugin" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="LastUpdatedInfoWindowReversed" customModule="CapacitorGoogleMaps" customModuleProvider="target">
+        <view contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="iN0-l3-epB" customClass="LastUpdatedInfoWindowReversed" customModule="Plugin" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="124" height="70"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
