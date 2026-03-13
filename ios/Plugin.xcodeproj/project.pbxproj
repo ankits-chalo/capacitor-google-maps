@@ -66,6 +66,8 @@
 		EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */; };
 		EEC1D56E2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */; };
 		FAC57A9F2F29057600FED7B3 /* DynamicMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC57A9E2F29057600FED7B3 /* DynamicMarker.swift */; };
+		FAE6511B2F64544D004AE4CD /* RouteNameInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6511A2F64544D004AE4CD /* RouteNameInfoWindow.swift */; };
+		FAE6511D2F6454BB004AE4CD /* RouteNameInfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAE6511C2F6454BB004AE4CD /* RouteNameInfoWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +149,8 @@
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC57A9E2F29057600FED7B3 /* DynamicMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicMarker.swift; sourceTree = "<group>"; };
+		FAE6511A2F64544D004AE4CD /* RouteNameInfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteNameInfoWindow.swift; sourceTree = "<group>"; };
+		FAE6511C2F6454BB004AE4CD /* RouteNameInfoWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteNameInfoWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -289,6 +293,8 @@
 				EC11CB3F2BC92C6B00310392 /* mapStyle.json */,
 				EEC1D56B2EBF2D0300A51034 /* StopArrivalInfoWindow.swift */,
 				EEC1D56D2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib */,
+				FAE6511A2F64544D004AE4CD /* RouteNameInfoWindow.swift */,
+				FAE6511C2F6454BB004AE4CD /* RouteNameInfoWindow.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -413,6 +419,7 @@
 				EC11CB4A2BC92C6B00310392 /* BusesAround.xib in Resources */,
 				EC1FC3FF2C0EEA7D006AA7E4 /* AlertStopMarker.xib in Resources */,
 				EEC1D56E2EBF2D6C00A51034 /* StopArrivalInfoWindow.xib in Resources */,
+				FAE6511D2F6454BB004AE4CD /* RouteNameInfoWindow.xib in Resources */,
 				EC0028362CC00A7800400425 /* LastUpdatedInfoWindow.xib in Resources */,
 				EC11CB4E2BC92C6B00310392 /* mapStyle.json in Resources */,
 				EC11CB442BC92C6B00310392 /* infoWindow.xib in Resources */,
@@ -560,6 +567,7 @@
 				ECD18C8D2C254FFC0095B7ED /* AlertSingleLineInfoWindow.swift in Sources */,
 				ECAD59B22BC917E500158D06 /* BusesAroundYou.swift in Sources */,
 				02B55EAE29EA0CF000493664 /* Circle.swift in Sources */,
+				FAE6511B2F64544D004AE4CD /* RouteNameInfoWindow.swift in Sources */,
 				02B55EAC29E9AAAA00493664 /* Polygon.swift in Sources */,
 				EEC1D56C2EBF2D0300A51034 /* StopArrivalInfoWindow.swift in Sources */,
 				EC9AB75C2D12C643007314B3 /* HistoryReplayInfoWindow.swift in Sources */,
