@@ -1370,17 +1370,28 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 title = userInfo.title
             }
             
-            self.notifyListeners("onMarkerClick", data: [
+            var data: [String: Any] = [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": String(marker.hash.hashValue),
                 "latitude": marker.position.latitude,
                 "longitude": marker.position.longitude,
                 "title": title ?? "",
                 "snippet": marker.snippet ?? ""
-            ])
+            ]
             
+            // Add custom data
+            if let infoData = userInfo.infoData {
+                data["customData"] = infoData
+            }
+            
+            self.notifyListeners("onMarkerClick", data: data)
+            
+            // Check for the `showInfoWindow` flag in the marker's userData
+            if let showInfoWindow = userInfo.infoData?["showInfoWindow"] as? Bool, showInfoWindow {
+                return false // Allow the default behavior (show the info window)
+            }
         }
-        return false
+        return true // Suppress the default behavior (do not show the info window)
     }
 
     // onMarkerDragStart

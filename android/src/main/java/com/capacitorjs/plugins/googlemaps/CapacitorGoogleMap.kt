@@ -820,7 +820,7 @@ class CapacitorGoogleMap(
 
                         if (marker.rotation == 1) {
                             if(marker.angleDiff != 0.0f){
-oldMarker?.googleMapMarker?.rotation = marker.angleDiff
+                                oldMarker?.googleMapMarker?.rotation = marker.angleDiff
                             }
                             else{
                                 oldMarker?.googleMapMarker?.rotation = getAngle(marker!!.coordinate)
@@ -1774,6 +1774,26 @@ oldMarker?.googleMapMarker?.rotation = marker.angleDiff
         data.put("longitude", marker.position.longitude)
         data.put("title", title)
         data.put("snippet", marker.snippet)
+        infoData?.let { infoData ->
+            val infoJsObject = JSObject()
+
+            val keys = infoData.keys()
+            while (keys.hasNext()) {
+                val key = keys.next()
+                val value = infoData.get(key)
+
+                when (value) {
+                    is String -> infoJsObject.put(key, value)
+                    is Int -> infoJsObject.put(key, value)
+                    is Boolean -> infoJsObject.put(key, value)
+                    is Double -> infoJsObject.put(key, value)
+                    is Float -> infoJsObject.put(key, value)
+                    else -> infoJsObject.put(key, value.toString())
+                }
+            }
+
+            data.put("customData", infoJsObject)
+        }
         if(marker.snippet.isNullOrEmpty() && infoData is JSONObject && infoData.has("snippet")){
             val snippet = infoData.getString("snippet")
             data.put("snippet", snippet)
