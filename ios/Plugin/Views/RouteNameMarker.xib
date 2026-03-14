@@ -12,15 +12,15 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RouteNameMarker" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="360" height="242"/>
+            <rect key="frame" x="0.0" y="0.0" width="168" height="52"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0z1-LT-mI9">
-                    <rect key="frame" x="16" y="91" width="283" height="41"/>
+                    <rect key="frame" x="0.0" y="0.0" width="168" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route : 43-Hirekerur-Chandragutti" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpd-9Q-YlY">
-                            <rect key="frame" x="4" y="8" width="263" height="21"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route : 43-Hirekerur" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpd-9Q-YlY">
+                            <rect key="frame" x="4" y="8" width="157" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
@@ -40,7 +40,7 @@
                 <outlet property="routeNameCardView" destination="0z1-LT-mI9" id="VOz-bb-AH1"/>
                 <outlet property="routeNameLabel" destination="Kpd-9Q-YlY" id="u6R-Au-IqI"/>
             </connections>
-            <point key="canvasLocation" x="-56.488549618320612" y="-223.23943661971833"/>
+            <point key="canvasLocation" x="-189.31297709923663" y="-290.84507042253523"/>
         </view>
     </objects>
     <resources>
