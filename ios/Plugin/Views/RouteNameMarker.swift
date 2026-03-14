@@ -11,7 +11,7 @@ import UIKit
 class RouteNameMarker: UIView {
 
     @IBOutlet weak var routeNameCardView: UIView!
-    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var routeNameLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,9 +25,9 @@ class RouteNameMarker: UIView {
         routeNameCardView.layer.masksToBounds = false
         routeNameCardView.backgroundColor = UIColor.white
 
-        title.numberOfLines = 1 // Ensure single-line text
-        title.lineBreakMode = .byClipping // Prevent wrapping or truncation
-        title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // Allow expansion
+        routeNameLabel.numberOfLines = 1 // Ensure single-line text
+        routeNameLabel.lineBreakMode = .byClipping // Prevent wrapping or truncation
+        routeNameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // Allow expansion
     }
     
     override func layoutSubviews() {

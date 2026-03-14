@@ -37,7 +37,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="routeNameCardView" destination="0z1-LT-mI9" id="VOz-bb-AH1"/>
-                <outlet property="title" destination="Kpd-9Q-YlY" id="Xff-Uy-s2m"/>
+                <outlet property="routeNameLabel" destination="Kpd-9Q-YlY" id="u6R-Au-IqI"/>
             </connections>
             <point key="canvasLocation" x="-31.297709923664122" y="19.718309859154932"/>
         </view>
