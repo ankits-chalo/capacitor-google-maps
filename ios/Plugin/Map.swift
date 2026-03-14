@@ -1354,7 +1354,11 @@ public class Map {
     }
 
     func setCamera(config: GoogleMapCameraConfig) throws {
-        let currentCamera = self.mapViewController.GMapView.camera
+        
+        guard let mapView = self.mapViewController.GMapView else {
+            return
+        }
+        let currentCamera = mapView.camera
 
         let lat = config.coordinate?.lat ?? currentCamera.target.latitude
         let lng = config.coordinate?.lng ?? currentCamera.target.longitude
