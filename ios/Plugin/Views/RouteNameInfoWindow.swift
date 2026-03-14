@@ -27,6 +27,8 @@ class RouteNameInfoWindow: UIView {
         routeNameCardView.layer.shadowRadius = 1.86
         routeNameCardView.layer.masksToBounds = false
         routeNameCardView.backgroundColor = UIColor.white
+        routeNameCardView.numberOfLines = 0
+        routeNameCardView.lineBreakMode = .byWordWrapping
         
     }
     
