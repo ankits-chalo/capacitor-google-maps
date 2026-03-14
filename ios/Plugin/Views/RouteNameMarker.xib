@@ -12,7 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RouteNameMarker" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <rect key="frame" x="0.0" y="0.0" width="360" height="242"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0z1-LT-mI9">
@@ -35,11 +35,12 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="routeNameCardView" destination="0z1-LT-mI9" id="VOz-bb-AH1"/>
                 <outlet property="routeNameLabel" destination="Kpd-9Q-YlY" id="u6R-Au-IqI"/>
             </connections>
-            <point key="canvasLocation" x="-31.297709923664122" y="19.718309859154932"/>
+            <point key="canvasLocation" x="-56.488549618320612" y="-223.23943661971833"/>
         </view>
     </objects>
     <resources>

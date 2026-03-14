@@ -1092,7 +1092,14 @@ public class Map {
                  newMarker.isDraggable = marker.draggable ?? false
                  if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
                      renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
-                 } else {
+                 } else if let iconUrl = marker.iconUrl,
+                    iconUrl.contains("route_name") {
+                    let routeNameMarker = RouteNameMarker.instanceFromNib()
+                    routeNameMarker.routeNameLabel.text = "Route : " + (marker.title ?? "")
+                    newMarker.iconView = routeNameMarker
+                    newMarker.title = ""
+                    newMarker.snippet = ""
+                } else {
                      newMarker.icon = UIImage(named: marker.iconUrl ?? "")
                  }
 
