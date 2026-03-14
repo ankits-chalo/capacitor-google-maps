@@ -416,8 +416,9 @@ public class Map {
                     } else if let iconUrl = marker.iconUrl,
                         iconUrl.contains("route_name") {
                         let routeNameMarker = RouteNameMarker.instanceFromNib()
-                        routeNameMarker.routeNameLabel.text = "Route : " + (marker.title ?? "")
+                        routeNameMarker.routeNameLabel.text = "Route : " + (marker.id ?? "")
                         newMarker.iconView = routeNameMarker
+                        newMarker.zIndex = 1000 
                         newMarker.title = ""
                         newMarker.snippet = ""
                     } else {
@@ -821,13 +822,6 @@ public class Map {
                             oldMarker.snippet = ""
                         } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
                             renderDynamicMarker(gmsMarker: oldMarker, markerData: marker)
-                        } else if let iconUrl = marker.iconUrl,
-                            iconUrl.contains("route_name") {
-                            let routeNameMarker = RouteNameMarker.instanceFromNib()
-                            routeNameMarker.routeNameLabel.text = "Route : " + (marker.title ?? "")
-                            oldMarker.iconView = routeNameMarker
-                            oldMarker.title = ""
-                            oldMarker.snippet = ""
                         } else {
                             // If it is present in assets folder then the icon is picked from it
                             // oldMarker.icon =  UIImage(named: marker.iconUrl ?? "")
@@ -1092,13 +1086,6 @@ public class Map {
                  newMarker.isDraggable = marker.draggable ?? false
                  if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
                      renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
-                 } else if let iconUrl = marker.iconUrl,
-                    iconUrl.contains("route_name") {
-                    let routeNameMarker = RouteNameMarker.instanceFromNib()
-                    routeNameMarker.routeNameLabel.text = "Route : " + (marker.title ?? "")
-                    newMarker.iconView = routeNameMarker
-                    newMarker.title = ""
-                    newMarker.snippet = ""
                 } else {
                      newMarker.icon = UIImage(named: marker.iconUrl ?? "")
                  }
