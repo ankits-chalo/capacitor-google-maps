@@ -37,8 +37,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="routeNameCardView" destination="0z1-LT-mI9" id="VOz-bb-AH1"/>
-                <outlet property="routeNameLabel" destination="Kpd-9Q-YlY" id="u6R-Au-IqI"/>
+                <outlet property="containerView" destination="0z1-LT-mI9" id="m3p-JR-NO3"/>
+                <outlet property="routeLabel" destination="Kpd-9Q-YlY" id="x46-fm-Jao"/>
             </connections>
             <point key="canvasLocation" x="-189.31297709923663" y="-285.56338028169017"/>
         </view>

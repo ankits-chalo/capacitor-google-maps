@@ -1,43 +1,45 @@
-//
-//  RouteNameMarker.swift
-//  Plugin
-//
-//  Created by macbook on 14/03/26.
-//  Copyright © 2026 Max Lynch. All rights reserved.
-//
-
-import UIKit
-
 class RouteNameMarker: UIView {
-
-    @IBOutlet weak var routeNameCardView: UIView!
-    @IBOutlet weak var routeNameLabel: UILabel!
+    @IBOutlet weak var containerView: UIView!
+    
+    @IBOutlet weak var routeLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // Applying card-like background to alertCardView
-        routeNameCardView.layer.cornerRadius = 4
-        routeNameCardView.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.08).cgColor
-        routeNameCardView.layer.shadowOpacity = 1
-        routeNameCardView.layer.shadowOffset = CGSize(width: 0, height: 0.62)
-        routeNameCardView.layer.shadowRadius = 1.86
-        routeNameCardView.layer.masksToBounds = false
-        routeNameCardView.backgroundColor = UIColor.white
-
-        routeNameLabel.numberOfLines = 1 // Ensure single-line text
-        routeNameLabel.lineBreakMode = .byClipping // Prevent wrapping or truncation
-        routeNameLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal) // Allow expansion
+        setupView()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        // Ensure the view adjusts its size dynamically
-        self.layoutIfNeeded()
+    private func setupView() {
+        // Configure label for dynamic sizing
+        routeLabel.numberOfLines = 1
+        routeLabel.lineBreakMode = .tailTruncation
+        routeLabel.setContentHuggingPriority(.required, for: .horizontal)
+        routeLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        
+        // Configure container
+        containerView.backgroundColor = .systemBackground
+        containerView.layer.cornerRadius = 8
+    }
+    
+    func configure(with routeName: String) {
+        routeLabel.text = "Route : \(routeName)"
+        // Force layout update
+        setNeedsLayout()
+        layoutIfNeeded()
+    }
+       
+    override var intrinsicContentSize: CGSize {
+        let labelSize = routeLabel.intrinsicContentSize
+        let padding: CGFloat = 16 // 8 points on each side
+        let arrowWidth: CGFloat = 24
+        let totalHeight: CGFloat = 52 // As per your current design
+        
+        return CGSize(
+            width: labelSize.width + arrowWidth + padding,
+            height: totalHeight
+        )
     }
 
     class func instanceFromNib() -> RouteNameMarker {
         return UINib(nibName: "RouteNameMarker", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! RouteNameMarker
     }
-
 }

@@ -413,12 +413,17 @@ public class Map {
                         newMarker.snippet = ""
                     } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
                         renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
-                    } else if let iconUrl = marker.iconUrl,
-                        iconUrl.contains("route_name") {
-                        let routeNameMarker = RouteNameMarker.instanceFromNib()
-                        routeNameMarker.routeNameLabel.text = "Route : " + (marker.id ?? "")
+                    } else if let iconUrl = marker.iconUrl, iconUrl.contains("route_name") {
+                        // Load the custom view
+                        let routeNameMarker = RouteNameMarker.instanceFromNib() 
+                        let routeName = marker.id
+                        routeNameMarker.configure(with: routeName)
+                        // Size the view to fit its content
+                        routeNameMarker.sizeToFit()
+                        // let routeNameMarker = RouteNameMarker.instanceFromNib()
+                        // routeNameMarker.routeNameLabel.text = "Route : " + (marker.id ?? "")
                         newMarker.iconView = routeNameMarker
-                        newMarker.zIndex = 1000 
+                        newMarker.zIndex = 1000
                         newMarker.title = ""
                         newMarker.snippet = ""
                     } else {
