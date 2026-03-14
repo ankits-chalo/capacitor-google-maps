@@ -1510,12 +1510,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 stopArrivalInfo.arrivalTime.text = arrivalTime
                 stopArrivalInfo.departureTime.text = departureTime
                 return stopArrivalInfo
-            }else if(imageUrl.contains("route_name")) {
-                let routeName = userData.infoData?["route_name"] as? String ?? "N/A"
-                let routeNameInfoWindow = RouteNameInfoWindow.instanceFromNib()
-                routeNameInfoWindow.infoTitle.text = "Route : " + routeName
-                return routeNameInfoWindow
-            }else if(imageUrl.contains("last_updated_info")) {
+            } else if(imageUrl.contains("last_updated_info")) {
                 if(imageUrl.contains("reverse")){
                     marker.infoWindowAnchor = CGPoint(x: 0.5, y: 1.4)
                     let lastUpdateInfo = LastUpdatedInfoWindowReversed.instanceFromNib()

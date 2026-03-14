@@ -11,23 +11,23 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="center" id="iN0-l3-epB" customClass="RouteNameInfoWindow" customModule="Plugin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="239" height="55"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="RouteNameMarker" customModule="Plugin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="O7w-m6-lu6">
-                    <rect key="frame" x="0.0" y="-7" width="239" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0z1-LT-mI9">
+                    <rect key="frame" x="16" y="91" width="283" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route : 43-Hirekerur-Chandragutti" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="As0-e8-I0B">
-                            <rect key="frame" x="8" y="8" width="223.33333333333334" height="22"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Route : 43-Hirekerur-Chandragutti" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kpd-9Q-YlY">
+                            <rect key="frame" x="4" y="8" width="263" height="21"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ArrowPolygon" id="q2k-K6-scn">
-                            <rect key="frame" x="111" y="18" width="17" height="27"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ArrowPolygon" id="giQ-iQ-QbE">
+                            <rect key="frame" x="81" y="31" width="24" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
@@ -35,14 +35,11 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <nil key="simulatedTopBarMetrics"/>
-            <nil key="simulatedBottomBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="infoTitle" destination="As0-e8-I0B" id="Yxv-XA-4QB"/>
-                <outlet property="routeNameCardView" destination="O7w-m6-lu6" id="IeI-6p-yRY"/>
+                <outlet property="routeNameCardView" destination="0z1-LT-mI9" id="VOz-bb-AH1"/>
+                <outlet property="title" destination="Kpd-9Q-YlY" id="Xff-Uy-s2m"/>
             </connections>
-            <point key="canvasLocation" x="-270.99236641221376" y="-564.43661971830988"/>
+            <point key="canvasLocation" x="-31.297709923664122" y="19.718309859154932"/>
         </view>
     </objects>
     <resources>

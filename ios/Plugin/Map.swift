@@ -413,6 +413,10 @@ public class Map {
                         newMarker.snippet = ""
                     } else if let iconUrl = marker.iconUrl, iconUrl.contains("new_3d_marker") {
                         renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
+                    } else if let iconUrl = marker.iconUrl,
+                        iconUrl.contains("route_name") {
+                        let routeNameMarker = RouteNameMarker.instanceFromNib()
+                        routeNameMarker.title.text ="Route : " +  marker.title
                     } else {
                         // If it is present in assets folder then the icon is picked from it
 //                        newMarker.icon = UIImage(named: marker.iconUrl ?? "")
