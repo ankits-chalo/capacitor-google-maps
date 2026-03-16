@@ -485,6 +485,13 @@ class CapacitorGoogleMap(
                             if (googleMapMarker != null && marker.infoIcon!!.contains("address")) {
                                 fetchAddressForMarker(googleMapMarker, bridge.context)
                             }
+                        } else if(marker.iconUrl?.contains("route_name") == true) {
+                            val bridge = delegate.bridge
+                            googleMapMarker?.tag = marker
+                            googleMap?.setInfoWindowAdapter(RouteNameMarker(bridge.context))
+                            googleMapMarker?.showInfoWindow()
+//                          To remove info window set title as empty string
+                            markerOptions.title("")
                         } else if(marker.infoIcon!!.contains("last_updated_info")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
