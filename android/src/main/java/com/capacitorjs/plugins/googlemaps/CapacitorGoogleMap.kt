@@ -867,7 +867,7 @@ oldMarker?.googleMapMarker?.rotation = marker.angleDiff
                                     oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 1.4f)
                                 }
                                 else{
-                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.15f)
+                                    oldMarker?.googleMapMarker?.setInfoWindowAnchor(0.5f, 0.25f)
                                 }
                                 oldMarker?.googleMapMarker?.showInfoWindow()
                             } else if(marker.infoIcon!!.contains("replay_info_icon")) {
