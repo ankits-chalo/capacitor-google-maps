@@ -153,7 +153,7 @@ export declare class GoogleMap {
     addPolygons(polygons: Polygon[]): Promise<string[]>;
     addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any): Promise<string[]>;
     setMarkerPosition(marker: any): Promise<string>;
-    fitBound(cords: any): Promise<void>;
+    fitBound(cords: any, padding: number): Promise<void>;
     removePolygons(ids: string[]): Promise<void>;
     addCircles(circles: Circle[]): Promise<string[]>;
     removeCircles(ids: string[]): Promise<void>;

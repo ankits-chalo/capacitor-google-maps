@@ -351,10 +351,11 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
             });
             return res.id;
         }
-        async fitBound(cords) {
+        async fitBound(cords, padding) {
             return CapacitorGoogleMaps.fitBound({
                 id: this.id,
                 cords,
+                padding,
             });
         }
         async removePolygons(ids) {
