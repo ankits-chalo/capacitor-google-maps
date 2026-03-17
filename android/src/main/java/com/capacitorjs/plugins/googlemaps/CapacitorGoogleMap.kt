@@ -446,6 +446,14 @@ class CapacitorGoogleMap(
                         markerOptions.title("")
                     }
 
+                    if(marker.iconUrl?.contains("route_name") == true) {
+                        val bridge = delegate.bridge
+                        val routeNameMarker = RouteNameMarker(bridge.context)
+                        markerOptions.icon(routeNameMarker.getMarkerIcon(marker.title))
+//                        To remove info window set title as empty string
+                        markerOptions.title("")
+                    }
+
                     if(marker.iconUrl?.contains("overspeed_marker") == true) {
                         val bridge = delegate.bridge
                         val overSpeedMarker = OverSpeedCustomMarker(bridge.context)
@@ -485,13 +493,6 @@ class CapacitorGoogleMap(
                             if (googleMapMarker != null && marker.infoIcon!!.contains("address")) {
                                 fetchAddressForMarker(googleMapMarker, bridge.context)
                             }
-                        } else if(marker.iconUrl?.contains("route_name") == true) {
-                            val bridge = delegate.bridge
-                            googleMapMarker?.tag = marker
-                            googleMap?.setInfoWindowAdapter(RouteNameMarker(bridge.context))
-                            googleMapMarker?.showInfoWindow()
-//                          To remove info window set title as empty string
-                            markerOptions.title("")
                         } else if(marker.infoIcon!!.contains("last_updated_info")) {
                             val bridge = delegate.bridge
                             googleMapMarker?.tag = marker
