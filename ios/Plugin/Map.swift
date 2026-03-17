@@ -182,11 +182,14 @@ public class Map {
                     target.removeAllSubview()
                     self.mapViewController.view.frame = target.bounds
                     target.addSubview(self.mapViewController.view)
-                    self.mapViewController.GMapView.delegate = self.delegate
+                    guard let mapView = self.mapViewController.GMapView else {
+                        return
+                    }
+                    mapView.delegate = self.delegate
                     
                     if let styles = self.config.styles {
                         do {
-                            self.mapViewController.GMapView.mapStyle = try GMSMapStyle(jsonString: styles)
+                            mapView.mapStyle = try GMSMapStyle(jsonString: styles)
                         } catch {
                             CAPLog.print("Invalid Google Maps styles")
                         }
@@ -1354,7 +1357,10 @@ public class Map {
     }
 
     func setCamera(config: GoogleMapCameraConfig) throws {
-        let currentCamera = self.mapViewController.GMapView.camera
+        guard let mapView = self.mapViewController.GMapView else {
+            return
+        }
+        let currentCamera = mapView.camera
 
         let lat = config.coordinate?.lat ?? currentCamera.target.latitude
         let lng = config.coordinate?.lng ?? currentCamera.target.longitude
