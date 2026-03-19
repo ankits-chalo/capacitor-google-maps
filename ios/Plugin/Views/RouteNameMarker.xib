@@ -37,6 +37,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="arrowTail" destination="giQ-iQ-QbE" id="mId-I7-yCB"/>
                 <outlet property="containerView" destination="0z1-LT-mI9" id="m3p-JR-NO3"/>
                 <outlet property="routeLabel" destination="Kpd-9Q-YlY" id="x46-fm-Jao"/>
             </connections>

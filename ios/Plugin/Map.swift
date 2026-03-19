@@ -415,15 +415,15 @@ public class Map {
                         renderDynamicMarker(gmsMarker: newMarker, markerData: marker)
                     } else if let iconUrl = marker.iconUrl, iconUrl.contains("route_name") {
                         // Load the custom view
-                        let routeNameMarker = RouteNameMarker.instanceFromNib() 
-                        let routeName = marker.id
+                        let routeNameMarker = RouteNameMarker.instanceFromNib()
+                        let routeName = marker.title ?? ""
                         routeNameMarker.configure(with: routeName)
                         // Size the view to fit its content
                         routeNameMarker.sizeToFit()
                         // let routeNameMarker = RouteNameMarker.instanceFromNib()
                         // routeNameMarker.routeNameLabel.text = "Route : " + (marker.id ?? "")
                         newMarker.iconView = routeNameMarker
-                        newMarker.zIndex = 1000
+                        newMarker.zIndex = 3000
                         newMarker.title = ""
                         newMarker.snippet = ""
                     } else {
