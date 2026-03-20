@@ -34,7 +34,8 @@
                 android:paddingBottom="4dp"
                 android:text="Route : 43"
                 android:textColor="#323232"
-                android:textSize="10sp" />
+                android:fontWeight="600"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
