@@ -30,8 +30,7 @@
                 android:id="@+id/routeName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans"
-                android:fontWeight="700"
+                android:fontFamily="@font/notosanssemibold"
                 android:text="Route : 43"
                 android:textColor="#323232"
                 android:textSize="14sp" />
