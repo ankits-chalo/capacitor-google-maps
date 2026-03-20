@@ -423,7 +423,6 @@ public class Map {
                         // let routeNameMarker = RouteNameMarker.instanceFromNib()
                         // routeNameMarker.routeNameLabel.text = "Route : " + (marker.id ?? "")
                         newMarker.iconView = routeNameMarker
-                        newMarker.zIndex = 3000
                         newMarker.title = ""
                         newMarker.snippet = ""
                     } else {
