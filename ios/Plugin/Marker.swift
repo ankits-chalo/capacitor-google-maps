@@ -26,12 +26,30 @@ public struct Marker {
     let markerBgColor: UIColor?
 
     init(fromJSObject: JSObject) throws {
-        guard let latLngObj = fromJSObject["coordinate"] as? JSObject else {
+        let lat: Double
+        let lng: Double
+
+        if let latLngObj = fromJSObject["coordinate"] as? JSObject {
+            guard let _lat = latLngObj["lat"] as? Double, let _lng = latLngObj["lng"] as? Double else {
+                throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
+            }
+            lat = _lat
+            lng = _lng
+        } else if let _lat = fromJSObject["latitude"] as? Double, let _lng = fromJSObject["longitude"] as? Double {
+            lat = _lat
+            lng = _lng
+        } else {
             throw GoogleMapErrors.invalidArguments("Marker object is missing the required 'coordinate' property")
         }
 
-        guard let lat = latLngObj["lat"] as? Double, let lng = latLngObj["lng"] as? Double else {
-            throw GoogleMapErrors.invalidArguments("LatLng object is missing the required 'lat' and/or 'lng' property")
+        // Resolve iconUrl with fallback to "image" field
+        let resolvedIconUrl: String?
+        if let url = fromJSObject["iconUrl"] as? String, !url.isEmpty {
+            resolvedIconUrl = url
+        } else if let image = fromJSObject["image"] as? String, !image.isEmpty {
+            resolvedIconUrl = image
+        } else {
+            resolvedIconUrl = fromJSObject["iconUrl"] as? String
         }
 
         var iconSize: CGSize?
@@ -84,7 +102,7 @@ public struct Marker {
         self.title = fromJSObject["title"] as? String
         self.snippet = fromJSObject["snippet"] as? String
         self.isFlat = fromJSObject["isFlat"] as? Bool
-        self.iconUrl = fromJSObject["iconUrl"] as? String
+        self.iconUrl = resolvedIconUrl
         self.draggable = fromJSObject["draggable"] as? Bool
         self.isClustered = fromJSObject["isClustered"] as? Bool ?? true
         self.iconSize = iconSize

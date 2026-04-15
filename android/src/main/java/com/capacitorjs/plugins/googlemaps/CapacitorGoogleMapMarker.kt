@@ -40,24 +40,31 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
 
     init {
         if (!fromJSONObject.has("coordinate")) {
-            throw InvalidArgumentsError("Marker object is missing the required 'coordinate' property")
-        }
-
-        val latLngObj = fromJSONObject.getJSONObject("coordinate")
-        if (!latLngObj.has("lat") || !latLngObj.has("lng")) {
-            throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
+            // Fallback: construct coordinate from top-level latitude/longitude
+            if (fromJSONObject.has("latitude") && fromJSONObject.has("longitude")) {
+                coordinate = LatLng(fromJSONObject.getDouble("latitude"), fromJSONObject.getDouble("longitude"))
+            } else {
+                throw InvalidArgumentsError("Marker object is missing the required 'coordinate' property")
+            }
+        } else {
+            val latLngObj = fromJSONObject.getJSONObject("coordinate")
+            if (!latLngObj.has("lat") || !latLngObj.has("lng")) {
+                throw InvalidArgumentsError("LatLng object is missing the required 'lat' and/or 'lng' property")
+            }
+            coordinate = LatLng(latLngObj.getDouble("lat"), latLngObj.getDouble("lng"))
         }
 
         markerBgColor = fromJSONObject.optString("markerBgColor")
 
-        coordinate = LatLng(latLngObj.getDouble("lat"), latLngObj.getDouble("lng"))
         title = fromJSONObject.optString("title")
 //        opacity = fromJSONObject.optDouble("opacity", 1.0).toFloat()
         snippet = fromJSONObject.optString("snippet")
         infoIcon = fromJSONObject.optString("infoIcon")
         infoData = fromJSONObject.optJSONObject("infoData")
         isFlat = fromJSONObject.optBoolean("isFlat", false)
-        iconUrl = fromJSONObject.optString("iconUrl")
+        iconUrl = fromJSONObject.optString("iconUrl").ifEmpty {
+            fromJSONObject.optString("image")
+        }
 
         if (fromJSONObject.has("iconSize")) {
             val iconSizeObject = fromJSONObject.getJSONObject("iconSize")
@@ -194,9 +201,14 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             markerOptions.icon(BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, markerWidth, markerHeight, false)))
         } else if(iconUrl?.contains("new_3d_marker") == true) {
             val generator = DynamicMarkerGenerator(context)
+            val safeColor = if (!markerBgColor.isNullOrEmpty()) {
+                try { Color.parseColor(markerBgColor) } catch (e: IllegalArgumentException) { Color.GRAY }
+            } else {
+                Color.GRAY
+            }
             val descriptor = generator.generateMarker(
                 busIconRes =  R.drawable.ic_bus_white,   // your bus drawable
-                statusColor = Color.parseColor(markerBgColor),
+                statusColor = safeColor,
                 angle = bearingAngle ?: 0f
             )
 
@@ -272,11 +284,11 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
             val generator = DynamicMarkerGenerator(context)
             googleMapMarker?.apply {
                 setIcon(
-                generator.generateMarker(
-                    busIconRes = R.drawable.ic_bus_white,
-                    statusColor =  Color.parseColor(markerBgColor),
-                    angle = bearingAngle
-                )
+                    generator.generateMarker(
+                        busIconRes = R.drawable.ic_bus_white,
+                        statusColor =  Color.parseColor(markerBgColor),
+                        angle = bearingAngle
+                    )
                 )
             }
         } else if(iconUrl?.contains("overspeed_marker") == true) {

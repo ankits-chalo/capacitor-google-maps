@@ -236,9 +236,13 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             var markers: [Marker] = []
 
-            try markerObjs.forEach { marker in
-                let marker = try Marker(fromJSObject: marker)
-                markers.append(marker)
+            for (index, markerObj) in markerObjs.enumerated() {
+                do {
+                    let marker = try Marker(fromJSObject: markerObj)
+                    markers.append(marker)
+                } catch {
+                    NSLog("CapacitorGoogleMaps: Skipping invalid marker at index \(index): \(error.localizedDescription)")
+                }
             }
 
             let ids = try map.addMarkers(markers: markers)

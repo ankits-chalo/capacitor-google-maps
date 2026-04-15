@@ -234,78 +234,182 @@ class CapacitorGoogleMap(
             val markerIds: MutableList<String> = mutableListOf()
 
             CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    // Collect IDs of new markers for comparison
+                    val newMarkerIds = newMarkers.mapNotNull { it.getMarkerId() }.toSet()
 
-
-                // Collect IDs of new markers for comparison
-                val newMarkerIds = newMarkers.mapNotNull { it.getMarkerId() }.toSet()
-
-                // Find and remove markers that are not in the newMarkers list
-                val markersToRemove = markerIdOnWeb.filter { it !in newMarkerIds }
-                markersToRemove.forEach { markerId ->
-                    // Remove the marker from the map
-                    markers.entries.find { it.value.getMarkerId() == markerId }?.let { entry ->
-                        entry.value.googleMapMarker?.remove()
-                        markers.remove(entry.key)
+                    // Find and remove markers that are not in the newMarkers list
+                    val markersToRemove = markerIdOnWeb.filter { it !in newMarkerIds }
+                    markersToRemove.forEach { markerId ->
+                        // Remove the marker from the map
+                        markers.entries.find { it.value.getMarkerId() == markerId }?.let { entry ->
+                            entry.value.googleMapMarker?.remove()
+                            markers.remove(entry.key)
+                        }
+                        // Remove the marker ID from the markerIdOnWeb list
+                        markerIdOnWeb.remove(markerId)
                     }
-                    // Remove the marker ID from the markerIdOnWeb list
-                    markerIdOnWeb.remove(markerId)
-                }
 
-                newMarkers.forEach {
-                    if (markerIdOnWeb.contains(it.getMarkerId())) {
-                        for ((key, value) in markers) {
-                            if(value.id == it.getMarkerId()) {
-                                if (clusterManager != null) {
-                                    it.googleMapMarker?.remove()
+                    newMarkers.forEach {
+                        if (markerIdOnWeb.contains(it.getMarkerId())) {
+                            for ((key, value) in markers) {
+                                if(value.id == it.getMarkerId()) {
+                                    if (clusterManager != null) {
+                                        it.googleMapMarker?.remove()
+                                    }
+                                    setMultipleMarkerPosition(it)
+                                    markerIds.add(key)
+
+                                    break
                                 }
-                                setMultipleMarkerPosition(it)
-                                markerIds.add(key)
-
-                                break
                             }
-                        }
-                    } else {
-                        // Make a record of react code marker IDs that we are adding on map
-                        it.getMarkerId()?.let { marker -> markerIdOnWeb.add(marker) }
+                        } else {
+                            // Make a record of react code marker IDs that we are adding on map
+                            it.getMarkerId()?.let { marker -> markerIdOnWeb.add(marker) }
 
-                        val markerOptions = it.getMarkerOptionsUpdated()
+                            val markerOptions = it.getMarkerOptionsUpdated()
 
-                        if (it.iconUrl.equals("buses_custom_marker")) {
-                            val bridge = delegate.bridge
-                            val busesMarker = BusesMarker(bridge.context)
-                            markerOptions.icon(it.iconUrl?.let { it1 -> busesMarker.getMarkerIcon(it.title, it1) })
-                        }
+                            // Handle rotation
+                            if(it.rotation == 1) {
+                                if (it.angleDiff > 0) {
+                                    markerOptions.rotation(it.angleDiff)
+                                } else {
+                                    markerOptions.rotation(getAngle(it.coordinate))
+                                }
+                            }
 
-                        val googleMapMarker = googleMap?.addMarker(markerOptions)
-
-                        if (!it.infoIcon.isNullOrEmpty()) {
-                            if(it.infoIcon.equals("buses_info_icon")) {
+                            // Handle buses_custom_marker
+                            if (it.iconUrl?.contains("buses_custom_marker") == true) {
                                 val bridge = delegate.bridge
-                                googleMapMarker?.tag = it
-                                googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
+                                val busesMarker = BusesMarker(bridge.context)
+                                markerOptions.icon(busesMarker.getMarkerIcon(it.title, it.iconUrl!!))
+                            }
+
+                            // Handle alert_custom_marker
+                            if(it.iconUrl?.contains("alert_custom_marker") == true) {
+                                val bridge = delegate.bridge
+                                val busesMarker = AlertBusMarker(bridge.context)
+                                markerOptions.icon(busesMarker.getMarkerIcon(it.title, it.snippet, it.iconUrl!!))
+                                markerOptions.title("")
+                            }
+
+                            // Handle alert_stop_custom_marker
+                            if(it.iconUrl?.contains("alert_stop_custom_marker") == true) {
+                                val bridge = delegate.bridge
+                                val busesMarker = AlertStopCustomMarker(bridge.context)
+                                markerOptions.icon(busesMarker.getMarkerIcon(it.title, it.snippet, it.iconUrl!!))
+                                markerOptions.title("")
+                            }
+
+                            // Handle route_name
+                            if(it.iconUrl?.contains("route_name") == true) {
+                                val bridge = delegate.bridge
+                                val routeNameMarker = RouteNameMarker(bridge.context)
+                                markerOptions.icon(routeNameMarker.getMarkerIcon(it.title))
+                                markerOptions.anchor(0.5f, 1.0f)
+                                markerOptions.zIndex(1000f)
+                                markerOptions.title("")
+                            }
+
+                            // Handle overspeed_marker
+                            if(it.iconUrl?.contains("overspeed_marker") == true) {
+                                val bridge = delegate.bridge
+                                val overSpeedMarker = OverSpeedCustomMarker(bridge.context)
+                                val resId = bridge.context.resources.getIdentifier(
+                                    it.iconUrl,
+                                    "drawable",
+                                    bridge.context.packageName
+                                )
+                                markerOptions.icon(overSpeedMarker.getMarkerIcon(it.title, it.snippet, resId))
+                                markerOptions.title("")
+                            }
+
+                            val googleMapMarker = googleMap?.addMarker(markerOptions)
+                            if (googleMapMarker == null) {
+                                Log.w("CapacitorGoogleMap", "Failed to add marker with id: ${it.getMarkerId()}, iconUrl: ${it.iconUrl}")
+                                return@forEach
+                            }
+
+                            // Always set the tag so marker data is accessible
+                            googleMapMarker.tag = it
+
+                            // Handle info window adapters
+                            if (!it.infoIcon.isNullOrEmpty() && (it.iconUrl?.contains("new_3d_marker") != true || it.infoIcon!!.contains("last_updated_info")) && (!it.infoIcon.equals("not_show_info_window"))) {
+                                if(it.infoIcon.equals("buses_info_icon")) {
+                                    val bridge = delegate.bridge
+                                    googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
+                                } else if(it.infoIcon!!.contains("bus_alert_info")) {
+                                    val bridge = delegate.bridge
+                                    googleMap?.setInfoWindowAdapter(AlertMarkerInfoWindow(bridge.context))
+                                    googleMapMarker.showInfoWindow()
+                                    if (it.infoIcon!!.contains("address")) {
+                                        fetchAddressForMarker(googleMapMarker, bridge.context)
+                                    }
+                                } else if(it.infoIcon!!.contains("last_updated_info")) {
+                                    val bridge = delegate.bridge
+                                    if(it.infoIcon!!.contains("reverse") == true) {
+                                        googleMapMarker.setInfoWindowAnchor(0.5f, 1.4f)
+                                    } else {
+                                        googleMapMarker.setInfoWindowAnchor(0.5f, 0.15f)
+                                    }
+                                    googleMap?.setInfoWindowAdapter(LastUpdatedInfoWindowAdapter(bridge.context))
+                                    googleMapMarker.showInfoWindow()
+                                } else if(it.infoIcon!!.contains("stop_arrival_info")) {
+                                    val bridge = delegate.bridge
+                                    googleMap?.setInfoWindowAdapter(StopArrivalInfoWindowAdapter(bridge.context))
+                                } else if(it.infoIcon!!.contains("replay_info_icon")) {
+                                    val bridge = delegate.bridge
+                                    googleMap?.setInfoWindowAdapter(HistoryReplayInfoWindowAdapter(bridge.context))
+                                } else {
+                                    val bridge = delegate.bridge
+                                    googleMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(bridge.context))
+                                }
+                            }
+
+                            // Handle info-window-only markers (empty iconUrl)
+                            if(it.iconUrl?.isEmpty() == true) {
+                                googleMapMarker.showInfoWindow()
+                                googleMapMarker.alpha = 0.0f
+                                if(it.title.isNotEmpty()) {
+                                    googleMapMarker.title = it.title
+                                }
+                                if(it.snippet.isNotEmpty()) {
+                                    googleMapMarker.snippet = it.snippet
+                                }
+                            }
+
+                            // Handle clustering
+                            if (clusterManager == null || !it.isClustered) {
+                                it.googleMapMarker = googleMapMarker
+                                if(!it.isClustered) {
+                                    markerIdNotOnCluster.add(googleMapMarker.id)
+                                }
                             } else {
-                                val bridge = delegate.bridge
-                                googleMapMarker?.tag = it
-                                googleMap?.setInfoWindowAdapter(CustomInfoWindowAdapter(bridge.context))
+                                if (!it.infoIcon.isNullOrEmpty() && (!it.infoIcon.equals("not_show_info_window"))) {
+                                    if(it.infoIcon.equals("buses_info_icon")) {
+                                        val bridge = delegate.bridge
+                                        googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
+                                    }
+                                }
+                                googleMapMarker.remove()
+                                clusterManager?.addItem(it)
                             }
-                        }
-                        it.googleMapMarker = googleMapMarker
 
-                        if (clusterManager != null) {
-                            googleMapMarker?.remove()
+                            markers[googleMapMarker.id] = it
+                            markerIds.add(googleMapMarker.id)
                         }
-
-                        markers[googleMapMarker!!.id] = it
-                        markerIds.add(googleMapMarker.id)
                     }
 
+                    // Cluster once after all markers are added (outside the loop)
                     if (clusterManager != null) {
-                        clusterManager?.addItems(newMarkers)
                         clusterManager?.cluster()
                     }
-                }
 
-                callback(Result.success(markerIds))
+                    callback(Result.success(markerIds))
+                } catch (e: Exception) {
+                    Log.e("CapacitorGoogleMap", "Error in addMarkers", e)
+                    callback(Result.failure(e))
+                }
             }
         } catch (e: GoogleMapsError) {
             callback(Result.failure(e))
@@ -461,9 +565,9 @@ class CapacitorGoogleMap(
                         val overSpeedMarker = OverSpeedCustomMarker(bridge.context)
 
                         val resId = bridge.context.resources.getIdentifier(
-                        marker.iconUrl,
-                         "drawable",
-                         bridge.context.packageName
+                            marker.iconUrl,
+                            "drawable",
+                            bridge.context.packageName
                         )
 
                         markerOptions.icon(overSpeedMarker.getMarkerIcon(marker.title, marker.snippet, resId))
@@ -971,8 +1075,10 @@ class CapacitorGoogleMap(
 
             if (existingMarkerEntry != null) {
                 val oldMarker = existingMarkerEntry.value
-                // Below line animate the marker
-//                animateMarkerToICS(oldMarker?.googleMapMarker, marker!!.coordinate, LatLngInterpolator.Spherical())
+                // Update marker position
+                oldMarker.googleMapMarker?.position = marker.coordinate
+                oldMarker.coordinate = marker.coordinate
+
                 val infoWindowMarker = infoWindowMarkers[marker.id]
                 if (infoWindowMarker != null) {
                     val newInfoWindowPosition = calculateInfoWindowPosition(marker.coordinate)
