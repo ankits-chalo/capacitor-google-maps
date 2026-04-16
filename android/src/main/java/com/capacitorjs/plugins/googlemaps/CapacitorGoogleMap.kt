@@ -330,6 +330,12 @@ class CapacitorGoogleMap(
                                 return@forEach
                             }
 
+                            // Prevent any default info window for markers that should not show one
+                            if (it.infoIcon.equals("not_show_info_window")) {
+                                googleMapMarker.title = null
+                                googleMapMarker.snippet = null
+                            }
+
                             // Always set the tag so marker data is accessible
                             googleMapMarker.tag = it
 
@@ -849,7 +855,10 @@ class CapacitorGoogleMap(
                     val oldMarker = markers[marker.id]
                     val currentZoom = googleMap?.cameraPosition?.zoom ?: 0f
                     val shouldShowInfoWindow = currentZoom >= multipleInfoWindowZoomLevel
-
+                    if (marker.infoIcon == "not_show_info_window") {
+                        // Skip all info window processing
+                        oldMarker?.googleMapMarker?.hideInfoWindow()
+                    }
                     if (shouldShowInfoWindow && marker.infoIcon?.contains("multiple_info_window") == true) {
                         val infoWindowMarker = infoWindowMarkers[marker.id]
                         val existingInfoWindow = infoWindowMarkers[marker.id]
@@ -1915,6 +1924,11 @@ class CapacitorGoogleMap(
             data.put("snippet", snippet)
         }
         delegate.notify("onMarkerClick", data)
+        val markerData = marker.tag as? CapacitorGoogleMapMarker
+        if (markerData?.infoIcon == "not_show_info_window") {
+            delegate.notify("onMarkerClick", data)
+            return true  // true = consume the event, don't show info window
+        }
         return false
     }
 
