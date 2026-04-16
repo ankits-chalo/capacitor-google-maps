@@ -905,7 +905,7 @@ class CapacitorGoogleMap(
                         // Below line animate the marker
                         if (oldMarker!!.position.latitude != marker!!.coordinate.latitude
                             || oldMarker!!.position.longitude != marker!!.coordinate.longitude) {
-                            marker.infoData?.getLong("animationDuration")?.takeIf { it >= 0 }?.let { duration ->
+                            marker.infoData?.optLong("animationDuration")?.takeIf { it >= 0 }?.let { duration ->
                                 animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate, duration)
                             } ?: animateMarker(oldMarker?.googleMapMarker, marker!!.coordinate)
                             val infoWindowMarker = infoWindowMarkers[marker.id]
