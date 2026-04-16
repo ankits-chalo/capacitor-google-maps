@@ -21,14 +21,14 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 @CapacitorPlugin(
-        name = "CapacitorGoogleMaps",
-        permissions =
-                [
-                        Permission(
-                                strings = [Manifest.permission.ACCESS_FINE_LOCATION],
-                                alias = CapacitorGoogleMapsPlugin.LOCATION
-                        ),
-                ],
+    name = "CapacitorGoogleMaps",
+    permissions =
+        [
+            Permission(
+                strings = [Manifest.permission.ACCESS_FINE_LOCATION],
+                alias = CapacitorGoogleMapsPlugin.LOCATION
+            ),
+        ],
 )
 class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     private var maps: HashMap<String, CapacitorGoogleMap> = HashMap()
@@ -48,47 +48,47 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
 
         this.bridge.webView.setOnTouchListener(
-                object : View.OnTouchListener {
-                    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                        if (event != null) {
-                            if (event.source == -1) {
-                                return v?.onTouchEvent(event) ?: true
-                            }
-
-                            val touchX = event.x
-                            val touchY = event.y
-
-                            for ((id, map) in maps) {
-                                if (touchEnabled[id] == false) {
-                                    continue
-                                }
-                                val mapRect = map.getMapBounds()
-                                if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
-                                    if (event.action == MotionEvent.ACTION_DOWN) {
-                                        if (cachedTouchEvents[id] == null) {
-                                            cachedTouchEvents[id] = mutableListOf<MotionEvent>()
-                                        }
-
-                                        cachedTouchEvents[id]?.clear()
-                                    }
-
-                                    val motionEvent = MotionEvent.obtain(event)
-                                    cachedTouchEvents[id]?.add(motionEvent)
-
-                                    val payload = JSObject()
-                                    payload.put("x", touchX / map.config.devicePixelRatio)
-                                    payload.put("y", touchY / map.config.devicePixelRatio)
-                                    payload.put("mapId", map.id)
-
-                                    notifyListeners("isMapInFocus", payload)
-                                    return true
-                                }
-                            }
+            object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                    if (event != null) {
+                        if (event.source == -1) {
+                            return v?.onTouchEvent(event) ?: true
                         }
 
-                        return v?.onTouchEvent(event) ?: true
+                        val touchX = event.x
+                        val touchY = event.y
+
+                        for ((id, map) in maps) {
+                            if (touchEnabled[id] == false) {
+                                continue
+                            }
+                            val mapRect = map.getMapBounds()
+                            if (mapRect.contains(touchX.toInt(), touchY.toInt())) {
+                                if (event.action == MotionEvent.ACTION_DOWN) {
+                                    if (cachedTouchEvents[id] == null) {
+                                        cachedTouchEvents[id] = mutableListOf<MotionEvent>()
+                                    }
+
+                                    cachedTouchEvents[id]?.clear()
+                                }
+
+                                val motionEvent = MotionEvent.obtain(event)
+                                cachedTouchEvents[id]?.add(motionEvent)
+
+                                val payload = JSObject()
+                                payload.put("x", touchX / map.config.devicePixelRatio)
+                                payload.put("y", touchY / map.config.devicePixelRatio)
+                                payload.put("mapId", map.id)
+
+                                notifyListeners("isMapInFocus", payload)
+                                return true
+                            }
+                        }
                     }
+
+                    return v?.onTouchEvent(event) ?: true
                 }
+            }
         )
     }
 
@@ -134,8 +134,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             }
 
             val configObject =
-                    call.getObject("config")
-                            ?: throw InvalidArgumentsError("config object is missing")
+                call.getObject("config")
+                    ?: throw InvalidArgumentsError("config object is missing")
 
             val forceCreate = call.getBoolean("forceCreate", false)!!
 
@@ -256,10 +256,13 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             val markers: MutableList<CapacitorGoogleMapMarker> = mutableListOf()
 
             for (i in 0 until markerObjectArray.length()) {
-                val markerObj = markerObjectArray.getJSONObject(i)
-                val marker = CapacitorGoogleMapMarker(this.context, markerObj)
-
-                markers.add(marker)
+                try {
+                    val markerObj = markerObjectArray.getJSONObject(i)
+                    val marker = CapacitorGoogleMapMarker(this.context, markerObj)
+                    markers.add(marker)
+                } catch (e: Exception) {
+                    Log.w(tag, "Skipping invalid marker at index $i: ${e.message}")
+                }
             }
 
             map.addMarkers(markers) { result ->
@@ -439,7 +442,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
 
             val cordsObjectsArray = call.getArray("cords", null)
             cordsObjectsArray
-                    ?: throw InvalidArgumentsError("Coordinate array is missing for fitBound")
+                ?: throw InvalidArgumentsError("Coordinate array is missing for fitBound")
 
             if (cordsObjectsArray.length() == 0) {
                 throw InvalidArgumentsError("FitBound requires at least one coordinate")
@@ -454,7 +457,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                 }
                 cords.add(LatLng(cord.get("lat").toString().toDouble(), cord.get("lng").toString().toDouble()));
             }
-             val padding = call.getInt("padding", 200) ?: 200
+            val padding = call.getInt("padding", 200) ?: 200
             val map = maps[id]
             map ?: throw MapNotFoundError()
 
@@ -472,52 +475,52 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
         }
 
     }
-/*
-    @PluginMethod
-     fun addPolylines(call: PluginCall) {
-         try  {
-             val id = call.getString("id")
-             id ?: throw InvalidMapIdError()
+    /*
+        @PluginMethod
+         fun addPolylines(call: PluginCall) {
+             try  {
+                 val id = call.getString("id")
+                 id ?: throw InvalidMapIdError()
 
-             val polylinesObjectArray = call.getArray("polylines", null)
-             polylinesObjectArray ?: throw InvalidArgumentsError("polylines array is missing")
+                 val polylinesObjectArray = call.getArray("polylines", null)
+                 polylinesObjectArray ?: throw InvalidArgumentsError("polylines array is missing")
 
-             if (polylinesObjectArray.length() == 0) {
-                 throw InvalidArgumentsError("polylines requires at least one line")
+                 if (polylinesObjectArray.length() == 0) {
+                     throw InvalidArgumentsError("polylines requires at least one line")
+                 }
+
+                 val map = maps[id]
+                 map ?: throw MapNotFoundError()
+
+                 val polylines: MutableList<CapacitorGoogleMapPolyline> = mutableListOf()
+
+                 for (i in 0 until polylinesObjectArray.length()) {
+                     val polylineObj = polylinesObjectArray.getJSONObject(i)
+                     val polyline = CapacitorGoogleMapPolyline(polylineObj)
+
+                     polylines.add(polyline)
+                 }
+
+                 map.addPolylines(polylines) { result ->
+                     val ids = result.getOrThrow()
+
+                     val jsonIDs = JSONArray()
+                     ids.forEach { jsonIDs.put(it) }
+
+                     val res = JSObject()
+                     res.put("ids", jsonIDs)
+                     call.resolve(res)
+                 }
+
+             } catch (e: GoogleMapsError) {
+                 handleError(call, e)
+             } catch (e: Exception) {
+                 handleError(call, e)
              }
-
-             val map = maps[id]
-             map ?: throw MapNotFoundError()
-
-             val polylines: MutableList<CapacitorGoogleMapPolyline> = mutableListOf()
-
-             for (i in 0 until polylinesObjectArray.length()) {
-                 val polylineObj = polylinesObjectArray.getJSONObject(i)
-                 val polyline = CapacitorGoogleMapPolyline(polylineObj)
-
-                 polylines.add(polyline)
-             }
-
-             map.addPolylines(polylines) { result ->
-                 val ids = result.getOrThrow()
-
-                 val jsonIDs = JSONArray()
-                 ids.forEach { jsonIDs.put(it) }
-
-                 val res = JSObject()
-                 res.put("ids", jsonIDs)
-                 call.resolve(res)
-             }
-
-         } catch (e: GoogleMapsError) {
-             handleError(call, e)
-         } catch (e: Exception) {
-             handleError(call, e)
          }
-     }
-*/
+    */
 
-@PluginMethod
+    @PluginMethod
     fun addPolylines(call: PluginCall) {
         try {
             val id = call.getString("id")
@@ -828,8 +831,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val cameraConfigObject =
-                    call.getObject("config")
-                            ?: throw InvalidArgumentsError("config object is missing")
+                call.getObject("config")
+                    ?: throw InvalidArgumentsError("config object is missing")
 
             val config = GoogleMapCameraConfig(cameraConfigObject)
 
@@ -882,7 +885,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val mapType =
-                    call.getString("mapType") ?: throw InvalidArgumentsError("mapType is missing")
+                call.getString("mapType") ?: throw InvalidArgumentsError("mapType is missing")
 
             map.setMapType(mapType) { err ->
                 if (err != null) {
@@ -908,7 +911,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val enabled =
-                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
+                call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableIndoorMaps(enabled) { err ->
                 if (err != null) {
@@ -934,7 +937,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val enabled =
-                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
+                call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableTrafficLayer(enabled) { err ->
                 if (err != null) {
@@ -978,7 +981,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val paddingObj =
-                    call.getObject("padding") ?: throw InvalidArgumentsError("padding is missing")
+                call.getObject("padding") ?: throw InvalidArgumentsError("padding is missing")
 
             val padding = GoogleMapPadding(paddingObj)
 
@@ -1011,8 +1014,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val boundsObj =
-                    call.getObject("mapBounds")
-                            ?: throw InvalidArgumentsError("mapBounds object is missing")
+                call.getObject("mapBounds")
+                    ?: throw InvalidArgumentsError("mapBounds object is missing")
 
             val bounds = boundsObjectToRect(boundsObj)
 
@@ -1036,8 +1039,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val boundsObj =
-                    call.getObject("mapBounds")
-                            ?: throw InvalidArgumentsError("mapBounds object is missing")
+                call.getObject("mapBounds")
+                    ?: throw InvalidArgumentsError("mapBounds object is missing")
 
             val bounds = boundsObjectToRect(boundsObj)
 
@@ -1203,7 +1206,7 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             map ?: throw MapNotFoundError()
 
             val enabled =
-                    call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
+                call.getBoolean("enabled") ?: throw InvalidArgumentsError("enabled is missing")
 
             map.enableCurrentLocation(enabled) { err ->
                 if (err != null) {
@@ -1238,25 +1241,25 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
     private fun boundsObjectToRect(jsonObject: JSONObject): RectF {
         if (!jsonObject.has("width")) {
             throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'width' property"
+                "GoogleMapConfig object is missing the required 'width' property"
             )
         }
 
         if (!jsonObject.has("height")) {
             throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'height' property"
+                "GoogleMapConfig object is missing the required 'height' property"
             )
         }
 
         if (!jsonObject.has("x")) {
             throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'x' property"
+                "GoogleMapConfig object is missing the required 'x' property"
             )
         }
 
         if (!jsonObject.has("y")) {
             throw InvalidArgumentsError(
-                    "GoogleMapConfig object is missing the required 'y' property"
+                "GoogleMapConfig object is missing the required 'y' property"
             )
         }
 

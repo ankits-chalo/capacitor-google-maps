@@ -236,9 +236,13 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
 
             var markers: [Marker] = []
 
-            try markerObjs.forEach { marker in
-                let marker = try Marker(fromJSObject: marker)
-                markers.append(marker)
+            for (index, markerObj) in markerObjs.enumerated() {
+                do {
+                    let marker = try Marker(fromJSObject: markerObj)
+                    markers.append(marker)
+                } catch {
+                    NSLog("CapacitorGoogleMaps: Skipping invalid marker at index \(index): \(error.localizedDescription)")
+                }
             }
 
             let ids = try map.addMarkers(markers: markers)
@@ -1369,6 +1373,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             if((title?.isEmpty) != nil) {
                 title = userInfo.title
             }
+
+            if userInfo.infoIcon?.contains("not_show_info_window") == true {
+            // Still emit the click event, but consume it to prevent info window
+            notifyListeners("onMarkerClick", data: data)
+            return true  // Consume tap, don't show info window
+            }
             
             var data: [String: Any] = [
                 "mapId": self.findMapIdByMapView(mapView),
@@ -1434,6 +1444,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             guard let userData = marker.userData as? Marker,
                   let imageUrl = userData.infoIcon else {
                    return nil
+            }
+            if imageUrl.contains("not_show_info_window") {
+                return UIView()  // Return empty view (nil would fall through to default)
             }
             if(imageUrl == "buses_info_icon") {
                 let busesMarkerInfo = BusesMarkerInfoWindow.instanceFromNib()
