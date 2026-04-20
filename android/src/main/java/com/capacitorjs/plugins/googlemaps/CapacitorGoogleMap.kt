@@ -1136,6 +1136,8 @@ class CapacitorGoogleMap(
                      strokeWidths: MutableList<Int>,
                      zIndexs: MutableList<Int>,
                      strokeOpacities: MutableList<Int>,
+                     lineDashLengths: MutableList<Float>,
+                     lineDashGaps: MutableList<Float>,
                      callback: (ids: Result<List<String>>) -> Unit
     ) {
         // addPolylines is our custom implementation. If we want to use both add and remove polylines we can copy the plugins code here addPolylines
@@ -1151,6 +1153,15 @@ class CapacitorGoogleMap(
                     polylineOptions.width(strokeWidths[index].toFloat())
                     polylineOptions.color(Color.parseColor(strokeColors[index]))
                     polylineOptions.zIndex(zIndexs[index].toFloat())
+
+                    // Apply dashed pattern if lineDashLength > 0
+                    val dashLength = lineDashLengths[index]
+                    val dashGap = lineDashGaps[index]
+                    if (dashLength > 0f && dashGap > 0f) {
+                        val pattern = listOf(Dash(dashLength), Gap(dashGap))
+                        polylineOptions.pattern(pattern)
+                    }
+
                     val googleMapPolyline = googleMap?.addPolyline(polylineOptions)
                     customPolylines[googleMapPolyline!!.id] = googleMapPolyline
 

@@ -1275,7 +1275,7 @@ public class Map {
     //     return polylineHashes
     // }
 
-    func addPolyline(cords: [LatLng], strokeWidth: Double, strokeColor: String, strokeOpacity:Double ) throws -> [Int] {
+    func addPolyline(cords: [LatLng], strokeWidth: Double, strokeColor: String, strokeOpacity:Double, lineDashLength: Double = 0, lineDashGap: Double = 0 ) throws -> [Int] {
         var polylineHashes: [Int] = []
 
         DispatchQueue.main.sync {
@@ -1291,6 +1291,13 @@ public class Map {
                 newPolyline.map = self.mapViewController.GMapView
                 newPolyline.strokeWidth = strokeWidth
                 newPolyline.strokeColor = .black
+
+                // Apply dashed pattern if lineDashLength > 0
+                if lineDashLength > 0 && lineDashGap > 0 {
+                    let solidStyle = GMSStrokeStyle.solidColor(newPolyline.strokeColor ?? .black)
+                    let clearStyle = GMSStrokeStyle.solidColor(.clear)
+                    newPolyline.spans = GMSStyleSpans(path, styles: [solidStyle, clearStyle], lengths: [NSNumber(value: lineDashLength), NSNumber(value: lineDashGap)], lengthKind: .rhumb)
+                }
 
                 polylineHashes.append(newPolyline.hash.hashValue)
             let startCord = CLLocation(latitude: cords[0].lat, longitude: cords[0].lng)
@@ -1319,7 +1326,7 @@ public class Map {
         return polylineHashes
     }
 
-    func addPolylines(polylines:[[LatLng]],strokeColors: [String], strokeWidths: [Double], zIndexs: [Double], strokeOpacities:[Double] ) throws -> [Int] {
+    func addPolylines(polylines:[[LatLng]],strokeColors: [String], strokeWidths: [Double], zIndexs: [Double], strokeOpacities:[Double], lineDashLengths: [Double] = [], lineDashGaps: [Double] = [] ) throws -> [Int] {
         var polylineHashes: [Int] = []
        
         DispatchQueue.main.sync {
@@ -1341,6 +1348,16 @@ public class Map {
                         newPolyline.strokeColor = strokeColor
                    }
                    newPolyline.zIndex = Int32(zIndexs[index])
+
+                   // Apply dashed pattern if lineDashLength > 0
+                   let dashLength = index < lineDashLengths.count ? lineDashLengths[index] : 0
+                   let dashGap = index < lineDashGaps.count ? lineDashGaps[index] : 0
+                   if dashLength > 0 && dashGap > 0 {
+                       let solidStyle = GMSStrokeStyle.solidColor(newPolyline.strokeColor ?? .black)
+                       let clearStyle = GMSStrokeStyle.solidColor(.clear)
+                       newPolyline.spans = GMSStyleSpans(path, styles: [solidStyle, clearStyle], lengths: [NSNumber(value: dashLength), NSNumber(value: dashGap)], lengthKind: .rhumb)
+                   }
+
                    self.polylines[newPolyline.hash.hashValue] = newPolyline
                    polylineHashes.append(newPolyline.hash.hashValue)
             }

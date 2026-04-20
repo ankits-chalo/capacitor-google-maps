@@ -1129,6 +1129,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("strokeOpacity is missing")
             }
 
+            let lineDashLength = polylineProps["lineDashLength"] as? Double ?? 0
+            let lineDashGap = polylineProps["lineDashGap"] as? Double ?? 0
+
             if cordsObjs.isEmpty {
                 throw GoogleMapErrors.invalidArguments("cordinates requires at least one cordinate")
             }
@@ -1147,7 +1150,7 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 cords.append(cord)
             }
 
-            let ids = try map.addPolyline(cords: cords, strokeWidth:strokeWidth, strokeColor:strokeColor, strokeOpacity:strokeOpacity)
+            let ids = try map.addPolyline(cords: cords, strokeWidth:strokeWidth, strokeColor:strokeColor, strokeOpacity:strokeOpacity, lineDashLength: lineDashLength, lineDashGap: lineDashGap)
 
             call.resolve(["ids": ids.map({ id in
                 return String(id)
@@ -1188,6 +1191,9 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 throw GoogleMapErrors.invalidArguments("zIndex is missing")
             }
 
+            let lineDashLength = polylineProps["lineDashLength"] as? Double ?? 0
+            let lineDashGap = polylineProps["lineDashGap"] as? Double ?? 0
+
             if polylineObjs.isEmpty {
                 throw GoogleMapErrors.invalidArguments("cordinates requires at least one cordinate")
             }
@@ -1200,6 +1206,8 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             var strokeWidths: [Double] = []
             var zIndexs: [Double] = []
             var strokeOpacities: [Double] = []
+            var lineDashLengths: [Double] = []
+            var lineDashGaps: [Double] = []
             
             try polylineObjs.forEach { polylineObject in
                 guard let cordsObjs = polylineObject["polylinePath"] as? [JSObject] else {
@@ -1246,15 +1254,31 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                     // If the current object doesn't have stroke opacity, set the default opacity
                     objStrokeOpacities = strokeOpacity as Double
                 }
+
+                var objLineDashLength: Double
+                if let polylineLineDashLength = polylineObject["polylineLineDashLength"] as? Double {
+                    objLineDashLength = polylineLineDashLength
+                } else {
+                    objLineDashLength = lineDashLength
+                }
+
+                var objLineDashGap: Double
+                if let polylineLineDashGap = polylineObject["polylineLineDashGap"] as? Double {
+                    objLineDashGap = polylineLineDashGap
+                } else {
+                    objLineDashGap = lineDashGap
+                }
                 
                 strokeColors.append(objStokeColor)
                 strokeWidths.append(objStrokeWidth)
                 zIndexs.append(objZIndex)
                 strokeOpacities.append(objStrokeOpacities)
+                lineDashLengths.append(objLineDashLength)
+                lineDashGaps.append(objLineDashGap)
                 polylines.append(cords)
             }
       
-            let ids = try map.addPolylines(polylines:polylines, strokeColors:strokeColors, strokeWidths:strokeWidths, zIndexs:zIndexs, strokeOpacities:strokeOpacities)
+            let ids = try map.addPolylines(polylines:polylines, strokeColors:strokeColors, strokeWidths:strokeWidths, zIndexs:zIndexs, strokeOpacities:strokeOpacities, lineDashLengths:lineDashLengths, lineDashGaps:lineDashGaps)
 
             call.resolve(["ids": ids.map({ id in
                 return String(id)
