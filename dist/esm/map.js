@@ -270,7 +270,7 @@ export class GoogleMap {
     //   });
     //   return res.ids;
     // }
-    async addPolylines(cords, { strokeWidth = 1, strokeColor, strokeOpacity, zIndex }) {
+    async addPolylines(cords, { strokeWidth = 1, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }) {
         const res = await CapacitorGoogleMaps.addPolylines({
             id: this.id,
             cords,
@@ -279,6 +279,8 @@ export class GoogleMap {
                 strokeColor,
                 strokeOpacity,
                 zIndex,
+                lineDashLength,
+                lineDashGap,
             },
         });
         return res.ids;
