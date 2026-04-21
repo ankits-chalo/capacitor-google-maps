@@ -526,7 +526,7 @@ class CapacitorGoogleMap(
                     marker.getMarkerId()?.let { markerIdOnWeb.add(it) }
 
                     val markerOptions = marker.getMarkerOptionsUpdated()
-     //               val googleMapMarker = googleMap?.addMarker(markerOptions)
+                    //               val googleMapMarker = googleMap?.addMarker(markerOptions)
                     if(marker.rotation == 1) {
                         if (marker.angleDiff > 0) {
                             markerOptions.rotation(marker.angleDiff)
@@ -1084,15 +1084,15 @@ class CapacitorGoogleMap(
 
             if (existingMarkerEntry != null) {
                 val oldMarker = existingMarkerEntry.value
-                // Update marker position
-                oldMarker.googleMapMarker?.position = marker.coordinate
-                oldMarker.coordinate = marker.coordinate
 
-                val infoWindowMarker = infoWindowMarkers[marker.id]
-                if (infoWindowMarker != null) {
-                    val newInfoWindowPosition = calculateInfoWindowPosition(marker.coordinate)
-                    infoWindowMarker.position = newInfoWindowPosition
+                // Animate marker position (with info window synced frame-by-frame via animateMarker)
+                if (oldMarker.position.latitude != marker.coordinate.latitude
+                    || oldMarker.position.longitude != marker.coordinate.longitude) {
+                    marker.infoData?.optLong("animationDuration")?.takeIf { it >= 0 }?.let { duration ->
+                        animateMarker(oldMarker.googleMapMarker, marker.coordinate, duration)
+                    } ?: animateMarker(oldMarker.googleMapMarker, marker.coordinate)
                 }
+                oldMarker.coordinate = marker.coordinate
 
                 if(marker.rotation == 1){
                     if(marker.angleDiff>0){

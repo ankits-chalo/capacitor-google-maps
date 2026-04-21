@@ -1398,12 +1398,6 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
                 title = userInfo.title
             }
 
-            if userInfo.infoIcon?.contains("not_show_info_window") == true {
-            // Still emit the click event, but consume it to prevent info window
-            notifyListeners("onMarkerClick", data: data)
-            return true  // Consume tap, don't show info window
-            }
-            
             var data: [String: Any] = [
                 "mapId": self.findMapIdByMapView(mapView),
                 "markerId": String(marker.hash.hashValue),
@@ -1416,6 +1410,12 @@ public class CapacitorGoogleMapsPlugin: CAPPlugin, GMSMapViewDelegate {
             // Add custom data
             if let infoData = userInfo.infoData {
                 data["customData"] = infoData
+            }
+
+            if userInfo.infoIcon?.contains("not_show_info_window") == true {
+            // Still emit the click event, but consume it to prevent info window
+            notifyListeners("onMarkerClick", data: data)
+            return true  // Consume tap, don't show info window
             }
             
             self.notifyListeners("onMarkerClick", data: data)

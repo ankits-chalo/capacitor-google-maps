@@ -565,7 +565,7 @@ public class Map {
     }
 
 
-    private func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool, isReverseInfoWindow: Bool) -> CGPoint {
+    func calculateInfoWindowScreenPosition(for coordinate: CLLocationCoordinate2D, markerId: Int, isSnippet: Bool, isReverseInfoWindow: Bool) -> CGPoint {
         let point = self.mapViewController.GMapView.projection.point(for: coordinate)
         
         // Get the specific info window view for this marker
@@ -944,9 +944,72 @@ public class Map {
              }
 
              DispatchQueue.main.sync {
-                     CATransaction.begin()
-                     CATransaction.setAnimationDuration(2.0)
-                     oldMarker.position = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                     // Extract animation duration from infoData
+                     var duration = 2.0
+                     if let infoData = marker.infoData {
+                         let animationDuration = (infoData["animationDuration"] as? Double) ??
+                                                    (Double(infoData["animationDuration"] as? String ?? "")) ??
+                                                    2000
+                         duration = animationDuration > 0 ? animationDuration / 1000 : 0
+                     }
+
+                     let startPosition = oldMarker.position
+                     let endPosition = CLLocationCoordinate2D(latitude: marker.coordinate.lat, longitude: marker.coordinate.lng)
+                     let positionChanged = startPosition.latitude != endPosition.latitude || startPosition.longitude != endPosition.longitude
+
+                     if positionChanged && duration > 0 {
+                         // Use CADisplayLink-based animation for reliable frame-by-frame marker + info window sync
+                         let markerHash = oldMarker.hash.hashValue
+                         let hasSnippet = !(marker.snippet?.isEmpty ?? true)
+                         let isReverse = marker.infoIcon?.contains("reverse") ?? false
+
+                         let helper = MarkerAnimationHelper(
+                             startTime: CACurrentMediaTime(),
+                             duration: duration,
+                             startLat: startPosition.latitude,
+                             startLng: startPosition.longitude,
+                             endLat: endPosition.latitude,
+                             endLng: endPosition.longitude,
+                             gmsMarker: oldMarker,
+                             infoWindowView: self.infoWindowMarkers[markerHash],
+                             mapView: self.mapViewController.GMapView,
+                             map: self,
+                             markerHash: markerHash,
+                             hasSnippet: hasSnippet,
+                             isReverse: isReverse,
+                             zoomLevel: self.multipleInfoWindowZoomLevel
+                         )
+                         let displayLink = CADisplayLink(target: helper, selector: #selector(MarkerAnimationHelper.step(_:)))
+                         displayLink.add(to: .main, forMode: .common)
+                     } else {
+                         // No animation — snap to final position
+                         oldMarker.position = endPosition
+                         if let mapView = self.mapViewController.GMapView {
+                             let currentZoom = mapView.camera.zoom
+                             let shouldShow = currentZoom >= self.multipleInfoWindowZoomLevel
+                             if let infoWindowView = self.infoWindowMarkers[oldMarker.hash.hashValue] {
+                                 if shouldShow {
+                                     let hasSnippet = !(marker.snippet?.isEmpty ?? true)
+                                     let pos = self.calculateInfoWindowScreenPosition(
+                                         for: oldMarker.position,
+                                         markerId: oldMarker.hash.hashValue,
+                                         isSnippet: hasSnippet,
+                                         isReverseInfoWindow: marker.infoIcon?.contains("reverse") ?? false
+                                     )
+                                     infoWindowView.frame.origin = pos
+                                     infoWindowView.isHidden = false
+                                 } else {
+                                     infoWindowView.isHidden = true
+                                 }
+                             } else if shouldShow {
+                                 if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
+                                     self.createInfoWindowAsMarker(for: oldMarker, markerData: marker)
+                                 }
+                             }
+                         }
+                     }
+
+                     // Update title/icon/rotation (non-position properties)
                      oldMarker.title = marker.title
                      if marker.title?.range(of:"showInfoWindowTrue") != nil {
                          let customMarker = CustomMarker(title: marker.title!,coordinate: marker.coordinate)
@@ -972,7 +1035,6 @@ public class Map {
                      NSLog("Error in angle. \(error)")
                  }
                  oldMarker.userData = marker
-                 CATransaction.commit()
              }
          return marker.id!
      }
@@ -1296,7 +1358,7 @@ public class Map {
                 if lineDashLength > 0 && lineDashGap > 0 {
                     let solidStyle = GMSStrokeStyle.solidColor(newPolyline.strokeColor ?? .black)
                     let clearStyle = GMSStrokeStyle.solidColor(.clear)
-                    newPolyline.spans = GMSStyleSpans(path, styles: [solidStyle, clearStyle], lengths: [NSNumber(value: lineDashLength), NSNumber(value: lineDashGap)], lengthKind: .rhumb)
+                    newPolyline.spans = GMSStyleSpans(path, [solidStyle, clearStyle], [NSNumber(value: lineDashLength), NSNumber(value: lineDashGap)], .rhumb)
                 }
 
                 polylineHashes.append(newPolyline.hash.hashValue)
@@ -1355,7 +1417,7 @@ public class Map {
                    if dashLength > 0 && dashGap > 0 {
                        let solidStyle = GMSStrokeStyle.solidColor(newPolyline.strokeColor ?? .black)
                        let clearStyle = GMSStrokeStyle.solidColor(.clear)
-                       newPolyline.spans = GMSStyleSpans(path, styles: [solidStyle, clearStyle], lengths: [NSNumber(value: dashLength), NSNumber(value: dashGap)], lengthKind: .rhumb)
+                       newPolyline.spans = GMSStyleSpans(path, [solidStyle, clearStyle], [NSNumber(value: dashLength), NSNumber(value: dashGap)], .rhumb)
                    }
 
                    self.polylines[newPolyline.hash.hashValue] = newPolyline
@@ -1930,6 +1992,87 @@ extension UIImage {
         let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return resizedImage
+    }
+}
+
+// MARK: - MarkerAnimationHelper (CADisplayLink-based frame-by-frame animation)
+
+class MarkerAnimationHelper: NSObject {
+    private let startTime: CFTimeInterval
+    private let duration: Double
+    private let startLat: Double
+    private let startLng: Double
+    private let endLat: Double
+    private let endLng: Double
+    private weak var gmsMarker: GMSMarker?
+    private weak var infoWindowView: UIView?
+    private weak var mapView: GMSMapView?
+    private weak var map: Map?
+    private let markerHash: Int
+    private let hasSnippet: Bool
+    private let isReverse: Bool
+    private let zoomLevel: Float
+
+    init(startTime: CFTimeInterval, duration: Double,
+         startLat: Double, startLng: Double,
+         endLat: Double, endLng: Double,
+         gmsMarker: GMSMarker,
+         infoWindowView: UIView?,
+         mapView: GMSMapView?,
+         map: Map,
+         markerHash: Int,
+         hasSnippet: Bool,
+         isReverse: Bool,
+         zoomLevel: Float) {
+        self.startTime = startTime
+        self.duration = duration
+        self.startLat = startLat
+        self.startLng = startLng
+        self.endLat = endLat
+        self.endLng = endLng
+        self.gmsMarker = gmsMarker
+        self.infoWindowView = infoWindowView
+        self.mapView = mapView
+        self.map = map
+        self.markerHash = markerHash
+        self.hasSnippet = hasSnippet
+        self.isReverse = isReverse
+        self.zoomLevel = zoomLevel
+    }
+
+    @objc func step(_ displayLink: CADisplayLink) {
+        guard let gmsMarker = gmsMarker else {
+            displayLink.invalidate()
+            return
+        }
+
+        let elapsed = CACurrentMediaTime() - startTime
+        let fraction = min(elapsed / duration, 1.0)
+
+        let lat = startLat + (endLat - startLat) * fraction
+        let lng = startLng + (endLng - startLng) * fraction
+        let newPosition = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+
+        gmsMarker.position = newPosition
+
+        // Update info window position on every frame
+        if let infoWindowView = infoWindowView, let mapView = mapView, let map = map {
+            let currentZoom = mapView.camera.zoom
+            if currentZoom >= zoomLevel {
+                let screenPos = map.calculateInfoWindowScreenPosition(
+                    for: newPosition,
+                    markerId: markerHash,
+                    isSnippet: hasSnippet,
+                    isReverseInfoWindow: isReverse
+                )
+                infoWindowView.frame.origin = screenPos
+                infoWindowView.isHidden = false
+            }
+        }
+
+        if fraction >= 1.0 {
+            displayLink.invalidate()
+        }
     }
 }
 
