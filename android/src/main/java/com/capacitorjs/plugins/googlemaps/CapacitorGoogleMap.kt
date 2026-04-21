@@ -1937,8 +1937,10 @@ class CapacitorGoogleMap(
         delegate.notify("onMarkerClick", data)
         val markerData = marker.tag as? CapacitorGoogleMapMarker
         if (markerData?.infoIcon == "not_show_info_window") {
-            delegate.notify("onMarkerClick", data)
             return true  // true = consume the event, don't show info window
+        }
+         if (markerData?.infoIcon?.contains("multiple_info_window") == true) {
+            return true  // info displayed via separate bitmap marker, suppress default info window
         }
         return false
     }
