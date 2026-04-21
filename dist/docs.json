@@ -215,7 +215,7 @@
       },
       {
         "name": "addPolylines",
-        "signature": "(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any) => Promise<string[]>",
+        "signature": "(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any) => Promise<string[]>",
         "parameters": [
           {
             "name": "cords",

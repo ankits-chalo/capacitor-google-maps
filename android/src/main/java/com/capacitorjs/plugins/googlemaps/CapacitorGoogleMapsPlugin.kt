@@ -552,6 +552,9 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             }
             val zIndex = polylineProps.getInteger("zIndex")
 
+            val lineDashLength = if (polylineProps.has("lineDashLength")) polylineProps.getDouble("lineDashLength").toFloat() else 0f
+            val lineDashGap = if (polylineProps.has("lineDashGap")) polylineProps.getDouble("lineDashGap").toFloat() else 0f
+
             if (polylineObjectsArray.length() == 0) {
                 throw InvalidArgumentsError("Polylines coordinates requires at least one coordinate")
             }
@@ -564,6 +567,8 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
             var strokeWidths: MutableList<Int> = mutableListOf();
             var zIndexs: MutableList<Int> = mutableListOf();
             var strokeOpacities: MutableList<Int> = mutableListOf();
+            var lineDashLengths: MutableList<Float> = mutableListOf();
+            var lineDashGaps: MutableList<Float> = mutableListOf();
 
             for (i in 0 until polylineObjectsArray.length()) {
                 val polylineObject = polylineObjectsArray.getJSONObject(i)
@@ -612,14 +617,28 @@ class CapacitorGoogleMapsPlugin : Plugin(), OnMapsSdkInitializedCallback {
                     polylineObject.get("polylineOpacity") as Int;
                 }
 
+                var objLineDashLength: Float = if(polylineObject.has("polylineLineDashLength")) {
+                    polylineObject.getDouble("polylineLineDashLength").toFloat()
+                } else {
+                    lineDashLength
+                }
+
+                var objLineDashGap: Float = if(polylineObject.has("polylineLineDashGap")) {
+                    polylineObject.getDouble("polylineLineDashGap").toFloat()
+                } else {
+                    lineDashGap
+                }
+
                 polylines.add(cords)
                 strokeColors.add(objStokeColor)
                 strokeWidths.add(objStrokeWidth)
                 zIndexs.add(objZIndex)
                 strokeOpacities.add(objStrokeOpacities)
+                lineDashLengths.add(objLineDashLength)
+                lineDashGaps.add(objLineDashGap)
             }
 
-            map.addPolylines(polylines, strokeColors, strokeWidths , zIndexs, strokeOpacities) { result ->
+            map.addPolylines(polylines, strokeColors, strokeWidths , zIndexs, strokeOpacities, lineDashLengths, lineDashGaps) { result ->
                 val ids = result.getOrThrow()
 
                 val jsonIDs = JSONArray()

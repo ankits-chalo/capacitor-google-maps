@@ -19,7 +19,7 @@ export interface GoogleMapInterface {
     removePolygons(ids: string[]): Promise<void>;
     addCircles(circles: Circle[]): Promise<string[]>;
     removeCircles(ids: string[]): Promise<void>;
-    addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any): Promise<string[]>;
+    addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any): Promise<string[]>;
     setMarkerPosition(args: any): Promise<{
         id: string;
     }>;
@@ -151,7 +151,7 @@ export declare class GoogleMap {
      */
     removeMarkers(ids: string[]): Promise<void>;
     addPolygons(polygons: Polygon[]): Promise<string[]>;
-    addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any): Promise<string[]>;
+    addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any): Promise<string[]>;
     setMarkerPosition(marker: any): Promise<string>;
     fitBound(cords: any, padding: number): Promise<void>;
     removePolygons(ids: string[]): Promise<void>;

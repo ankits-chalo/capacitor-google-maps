@@ -518,7 +518,7 @@ removeCircles(ids: string[]) => Promise<void>
 ### addPolylines(...)
 
 ```typescript
-addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex }: any) => Promise<string[]>
+addPolylines(cords: any, { strokeWidth, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any) => Promise<string[]>
 ```
 
 | Param       | Type             |

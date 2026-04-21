@@ -331,7 +331,7 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
         //   });
         //   return res.ids;
         // }
-        async addPolylines(cords, { strokeWidth = 1, strokeColor, strokeOpacity, zIndex }) {
+        async addPolylines(cords, { strokeWidth = 1, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }) {
             const res = await CapacitorGoogleMaps.addPolylines({
                 id: this.id,
                 cords,
@@ -340,6 +340,8 @@ var capacitorCapacitorGoogleMaps = (function (exports, core, markerclusterer) {
                     strokeColor,
                     strokeOpacity,
                     zIndex,
+                    lineDashLength,
+                    lineDashGap,
                 },
             });
             return res.ids;

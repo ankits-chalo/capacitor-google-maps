@@ -49,7 +49,7 @@ export interface GoogleMapInterface {
   // addPolylines(polylines: Polyline[]): Promise<string[]>;
   addPolylines(
     cords: any,
-    { strokeWidth, strokeColor, strokeOpacity, zIndex }: any
+    { strokeWidth, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any
   ): Promise<string[]>;
   setMarkerPosition(args: any): Promise<{ id: string }>;
   fitBound(args: any): Promise<void>;
@@ -460,7 +460,7 @@ export class GoogleMap {
 
   async addPolylines(
     cords: any,
-    { strokeWidth = 1, strokeColor, strokeOpacity, zIndex }: any
+    { strokeWidth = 1, strokeColor, strokeOpacity, zIndex, lineDashLength, lineDashGap }: any
   ) {
     const res = await CapacitorGoogleMaps.addPolylines({
       id: this.id,
@@ -470,6 +470,8 @@ export class GoogleMap {
         strokeColor,
         strokeOpacity,
         zIndex,
+        lineDashLength,
+        lineDashGap,
       },
     });
     return res.ids;
