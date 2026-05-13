@@ -62,12 +62,26 @@ class GMViewController: UIViewController {
     
     func clusterMarker() {
         if let clusterManager = clusterManager {
-            clusterManager.cluster()
+            ObjCExceptionCatcher.tryBlock({
+                clusterManager.cluster()
+            }, catch: { exception in
+                NSLog("CapacitorGoogleMaps: clustering exception caught – \(exception.reason ?? "unknown"). Clearing and re-adding items.")
+                // Recover: clear the algorithm's state and re-add all current items
+                clusterManager.clearItems()
+            })
         }
     }
     
     func updateMarkerPosition(marker: GMSMarker, newPosition: CLLocationCoordinate2D) {
             guard let clusterManager = clusterManager else { return }
+
+            // Validate new position
+            guard newPosition.latitude.isFinite && newPosition.longitude.isFinite
+                  && newPosition.latitude >= -90 && newPosition.latitude <= 90
+                  && newPosition.longitude >= -180 && newPosition.longitude <= 180 else {
+                NSLog("CapacitorGoogleMaps: ignoring invalid marker position (\(newPosition.latitude), \(newPosition.longitude))")
+                return
+            }
                 
                 // Check if the marker is visible (not clustered)
             if marker.map != nil &&
@@ -83,7 +97,7 @@ class GMViewController: UIViewController {
                     
                     // Since the marker's position has changed, it may need to be re-clustered
                     if !skipClustering {
-                        clusterManager.cluster()
+                        clusterMarker()
                     }
                 } else {
                     print("Not inside the map", marker.title)
@@ -95,9 +109,18 @@ class GMViewController: UIViewController {
 
     func addMarkersToCluster(markers: [GMSMarker]) {
         if let clusterManager = clusterManager {
-            clusterManager.add(markers)
+            // Filter out markers with invalid coordinates to prevent clustering crash
+            let validMarkers = markers.filter { marker in
+                let lat = marker.position.latitude
+                let lng = marker.position.longitude
+                return lat.isFinite && lng.isFinite
+                    && lat >= -90 && lat <= 90
+                    && lng >= -180 && lng <= 180
+            }
+            if validMarkers.isEmpty { return }
+            clusterManager.add(validMarkers)
             if !skipClustering {
-                clusterManager.cluster()
+                clusterMarker()
             }
         }
     }
@@ -108,7 +131,7 @@ class GMViewController: UIViewController {
                 clusterManager.remove(marker)
             }
             if !skipClustering {
-                clusterManager.cluster()
+                clusterMarker()
             }
         }
     }
@@ -1558,7 +1581,7 @@ public class Map {
     func removeMarker(id: Int) throws {
         if (id != 0) {
             if let marker = self.markers[id] {
-                DispatchQueue.main.async {
+                DispatchQueue.main.sync {
                     self.removeInfoWindowMarker(for: id)
                     if self.mapViewController.clusteringEnabled {
                         self.mapViewController.removeMarkersFromCluster(markers: [marker])
