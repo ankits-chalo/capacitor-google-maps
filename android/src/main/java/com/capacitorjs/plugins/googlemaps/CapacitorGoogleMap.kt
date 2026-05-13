@@ -2,6 +2,7 @@ package com.capacitorjs.plugins.googlemaps
 
 import BusesMarker
 import BusesMarkerRenderer
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
@@ -414,6 +415,10 @@ class CapacitorGoogleMap(
                         clusterManager?.cluster()
                     }
 
+                    // cluster() schedules rendering asynchronously; wait for the renderer to finish
+                    // before checking which markers are rendered individually.
+                    delay(300)
+
                     // Update info windows so unclustered markers get their info windows immediately
                     updateInfoWindowsForCurrentZoom()
 
@@ -722,6 +727,16 @@ class CapacitorGoogleMap(
         return LatLng(originalPosition.latitude , originalPosition.longitude)
     }
 
+    /**
+     * Returns the rendered Google Marker for a cluster item, or null if the item
+     * is currently absorbed into a cluster (not rendered individually).
+     * Works with any renderer that extends DefaultClusterRenderer.
+     */
+    private fun getRenderedMarker(item: CapacitorGoogleMapMarker): Marker? {
+        val renderer = clusterManager?.renderer as? DefaultClusterRenderer<CapacitorGoogleMapMarker>
+        return renderer?.getMarker(item)
+    }
+
     private fun createInfoWindowView(marker: CapacitorGoogleMapMarker): Bitmap {
         return multipleInfoWindowView.createInfoWindowBitmap(marker)
     }
@@ -826,7 +841,7 @@ class CapacitorGoogleMap(
         val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
         valueAnimator.duration = 2000 // duration of the animation in milliseconds
 
-        val marker = (clusterManager?.renderer as? BusesMarkerRenderer)?.getMarker(clusterItem)
+        val marker = getRenderedMarker(clusterItem)
         valueAnimator.addUpdateListener { animator ->
             val v = valueAnimator.animatedFraction
 
@@ -1014,9 +1029,9 @@ class CapacitorGoogleMap(
                     } else {
                         oldMarker?.let {
 
-                            val renderer = clusterManager?.renderer as? BusesMarkerRenderer
-                            val isClustered = renderer?.getClusterItem(oldMarker.googleMapMarker) != null
-                            if (!isClustered
+                            val renderedMarker = getRenderedMarker(oldMarker)
+                            val isRenderedIndividually = renderedMarker != null
+                            if (isRenderedIndividually
                                 && (oldMarker.position.latitude != marker.coordinate.latitude
                                         || oldMarker.position.longitude != marker.coordinate.longitude)) {
 //                                  Only animate if the marker is not currently clustered
@@ -1154,14 +1169,13 @@ class CapacitorGoogleMap(
                         }
                     } else {
                         // Create new info window if marker is not inside a cluster
-                        oldMarker.googleMapMarker?.let { googleMapMarker ->
-                            val isStandalone = if (clusterManager != null && oldMarker.isClustered) {
-                                val renderer = clusterManager?.renderer as? BusesMarkerRenderer
-                                renderer?.getMarker(oldMarker) != null
-                            } else true
-                            if (isStandalone) {
-                                createInfoWindowAsMarker(marker, googleMapMarker)
-                            }
+                        val visibleMarker = if (clusterManager != null && oldMarker.isClustered) {
+                            getRenderedMarker(oldMarker)
+                        } else {
+                            oldMarker.googleMapMarker
+                        }
+                        if (visibleMarker != null) {
+                            createInfoWindowAsMarker(marker, visibleMarker)
                         }
                     }
                 } else {
@@ -2113,24 +2127,24 @@ class CapacitorGoogleMap(
             // Clean up info windows that don't have corresponding markers anymore
             infoWindowMarkers.forEach { (originalMarkerId, infoWindowMarker) ->
                 val marker = markers[originalMarkerId]
-                val markerExists = marker != null && marker.googleMapMarker != null
+                // A marker "exists" if it's tracked AND has a visible Google Marker
+                // (either standalone or rendered by the cluster renderer)
+                val hasVisibleMarker = if (marker != null) {
+                    if (clusterManager != null && marker.isClustered) {
+                        getRenderedMarker(marker) != null
+                    } else {
+                        marker.googleMapMarker != null
+                    }
+                } else false
 
-                if (!markerExists) {
-                    // Remove if original marker doesn't exist
+                if (!hasVisibleMarker) {
+                    // Remove if original marker doesn't exist or is inside a cluster
                     markersToRemove.add(originalMarkerId)
                     infoWindowMarker.remove()
                 } else if (!shouldShowInfoWindows) {
                     // Remove if zoomed out beyond the threshold
                     markersToRemove.add(originalMarkerId)
                     infoWindowMarker.remove()
-                } else if (marker != null && clusterManager != null && marker.isClustered) {
-                    // Remove info window if the marker is currently inside a cluster
-                    val renderer = clusterManager?.renderer as? BusesMarkerRenderer
-                    val isInsideCluster = renderer?.getMarker(marker) == null
-                    if (isInsideCluster) {
-                        markersToRemove.add(originalMarkerId)
-                        infoWindowMarker.remove()
-                    }
                 }
             }
 
@@ -2143,15 +2157,15 @@ class CapacitorGoogleMap(
         // Find all markers that should have multiple info windows and create them
         markers.forEach { (markerId, marker) ->
             if (marker.infoIcon?.contains("multiple_info_window") == true &&
-                infoWindowMarkers[markerId] == null &&
-                marker.googleMapMarker != null) {
-                // Check if the marker is currently rendered as standalone (not inside a cluster)
-                val isStandalone = if (clusterManager != null && marker.isClustered) {
-                    val renderer = clusterManager?.renderer as? BusesMarkerRenderer
-                    renderer?.getMarker(marker) != null
-                } else true
-                if (isStandalone) {
-                    createInfoWindowAsMarker(marker, marker.googleMapMarker!!)
+                infoWindowMarkers[markerId] == null) {
+                // Resolve the visible Google Marker: either the standalone one or the cluster-rendered one
+                val visibleMarker = if (clusterManager != null && marker.isClustered) {
+                    getRenderedMarker(marker)  // null when absorbed into a cluster
+                } else {
+                    marker.googleMapMarker
+                }
+                if (visibleMarker != null) {
+                    createInfoWindowAsMarker(marker, visibleMarker)
                 }
             }
         }
