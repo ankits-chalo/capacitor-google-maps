@@ -106,8 +106,15 @@ class CustomClusterManagerRenderer(
         }
     }
 
+    override fun onClusterItemRendered(item: CapacitorGoogleMapMarker, marker: Marker) {
+        super.onClusterItemRendered(item, marker)
+        marker.tag = item
+        item.googleMapMarker = marker
+    }
+
     override fun onClusterItemUpdated(item: CapacitorGoogleMapMarker, marker: Marker) {
         marker.tag = item
+        item.googleMapMarker = marker
 
         if (item.infoData?.optBoolean("showInfoIcon") == true) {
             marker.showInfoWindow()

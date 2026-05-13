@@ -1836,13 +1836,15 @@ class CapacitorGoogleMap(
     fun setClusterListeners() {
         CoroutineScope(Dispatchers.Main).launch {
             clusterManager?.setOnClusterItemClickListener {
-                if (null == it.googleMapMarker) false
-                else this@CapacitorGoogleMap.onMarkerClick(it.googleMapMarker!!)
+                val visibleMarker = it.googleMapMarker ?: getRenderedMarker(it)
+                if (visibleMarker != null) this@CapacitorGoogleMap.onMarkerClick(visibleMarker)
+                else false
             }
 
             clusterManager?.setOnClusterItemInfoWindowClickListener {
-                if (null != it.googleMapMarker) {
-                    this@CapacitorGoogleMap.onInfoWindowClick(it.googleMapMarker!!)
+                val visibleMarker = it.googleMapMarker ?: getRenderedMarker(it)
+                if (visibleMarker != null) {
+                    this@CapacitorGoogleMap.onInfoWindowClick(visibleMarker)
                 }
             }
 
