@@ -414,6 +414,9 @@ class CapacitorGoogleMap(
                         clusterManager?.cluster()
                     }
 
+                    // Update info windows so unclustered markers get their info windows immediately
+                    updateInfoWindowsForCurrentZoom()
+
                     callback(Result.success(markerIds))
                 } catch (e: Exception) {
                     Log.e("CapacitorGoogleMap", "Error in addMarkers", e)
@@ -1120,6 +1123,49 @@ class CapacitorGoogleMap(
                 } else {
                     // Setting the new icon if the icon is modified
                     marker?.iconUrl?.let { oldMarker?.updateIcon(it, marker.title, marker.snippet, marker.bearingAngle) }
+                }
+
+                // Sync infoData and infoIcon from new marker data
+                oldMarker.infoData = marker.infoData
+                oldMarker.infoIcon = marker.infoIcon
+
+                // Handle multiple_info_window for setMultipleMarkerPosition
+                val currentZoom = googleMap?.cameraPosition?.zoom ?: 0f
+                val shouldShowInfoWindow = currentZoom >= multipleInfoWindowZoomLevel
+                val markerId2 = existingMarkerEntry.key
+
+                if (shouldShowInfoWindow && marker.infoIcon?.contains("multiple_info_window") == true) {
+                    val existingInfoWindow = infoWindowMarkers[markerId2]
+                    if (existingInfoWindow != null) {
+                        // Update existing info window position and bitmap
+                        val newInfoWindowPosition = calculateInfoWindowPosition(marker.coordinate)
+                        existingInfoWindow.position = newInfoWindowPosition
+                        existingInfoWindow.zIndex = oldMarker.googleMapMarker?.zIndex?.plus(10.0f) ?: 1000.0f
+
+                        val infoWindowTypeChanged = oldMarker.infoIcon != marker.infoIcon
+                        if (infoWindowTypeChanged) {
+                            val newInfoWindowBitmap = multipleInfoWindowView.createInfoWindowBitmap(marker)
+                            existingInfoWindow.setIcon(BitmapDescriptorFactory.fromBitmap(newInfoWindowBitmap))
+                            if (marker.infoIcon?.contains("reverse") == true) {
+                                existingInfoWindow.setAnchor(0.4f, -0.15f)
+                            } else {
+                                existingInfoWindow.setAnchor(0.4f, 1.0f)
+                            }
+                        }
+                    } else {
+                        // Create new info window if marker is not inside a cluster
+                        oldMarker.googleMapMarker?.let { googleMapMarker ->
+                            val isStandalone = if (clusterManager != null && oldMarker.isClustered) {
+                                val renderer = clusterManager?.renderer as? BusesMarkerRenderer
+                                renderer?.getMarker(oldMarker) != null
+                            } else true
+                            if (isStandalone) {
+                                createInfoWindowAsMarker(marker, googleMapMarker)
+                            }
+                        }
+                    }
+                } else {
+                    removeInfoWindowMarker(markerId2)
                 }
 
                 markerId = marker?.id.toString()
@@ -2066,8 +2112,8 @@ class CapacitorGoogleMap(
 
             // Clean up info windows that don't have corresponding markers anymore
             infoWindowMarkers.forEach { (originalMarkerId, infoWindowMarker) ->
-                val markerExists = markers.containsKey(originalMarkerId) &&
-                        markers[originalMarkerId]?.googleMapMarker != null
+                val marker = markers[originalMarkerId]
+                val markerExists = marker != null && marker.googleMapMarker != null
 
                 if (!markerExists) {
                     // Remove if original marker doesn't exist
@@ -2077,6 +2123,14 @@ class CapacitorGoogleMap(
                     // Remove if zoomed out beyond the threshold
                     markersToRemove.add(originalMarkerId)
                     infoWindowMarker.remove()
+                } else if (marker != null && clusterManager != null && marker.isClustered) {
+                    // Remove info window if the marker is currently inside a cluster
+                    val renderer = clusterManager?.renderer as? BusesMarkerRenderer
+                    val isInsideCluster = renderer?.getMarker(marker) == null
+                    if (isInsideCluster) {
+                        markersToRemove.add(originalMarkerId)
+                        infoWindowMarker.remove()
+                    }
                 }
             }
 
@@ -2087,11 +2141,18 @@ class CapacitorGoogleMap(
 
     private fun showAllMultipleInfoWindows() {
         // Find all markers that should have multiple info windows and create them
-        markers.values.forEach { marker ->
+        markers.forEach { (markerId, marker) ->
             if (marker.infoIcon?.contains("multiple_info_window") == true &&
-                infoWindowMarkers[marker.id] == null &&
+                infoWindowMarkers[markerId] == null &&
                 marker.googleMapMarker != null) {
-                createInfoWindowAsMarker(marker, marker.googleMapMarker!!)
+                // Check if the marker is currently rendered as standalone (not inside a cluster)
+                val isStandalone = if (clusterManager != null && marker.isClustered) {
+                    val renderer = clusterManager?.renderer as? BusesMarkerRenderer
+                    renderer?.getMarker(marker) != null
+                } else true
+                if (isStandalone) {
+                    createInfoWindowAsMarker(marker, marker.googleMapMarker!!)
+                }
             }
         }
     }
