@@ -20,6 +20,10 @@ class GMViewController: UIViewController {
 
     private var clusterManager: GMUClusterManager?
 
+    /// When true, cluster-mutating methods skip the automatic `cluster()` call.
+    /// Set before a batch of add/remove/update operations, then call `clusterMarker()` once when done.
+    var skipClustering = false
+
     var clusteringEnabled: Bool {
         return clusterManager != nil
     }
@@ -78,7 +82,9 @@ class GMViewController: UIViewController {
                     clusterManager.add(marker)
                     
                     // Since the marker's position has changed, it may need to be re-clustered
-                    clusterManager.cluster()
+                    if !skipClustering {
+                        clusterManager.cluster()
+                    }
                 } else {
                     print("Not inside the map", marker.title)
                     // The marker is not visible (it's inside a cluster)
@@ -90,7 +96,9 @@ class GMViewController: UIViewController {
     func addMarkersToCluster(markers: [GMSMarker]) {
         if let clusterManager = clusterManager {
             clusterManager.add(markers)
-            clusterManager.cluster()
+            if !skipClustering {
+                clusterManager.cluster()
+            }
         }
     }
 
@@ -99,7 +107,9 @@ class GMViewController: UIViewController {
             markers.forEach { marker in
                 clusterManager.remove(marker)
             }
-            clusterManager.cluster()
+            if !skipClustering {
+                clusterManager.cluster()
+            }
         }
     }
 }
@@ -635,6 +645,8 @@ public class Map {
                 // Hide all multiple info windows
                 self.hideAllMultipleInfoWindows()
             }
+            // Always clean up info windows for markers absorbed into clusters
+            self.cleanupStaleInfoWindows()
         }
     }
 
@@ -646,9 +658,40 @@ public class Map {
                let infoIcon = markerData.infoIcon,
                infoIcon.contains("multiple_info_window"),
                self.infoWindowMarkers[markerId] == nil { // Only create if not already exists
+                // Skip markers that are absorbed into a cluster (map == nil means clustered)
+                let isNotClustered = self.markerIdNotOnCluster.contains(String(markerId))
+                if !isNotClustered && self.mapViewController.clusteringEnabled && marker.map == nil {
+                    continue
+                }
                 self.removeInfoWindowMarker(for: markerId)
                 self.createInfoWindowAsMarker(for: marker, markerData: markerData)
             }
+        }
+        // Clean up info windows for markers that got absorbed into clusters
+        self.cleanupStaleInfoWindows()
+    }
+
+    private func cleanupStaleInfoWindows() {
+        // Remove info windows for markers that are now inside a cluster (map == nil)
+        var markersToRemove = [Int]()
+        for (markerId, infoWindowView) in self.infoWindowMarkers {
+            if let marker = self.markers[markerId] {
+                let isNotClustered = self.markerIdNotOnCluster.contains(String(markerId))
+                if !isNotClustered && self.mapViewController.clusteringEnabled && marker.map == nil {
+                    markersToRemove.append(markerId)
+                    infoWindowView.removeFromSuperview()
+                    if let miwView = infoWindowView as? MultipleInfoWindowView {
+                        miwView.onClose = nil
+                    }
+                }
+            } else {
+                // Marker no longer exists, remove its info window
+                markersToRemove.append(markerId)
+                infoWindowView.removeFromSuperview()
+            }
+        }
+        for markerId in markersToRemove {
+            self.infoWindowMarkers.removeValue(forKey: markerId)
         }
     }
 
@@ -1001,7 +1044,7 @@ public class Map {
                                  } else {
                                      infoWindowView.isHidden = true
                                  }
-                             } else if shouldShow {
+                             } else if shouldShow && oldMarker.map != nil {
                                  if let infoIcon = marker.infoIcon, infoIcon.contains("multiple_info_window") {
                                      self.createInfoWindowAsMarker(for: oldMarker, markerData: marker)
                                  }
@@ -1102,6 +1145,13 @@ public class Map {
         var markerHashes: [Int] = []
 
         let newMarkerIds = Set(markers.compactMap { $0.id })
+
+        // Suppress per-operation clustering to avoid
+        // 'All items should be mapped to a distance' crash.
+        // We cluster once at the end after all add/remove/update operations complete.
+        DispatchQueue.main.sync {
+            self.mapViewController.skipClustering = true
+        }
         
         // Phase 1: Remove stale markers (on map but not in new list)
         let markersToRemove = self.removeMarkersArray.filter { !newMarkerIds.contains($0.id) }
@@ -1281,6 +1331,12 @@ public class Map {
             // Cluster all at once (performance optimization)
             if self.mapViewController.clusteringEnabled && !googleMapsMarkers.isEmpty {
                 self.mapViewController.addMarkersToCluster(markers: googleMapsMarkers)
+            }
+
+            // Re-enable clustering and perform a single cluster pass
+            self.mapViewController.skipClustering = false
+            if self.mapViewController.clusteringEnabled {
+                self.mapViewController.clusterMarker()
             }
         }
         return markerHashes
@@ -1477,6 +1533,12 @@ public class Map {
         DispatchQueue.main.async {
             for (markerId, infoWindowView) in self.infoWindowMarkers {
                 if let marker = self.markers[markerId] {
+                    // Hide info window if marker is absorbed into a cluster
+                    let isNotClustered = self.markerIdNotOnCluster.contains(String(markerId))
+                    if !isNotClustered && self.mapViewController.clusteringEnabled && marker.map == nil {
+                        infoWindowView.isHidden = true
+                        continue
+                    }
                     if let markerData = marker.userData as? Marker {
                         let hasSnippet = !(markerData.snippet?.isEmpty ?? true)
                         let screenPosition = self.calculateInfoWindowScreenPosition(
@@ -1486,6 +1548,7 @@ public class Map {
                                             isReverseInfoWindow :markerData.infoIcon?.contains("reverse") ?? false
                                         )
                         infoWindowView.frame.origin = screenPosition
+                        infoWindowView.isHidden = false
                     }
                 }
             }
@@ -2058,7 +2121,8 @@ class MarkerAnimationHelper: NSObject {
         // Update info window position on every frame
         if let infoWindowView = infoWindowView, let mapView = mapView, let map = map {
             let currentZoom = mapView.camera.zoom
-            if currentZoom >= zoomLevel {
+            // Hide info window if marker is absorbed into a cluster (map == nil)
+            if currentZoom >= zoomLevel && gmsMarker.map != nil {
                 let screenPos = map.calculateInfoWindowScreenPosition(
                     for: newPosition,
                     markerId: markerHash,
@@ -2067,6 +2131,8 @@ class MarkerAnimationHelper: NSObject {
                 )
                 infoWindowView.frame.origin = screenPos
                 infoWindowView.isHidden = false
+            } else {
+                infoWindowView.isHidden = true
             }
         }
 
