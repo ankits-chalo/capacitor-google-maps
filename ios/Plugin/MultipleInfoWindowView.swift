@@ -302,36 +302,18 @@ class MultipleInfoWindowView: UIView, UIGestureRecognizerDelegate {
     }
     
     private func updateConstraintsBasedOnContent() {
-        // Remove existing constraints that we'll replace
-        NSLayoutConstraint.deactivate([
-            titleLabel.topAnchor.constraint(equalTo: textStackView.topAnchor),
-            snippetStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor)
-        ])
+        // UIStackView manages spacing/layout of its arranged subviews automatically.
+        // Instead of adding manual constraints that conflict with UISV-spacing,
+        // simply show/hide the appropriate views and let the stack view handle layout.
+        titleLabel.isHidden = !hasTitle
+        snippetStackView.isHidden = !hasSnippet
         
-        var constraintsToActivate: [NSLayoutConstraint] = []
-        
+        // Adjust spacing: if only one item is visible, no spacing needed
         if hasTitle && hasSnippet {
-            // Both title and snippet - already handled by stack view
-        } else if hasTitle {
-            // Only title
-            constraintsToActivate = [
-                titleLabel.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor)
-            ]
-        } else if hasSnippet {
-            // Only snippet
-            constraintsToActivate = [
-                snippetStackView.topAnchor.constraint(equalTo: textStackView.topAnchor),
-                snippetStackView.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor)
-            ]
+            textStackView.spacing = interItemSpacing
         } else {
-            // No content - minimal height
-            constraintsToActivate = [
-                titleLabel.bottomAnchor.constraint(equalTo: textStackView.bottomAnchor)
-            ]
+            textStackView.spacing = 0
         }
-        
-        NSLayoutConstraint.activate(constraintsToActivate)
     }
     
     private func calculateOptimalSize() -> CGSize {

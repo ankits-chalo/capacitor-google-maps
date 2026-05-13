@@ -18,11 +18,21 @@ class GMViewController: UIViewController {
     var circleView: UIView!
     var circle: GMSCircle!
 
-    private var clusterManager: GMUClusterManager?
+    // Internal access to allow Map to perform batch removal without nested dispatch
+    var clusterManager: GMUClusterManager? {
+        get { return _clusterManager }
+    }
+    private var _clusterManager: GMUClusterManager?
 
     /// When true, cluster-mutating methods skip the automatic `cluster()` call.
     /// Set before a batch of add/remove/update operations, then call `clusterMarker()` once when done.
     var skipClustering = false
+
+    /// Called when clustering fails and items are cleared, allowing the Map to re-add markers.
+    var clusterRecoveryHandler: (() -> Void)?
+
+    /// Guard against re-entrant clustering (e.g. recovery handler triggering another cluster call).
+    private var isClusteringInProgress = false
 
     var clusteringEnabled: Bool {
         return clusterManager != nil
@@ -53,23 +63,39 @@ class GMViewController: UIViewController {
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
         let renderer = GMUDefaultClusterRenderer(mapView: self.GMapView, clusterIconGenerator: iconGenerator)
 
-        self.clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
+        self._clusterManager = GMUClusterManager(map: self.GMapView, algorithm: algorithm, renderer: renderer)
+        // NOTE: GMUClusterManager internally overrides GMapView.delegate to itself.
+        // The caller must reclaim the delegate after calling this method.
     }
 
     func destroyClusterManager() {
-        self.clusterManager = nil
+        self._clusterManager = nil
     }
     
     func clusterMarker() {
-        if let clusterManager = clusterManager {
-            ObjCExceptionCatcher.tryBlock({
-                clusterManager.cluster()
-            }, catch: { exception in
-                NSLog("CapacitorGoogleMaps: clustering exception caught – \(exception.reason ?? "unknown"). Clearing and re-adding items.")
-                // Recover: clear the algorithm's state and re-add all current items
-                clusterManager.clearItems()
-            })
+        guard let clusterManager = clusterManager else { return }
+        // Prevent re-entrant clustering (e.g. recovery handler triggering another cluster)
+        guard !isClusteringInProgress else {
+            NSLog("CapacitorGoogleMaps: skipping re-entrant cluster() call")
+            return
         }
+        isClusteringInProgress = true
+        defer { isClusteringInProgress = false }
+
+        ObjCExceptionCatcher.try({
+            clusterManager.cluster()
+        }, catch: { [weak self] exception in
+            NSLog("CapacitorGoogleMaps: clustering exception caught – \(exception.reason ?? "unknown"). Clearing and re-adding items.")
+            // Recover: clear the algorithm's state and re-add all current items
+            clusterManager.clearItems()
+            // Re-add markers so they are not permanently lost.
+            // The recovery handler will call addMarkersToCluster which respects
+            // skipClustering, so it won't recurse back into clusterMarker().
+            let savedSkip = self?.skipClustering ?? false
+            self?.skipClustering = true
+            self?.clusterRecoveryHandler?()
+            self?.skipClustering = savedSkip
+        })
     }
     
     func updateMarkerPosition(marker: GMSMarker, newPosition: CLLocationCoordinate2D) {
@@ -82,30 +108,26 @@ class GMViewController: UIViewController {
                 NSLog("CapacitorGoogleMaps: ignoring invalid marker position (\(newPosition.latitude), \(newPosition.longitude))")
                 return
             }
-                
-                // Check if the marker is visible (not clustered)
-            if marker.map != nil &&
-                (marker.position.latitude != newPosition.latitude ||
-                marker.position.longitude != newPosition.longitude) {
-                    // The marker is visible on the map
-                    clusterManager.remove(marker)
-                    
-                    // Update the marker's position
-                    marker.position = newPosition
-                    
-                    clusterManager.add(marker)
-                    
-                    // Since the marker's position has changed, it may need to be re-clustered
-                    if !skipClustering {
-                        clusterMarker()
-                    }
-                } else {
-                    print("Not inside the map", marker.title)
-                    // The marker is not visible (it's inside a cluster)
-                    // Do not update the position
-                }
 
+            let positionChanged = marker.position.latitude != newPosition.latitude ||
+                                  marker.position.longitude != newPosition.longitude
+            guard positionChanged else { return }
+
+            // Update position via remove→add. Wrap in exception catcher because the
+            // algorithm's internal state can be inconsistent during rapid updates.
+            ObjCExceptionCatcher.try({
+                clusterManager.remove(marker)
+                marker.position = newPosition
+                clusterManager.add(marker)
+            }, catch: { exception in
+                NSLog("CapacitorGoogleMaps: exception during marker position update – \(exception.reason ?? "unknown"). Updating position directly.")
+                marker.position = newPosition
+            })
+
+            if !skipClustering {
+                clusterMarker()
             }
+        }
 
     func addMarkersToCluster(markers: [GMSMarker]) {
         if let clusterManager = clusterManager {
@@ -1010,6 +1032,27 @@ public class Map {
              }
 
              DispatchQueue.main.sync {
+                 self.applyMarkerPositionUpdate(oldMarker: oldMarker, marker: marker)
+             }
+         return marker.id!
+     }
+
+    /// Same as setMarkerPositionNew but callable from within an existing DispatchQueue.main.sync block.
+    /// Avoids nested DispatchQueue.main.sync deadlock.
+    func setMarkerPositionNewInline(marker: Marker) throws -> String {
+        guard let markerId = marker.id,
+              let hash = self.markerIdOnWeb[markerId],
+              let oldMarker = self.markers[hash] else {
+            NSLog("CapacitorGoogleMaps: setMarkerPositionNewInline - marker not found for id: \(marker.id ?? "nil")")
+            return marker.id ?? ""
+        }
+        self.applyMarkerPositionUpdate(oldMarker: oldMarker, marker: marker)
+        return marker.id!
+    }
+
+    /// Core marker update logic shared by setMarkerPositionNew and setMarkerPositionNewInline.
+    /// MUST be called on the main thread.
+    private func applyMarkerPositionUpdate(oldMarker: GMSMarker, marker: Marker) {
                      // Extract animation duration from infoData
                      var duration = 2.0
                      if let infoData = marker.infoData {
@@ -1101,9 +1144,7 @@ public class Map {
                      NSLog("Error in angle. \(error)")
                  }
                  oldMarker.userData = marker
-             }
-         return marker.id!
-     }
+    }
     
     func updateInfoWindow(marker: Marker) throws  -> String  {
         if let oldMarker = self.markers[Int(marker.id!)!] {
@@ -1166,39 +1207,61 @@ public class Map {
 
     func addMarkers(markers: [Marker]) throws -> [Int] {
         var markerHashes: [Int] = []
+        var batchError: Error?
 
         let newMarkerIds = Set(markers.compactMap { $0.id })
 
-        // Suppress per-operation clustering to avoid
-        // 'All items should be mapped to a distance' crash.
-        // We cluster once at the end after all add/remove/update operations complete.
+        // Execute ALL phases (remove, update, add) in a single main-queue sync block
+        // to prevent GMUClusterManager's internal requestCluster from firing mid-batch.
         DispatchQueue.main.sync {
             self.mapViewController.skipClustering = true
-        }
-        
-        // Phase 1: Remove stale markers (on map but not in new list)
-        let markersToRemove = self.removeMarkersArray.filter { !newMarkerIds.contains($0.id) }
-        if !markersToRemove.isEmpty {
-            do {
-                try removeMarkers(ids: markersToRemove.map { $0.keyValue })
-            } catch {
-                NSLog("CapacitorGoogleMaps: Error removing stale markers: \(error)")
-            }
-        }
-        self.removeMarkersArray.removeAll { !newMarkerIds.contains($0.id) }
 
-        // Phase 2: Update existing markers' positions
-        var existingMarkerIds = Set<String>()
-        for marker in markers {
-            guard let markerId = marker.id else { continue }
-            if self.markerIdOnWeb[markerId] != nil {
+            // Phase 1: Remove stale markers (on map but not in new list)
+            let markersToRemove = self.removeMarkersArray.filter { !newMarkerIds.contains($0.id) }
+            if !markersToRemove.isEmpty {
+                // Inline removal logic to avoid nested DispatchQueue.main.sync deadlock
+                var markersToRemoveFromCluster: [GMSMarker] = []
+                let idsToRemove = markersToRemove.map { $0.keyValue }
+                idsToRemove.forEach { id in
+                    if let marker = self.markers[id] {
+                        if self.mapViewController.clusteringEnabled {
+                            markersToRemoveFromCluster.append(marker)
+                        }
+                        marker.map = nil
+                        self.markers.removeValue(forKey: id)
+                        self.markersDetails.removeValue(forKey: id)
+                        // Clean up info window if present
+                        if let infoWindowView = self.infoWindowMarkers[id] {
+                            infoWindowView.removeFromSuperview()
+                            self.infoWindowMarkers.removeValue(forKey: id)
+                        }
+                    }
+                }
+                let removedSet = Set(idsToRemove)
+                self.markerIdOnWeb = self.markerIdOnWeb.filter { !removedSet.contains($0.value) }
+
+                if self.mapViewController.clusteringEnabled && !markersToRemoveFromCluster.isEmpty {
+                    if let clusterManager = self.mapViewController.clusterManager {
+                        markersToRemoveFromCluster.forEach { clusterManager.remove($0) }
+                    }
+                }
+            }
+            self.removeMarkersArray.removeAll { !newMarkerIds.contains($0.id) }
+
+            // Phase 2: Update existing markers' positions
+            var existingMarkerIds = Set<String>()
+            for marker in markers {
+                guard let markerId = marker.id else { continue }
+                guard let hash = self.markerIdOnWeb[markerId],
+                      let _ = self.markers[hash] else { continue }
                 existingMarkerIds.insert(markerId)
-                _ = try setMarkerPositionNew(marker: marker)
+                // Inline setMarkerPositionNew logic to avoid nested DispatchQueue.main.sync
+                do {
+                    _ = try self.setMarkerPositionNewInline(marker: marker)
+                } catch {
+                    NSLog("CapacitorGoogleMaps: Error updating marker \(markerId): \(error)")
+                }
             }
-        }
-
-        // Phase 3: Add new markers
-        DispatchQueue.main.sync {
             var googleMapsMarkers: [GMSMarker] = []
             markers.forEach { marker in
                 guard let markerId = marker.id else { return }
@@ -1520,6 +1583,37 @@ public class Map {
         if !self.mapViewController.clusteringEnabled {
             DispatchQueue.main.sync {
                 self.mapViewController.initClusterManager()
+
+                // GMUClusterManager steals the map view delegate internally.
+                // Reclaim it so camera events go through the plugin and all
+                // clustering is routed through the exception-safe clusterMarker().
+                self.mapViewController.GMapView.delegate = self.delegate
+
+                // Set up recovery handler so markers are re-added after a clustering failure.
+                // Note: skipClustering is set to true by clusterMarker() before calling this,
+                // so addMarkersToCluster will NOT trigger another cluster() call.
+                self.mapViewController.clusterRecoveryHandler = { [weak self] in
+                    guard let self = self else { return }
+                    var validMarkers: [GMSMarker] = []
+                    for (key, marker) in self.markers {
+                        if let detail = self.markersDetails[key], !(detail.isClustered ?? true) {
+                            continue
+                        }
+                        // Validate coordinates before re-adding
+                        let lat = marker.position.latitude
+                        let lng = marker.position.longitude
+                        guard lat.isFinite && lng.isFinite
+                              && lat >= -90 && lat <= 90
+                              && lng >= -180 && lng <= 180 else {
+                            NSLog("CapacitorGoogleMaps: recovery skipping marker with invalid coords (\(lat), \(lng))")
+                            continue
+                        }
+                        validMarkers.append(marker)
+                    }
+                    if !validMarkers.isEmpty {
+                        self.mapViewController.addMarkersToCluster(markers: validMarkers)
+                    }
+                }
 
                 // add existing markers to the cluster
                 if !self.markers.isEmpty {

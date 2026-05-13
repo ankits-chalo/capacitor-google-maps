@@ -104,7 +104,7 @@ public struct Marker {
         self.isFlat = fromJSObject["isFlat"] as? Bool
         self.iconUrl = resolvedIconUrl
         self.draggable = fromJSObject["draggable"] as? Bool
-        self.isClustered = fromJSObject["isClustered"] as? Bool ?? true
+        self.isClustered = fromJSObject["isClustered"] as? Bool ?? false
         self.iconSize = iconSize
         self.iconAnchor = iconAnchor
         self.customAnchor = customAnchor
