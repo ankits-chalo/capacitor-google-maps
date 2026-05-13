@@ -1197,10 +1197,7 @@ class CapacitorGoogleMap(
             CoroutineScope(Dispatchers.Main).launch {
                 val bridge = delegate.bridge
                 clusterManager = ClusterManager(bridge.context, googleMap)
-                clusterManager!!.renderer = BusesMarkerRenderer(bridge.context, googleMap!!, clusterManager!!)
-                // Only for buses page marker info window. If new cluster marker info window is made then update
-                // the below line with condition
-                googleMap?.setInfoWindowAdapter(BusesMarkerInfoWindow(bridge.context))
+                clusterManager!!.renderer = CustomClusterManagerRenderer(bridge.context, googleMap!!, clusterManager!!)
 
 
 
