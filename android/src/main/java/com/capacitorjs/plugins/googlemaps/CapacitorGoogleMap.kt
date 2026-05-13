@@ -243,7 +243,10 @@ class CapacitorGoogleMap(
                     markersToRemove.forEach { markerId ->
                         // Remove the marker from the map
                         markers.entries.find { it.value.getMarkerId() == markerId }?.let { entry ->
+                            removeInfoWindowMarker(entry.key)
+                            clusterManager?.removeItem(entry.value)
                             entry.value.googleMapMarker?.remove()
+                            markerIdNotOnCluster.remove(entry.key)
                             markers.remove(entry.key)
                         }
                         // Remove the marker ID from the markerIdOnWeb list
@@ -1891,6 +1894,11 @@ class CapacitorGoogleMap(
             title = infoData.getString("title")
         }
 
+        val markerData = marker.tag as? CapacitorGoogleMapMarker
+        if (markerData?.infoIcon == "not_show_info_window") {
+            return true  // consume the event, don't show info window
+        }
+
         // Is this Marker is added inside the cluster
         val isClusterItemMarker = clusterManager?.markerCollection?.markers?.contains(marker) ?: false
 
@@ -1932,10 +1940,6 @@ class CapacitorGoogleMap(
             data.put("snippet", snippet)
         }
         delegate.notify("onMarkerClick", data)
-        val markerData = marker.tag as? CapacitorGoogleMapMarker
-        if (markerData?.infoIcon == "not_show_info_window") {
-            return true  // true = consume the event, don't show info window
-        }
          if (markerData?.infoIcon?.contains("multiple_info_window") == true) {
             return true  // info displayed via separate bitmap marker, suppress default info window
         }
