@@ -94,7 +94,7 @@ class CapacitorGoogleMapMarker(val context: Context, fromJSONObject: JSONObject)
         }
 
         draggable = fromJSONObject.optBoolean("draggable", false)
-        isClustered = fromJSONObject.optBoolean("isClustered", true)
+        isClustered = fromJSONObject.optBoolean("isClustered", false)
 
         id = fromJSONObject.optString("id")
         zIndex = fromJSONObject.optDouble("zIndex", 1.0 ).toFloat()
